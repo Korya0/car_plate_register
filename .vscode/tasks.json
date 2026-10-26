@@ -1,0 +1,395 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Analyze alabaqera_flutter offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": [
+				"analyze",
+				"--no-pub"
+			],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\alabaqera_flutter"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Test alabaqera_flutter offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": [
+				"test",
+				"--no-pub"
+			],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\alabaqera_flutter"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build car_register ARM64",
+			"type": "shell",
+			"command": "D:\\flutter_workspace\\flutter_Projects\\car_register\\android\\gradlew.bat",
+			"args": [
+				"-p",
+				"D:\\flutter_workspace\\flutter_Projects\\car_register\\android",
+				"--no-daemon",
+				"-Ptarget-platform=android-arm64",
+				"assembleDebug"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build alabaqera_flutter ARM64",
+			"type": "shell",
+			"command": "D:\\flutter_workspace\\flutter_Projects\\alabaqera_flutter\\android\\gradlew.bat",
+			"args": [
+				"-p",
+				"D:\\flutter_workspace\\flutter_Projects\\alabaqera_flutter\\android",
+				"--no-daemon",
+				"-Ptarget-platform=android-arm64",
+				"assembleDebug"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build flutter_project_foundation offline ARM64",
+			"type": "shell",
+			"command": "C:\\Users\\mahmo\\Documents\\flutter_project_foundation\\android\\gradlew.bat",
+			"args": [
+				"-p",
+				"C:\\Users\\mahmo\\Documents\\flutter_project_foundation\\android",
+				"--offline",
+				"--no-daemon",
+				"-Ptarget-platform=android-arm64",
+				"assembleDebug"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build flutter_async_search_challenge ARM64",
+			"type": "shell",
+			"command": "D:\\flutter_workspace\\flutter_Projects\\flutter_async_search_challenge\\android\\gradlew.bat",
+			"args": [
+				"-p",
+				"D:\\flutter_workspace\\flutter_Projects\\flutter_async_search_challenge\\android",
+				"--no-daemon",
+				"-Ptarget-platform=android-arm64",
+				"assembleDebug"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build imposter ARM64",
+			"type": "shell",
+			"command": "D:\\flutter_workspace\\flutter_Projects\\imposter\\android\\gradlew.bat",
+			"args": [
+				"-p",
+				"D:\\flutter_workspace\\flutter_Projects\\imposter\\android",
+				"--no-daemon",
+				"-Ptarget-platform=android-arm64",
+				"assembleDebug"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build muslim_app ARM64",
+			"type": "shell",
+			"command": "D:\\flutter_workspace\\flutter_Projects\\muslim_app\\android\\gradlew.bat",
+			"args": [
+				"-p",
+				"D:\\flutter_workspace\\flutter_Projects\\muslim_app\\android",
+				"--no-daemon",
+				"-Ptarget-platform=android-arm64",
+				"assembleDebug"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build muslim_app copy ARM64",
+			"type": "shell",
+			"command": "D:\\flutter_workspace\\flutter_Projects\\muslim_app - Copy\\android\\gradlew.bat",
+			"args": [
+				"-p",
+				"D:\\flutter_workspace\\flutter_Projects\\muslim_app - Copy\\android",
+				"--no-daemon",
+				"-Ptarget-platform=android-arm64",
+				"assembleDebug"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build fitness_app ARM64",
+			"type": "shell",
+			"command": "D:\\flutter_workspace\\flutter_Projects\\fitness_app\\android\\gradlew.bat",
+			"args": [
+				"-p",
+				"D:\\flutter_workspace\\flutter_Projects\\fitness_app\\android",
+				"--no-daemon",
+				"-Ptarget-platform=android-arm64",
+				"assembleDebug"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build hadana_zakia ARM64",
+			"type": "shell",
+			"command": "D:\\flutter_workspace\\flutter_Projects\\hadanazakia\\hadana_zakia\\android\\gradlew.bat",
+			"args": [
+				"-p",
+				"D:\\flutter_workspace\\flutter_Projects\\hadanazakia\\hadana_zakia\\android",
+				"--no-daemon",
+				"-Ptarget-platform=android-arm64",
+				"assembleDebug"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build ico_story_app ARM64",
+			"type": "shell",
+			"command": "D:\\flutter_workspace\\flutter_Projects\\ico_story_app\\android\\gradlew.bat",
+			"args": [
+				"-p",
+				"D:\\flutter_workspace\\flutter_Projects\\ico_story_app\\android",
+				"--no-daemon",
+				"-Ptarget-platform=android-arm64",
+				"assembleDebug"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Analyze fitness_app offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["analyze", "--no-pub"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\fitness_app"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Test fitness_app offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["test", "--no-pub"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\fitness_app"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Analyze flutter_async_search_challenge offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["analyze", "--no-pub"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\flutter_async_search_challenge"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Test flutter_async_search_challenge offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["test", "--no-pub"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\flutter_async_search_challenge"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Analyze hadana_zakia offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["analyze", "--no-pub"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\hadanazakia\\hadana_zakia"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Test hadana_zakia offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["test", "--no-pub"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\hadanazakia\\hadana_zakia"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Analyze ico_story_app offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["analyze", "--no-pub"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\ico_story_app"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Test ico_story_app offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["test", "--no-pub"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\ico_story_app"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Analyze imposter offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["analyze", "--no-pub"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\imposter"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Test imposter offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["test", "--no-pub"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\imposter"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Analyze muslim_app offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["analyze", "--no-pub"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\muslim_app"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Analyze muslim_app copy offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["analyze", "--no-pub"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\muslim_app - Copy"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Test muslim_app offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["test", "--no-pub"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\muslim_app"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Test muslim_app copy offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["test", "--no-pub"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\muslim_app - Copy"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Analyze flutter_project_foundation offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["analyze", "--no-pub"],
+			"options": {"cwd": "C:\\Users\\mahmo\\Documents\\flutter_project_foundation"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Test flutter_project_foundation offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["test", "--no-pub"],
+			"options": {"cwd": "C:\\Users\\mahmo\\Documents\\flutter_project_foundation"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Resolve alabaqera_flutter dependencies offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["pub", "get", "--offline"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\alabaqera_flutter"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Resolve fitness_app dependencies",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\cache\\dart-sdk\\bin\\dart.exe",
+			"args": ["pub", "get"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\fitness_app"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Refresh fitness_app Flutter plugin registration",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["pub", "get"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\fitness_app"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Resolve hadana_zakia dependencies",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\cache\\dart-sdk\\bin\\dart.exe",
+			"args": ["pub", "get"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\hadanazakia\\hadana_zakia"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Resolve ico_story_app dependencies",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\cache\\dart-sdk\\bin\\dart.exe",
+			"args": ["pub", "get"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\ico_story_app"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Resolve imposter dependencies",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\cache\\dart-sdk\\bin\\dart.exe",
+			"args": ["pub", "get"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\imposter"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Resolve muslim_app dependencies offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\cache\\dart-sdk\\bin\\dart.exe",
+			"args": ["pub", "get", "--offline", "--enforce-lockfile"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\muslim_app"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Resolve muslim_app copy dependencies offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\cache\\dart-sdk\\bin\\dart.exe",
+			"args": ["pub", "get", "--offline", "--enforce-lockfile"],
+			"options": {"cwd": "D:\\flutter_workspace\\flutter_Projects\\muslim_app - Copy"},
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Resolve flutter_project_foundation dependencies offline",
+			"type": "shell",
+			"command": "D:\\dev\\flutter\\bin\\flutter.bat",
+			"args": ["pub", "get", "--offline"],
+			"options": {"cwd": "C:\\Users\\mahmo\\Documents\\flutter_project_foundation"},
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}

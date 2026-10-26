@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "941888994967",
+    "project_id": "car-register-7e6e6",
+    "storage_bucket": "car-register-7e6e6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941888994967:android:0672edd591237fefe033d2",
+        "android_client_info": {
+          "package_name": "com.korya0.car_register"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbCtukW1pBtmDh0ATVx9ys-QAYRrC-eZg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
