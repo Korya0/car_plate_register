@@ -13,7 +13,7 @@
 
 ## 1. Core Rules
 
-- **Single theme only:** Car Register runs on a single unified theme with a dark navy and brand red palette. There is no light/dark mode switching.
+- **Single theme only:** Car Register runs on a single light theme with a white background, pale neutral surfaces, and brand red/navy accents. There is no light/dark mode switching.
 - **Direct color access:** All colors are accessed directly through `AppColors.*` (e.g. `AppColors.primary`, `AppColors.scaffoldBackgroundColor`). There is no `ThemeExtension`, no `context.color`, and no `MyColors`.
 - **Never use raw color values in UI code:** No `Color(0x...)` or random hex codes inside widgets. Every color must come from `AppColors`.
 - **System / Flutter fonts:** No custom downloaded font files (e.g. Cairo, Amiri, or Tajawal). We rely entirely on Flutter's default typography engine.
@@ -40,30 +40,30 @@ All colors are defined as `static const Color` in `AppColors`:
 
 | Token | Hex Value | Usage |
 |---|---|---|
-| `scaffoldBackgroundColor` | `#050D14` | Very dark navy — screen background |
-| `secondaryScaffoldBackgroundColor` | `#091E30` | Logo navy — cards, sheets, dialogs, surfaces |
+| `scaffoldBackgroundColor` | `#FFFFFF` | White — screen background |
+| `secondaryScaffoldBackgroundColor` | `#F4F6F8` | Pale gray-blue — cards, sheets, dialogs, surfaces |
 | `primary` | `#D91B21` | Logo red — primary brand action & highlight |
-| `secondary` | `#1F5C8F` | Steel blue — secondary brand accent |
-| `textPrimary` | `#FFFFFF` | Main readable text |
-| `textSecondary` | `#9AA3AB` | Light gray supporting text, readable on dark navy |
-| `textDisabled` | `#636C74` | Disabled text / muted labels |
+| `secondary` | `#091E30` | Logo navy — secondary brand accent |
+| `textPrimary` | `#091E30` | Main readable text |
+| `textSecondary` | `#636C74` | Gray supporting text |
+| `textDisabled` | `#A7AEB5` | Disabled text / muted labels |
 | `iconPrimary` | `#D91B21` | Default brand icon color |
-| `iconSecondary` | `#9AA3AB` | Supporting icon color |
-| `iconDisabled` | `#636C74` | Disabled icon color |
-| `textBrand` | `#EE3B41` | Lighter red for high contrast text on dark backgrounds |
-| `textBrandSecondary` | `#4F93C9` | Lighter blue for high contrast text on dark backgrounds |
+| `iconSecondary` | `#636C74` | Supporting icon color |
+| `iconDisabled` | `#A7AEB5` | Disabled icon color |
+| `textBrand` | `#C4191F` | Darker red for readable brand text on white |
+| `textBrandSecondary` | `#091E30` | Navy brand text |
 | `iconBrand` | `#D91B21` | Brand red icon |
-| `iconBrandSecondary` | `#4F93C9` | Secondary brand blue icon |
+| `iconBrandSecondary` | `#091E30` | Secondary brand navy icon |
 | `surfaceBrand` | `#D91B21` | Brand red container fill |
-| `surfaceBrandSecondary` | `#1F5C8F` | Secondary blue container fill |
-| `surfaceSelected` | `#22161B` | Selected item background (dark red tint) |
-| `surfaceDisabled` | `#0C141B` | Disabled item background |
-| `borderBrand` | `#EC4A50` | Focused / active brand border |
-| `dividerColor` | `#1E2F40` | Neutral subtle separators |
+| `surfaceBrandSecondary` | `#091E30` | Secondary navy container fill |
+| `surfaceSelected` | `#FDECEC` | Selected item background (light red tint) |
+| `surfaceDisabled` | `#EEF0F2` | Disabled item background |
+| `borderBrand` | `#D91B21` | Focused / active brand border |
+| `dividerColor` | `#E1E5E9` | Neutral subtle separators |
 | `actionPrimary` | `#D91B21` | Primary CTA background |
-| `actionSecondary` | `#1F5C8F` | Secondary CTA background |
+| `actionSecondary` | `#091E30` | Secondary CTA background |
 | `textOnPrimary` | `#FFFFFF` | Text on red buttons / actions |
-| `textOnSecondary` | `#FFFFFF` | Text on blue buttons / actions |
+| `textOnSecondary` | `#FFFFFF` | Text on navy buttons / actions |
 | `transparent` | `#00000000` | Transparent fills and gradients |
 | `black` | `#000000` | Shadows and scrims base |
 

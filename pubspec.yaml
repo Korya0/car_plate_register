@@ -93,11 +93,11 @@ flutter_launcher_icons:
 # Native Splash (Android only)
 # ----------
 flutter_native_splash:
-  color: "#050D14"
+  color: "#ffffff"
   image: assets/native/splash_logo.png
   android: true
   ios: false
   web: false
   android_12:
-    color: "#050D14"
+    color: "#ffffff"
     image: assets/native/splash_logo.png
