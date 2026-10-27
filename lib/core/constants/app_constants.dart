@@ -35,6 +35,8 @@ class AppConstants {
   static const Duration pressFadeOut150ms = Duration(milliseconds: 150);
   static const Duration pressMinVisible100ms = Duration(milliseconds: 100);
   static const Duration searchDebounce300ms = Duration(milliseconds: 300);
+  static const Duration splashFade250ms = Duration(milliseconds: 250);
+  static const Duration splashDuration1500ms = Duration(milliseconds: 1500);
 
   // Opacity
   static const double opacityTransparent = 0;

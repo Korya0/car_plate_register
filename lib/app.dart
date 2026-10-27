@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:car_register/core/constants/app_constants.dart';
@@ -30,7 +31,10 @@ class CarRegisterApp extends StatelessWidget {
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: context.unfocus,
-          child: child ?? const SizedBox.shrink(),
+          child: AnnotatedRegion<SystemUiOverlayStyle>(
+            value: AppTheme.systemOverlayStyle,
+            child: child ?? const SizedBox.shrink(),
+          ),
         ),
       );
     },

@@ -3,9 +3,20 @@ import 'package:flutter/services.dart';
 
 import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/theme/app_colors.dart';
+import 'package:car_register/core/theme/app_font.dart';
 
 abstract final class AppTheme {
   AppTheme._();
+
+  // Transparent system bars that blend with the app surface.
+  static const SystemUiOverlayStyle systemOverlayStyle = SystemUiOverlayStyle(
+    statusBarColor: AppColors.transparent,
+    systemNavigationBarColor: AppColors.transparent,
+    systemNavigationBarContrastEnforced: false,
+    statusBarIconBrightness: Brightness.dark,
+    systemNavigationBarIconBrightness: Brightness.dark,
+    statusBarBrightness: Brightness.light,
+  );
 
   static ThemeData get theme {
     const ColorScheme colorScheme = ColorScheme(
@@ -39,6 +50,7 @@ abstract final class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
+      fontFamily: AppFont.family,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.scaffoldBackgroundColor,
       dividerColor: AppColors.dividerColor,
@@ -57,7 +69,7 @@ abstract final class AppTheme {
         surfaceTintColor: AppColors.transparent,
         elevation: AppConstants.elevationNone,
         centerTitle: true,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        systemOverlayStyle: systemOverlayStyle,
       ),
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: AppColors.scaffoldBackgroundColor,

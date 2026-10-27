@@ -47,10 +47,6 @@ dependencies:
   # UI
   flutter_animate: ^4.5.2
   skeletonizer: ^3.0.0
-
-# ----------
-# Dev Dependencies
-# ----------
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -77,8 +73,15 @@ flutter:
 
   # Assets
   assets:
+    - assets/images/logo.png
     - assets/native/app_icon.png
     - assets/native/splash_logo.png
+
+  # Fonts
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/cairo/Cairo-VariableFont_slnt,wght.ttf
 
 # ----------
 # Launcher Icon (Android only)

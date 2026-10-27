@@ -2,9 +2,12 @@ class AppStrings {
   const AppStrings._();
 
   // App
-  static const String appName = 'Car Register';
-  static const String appNameArabic = 'تسجيل السيارات';
+  static const String appName = 'سجّل';
   static const String pageNotFound = 'تعذّر فتح الصفحة';
+
+  // Splash
+  static const String splashTitle = 'سجّل';
+  static const String splashSubtitle = 'أرقام البروشورات';
 
   // Navigation
   static const String homeTab = 'الأرقام';

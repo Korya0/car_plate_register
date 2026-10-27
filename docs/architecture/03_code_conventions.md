@@ -135,6 +135,6 @@ Future<void> loadBrochures() async {}
 - No `My*` prefix.
 - No themes beyond the single approved theme.
 - No `ThemeExtension` color lookup.
-- No downloaded fonts or custom icon fonts.
+- No font family other than Cairo; no custom icon fonts.
 - No authentication layer.
 - No new `docs/` file for a rule; extend the existing nine.

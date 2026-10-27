@@ -1,8 +1,7 @@
 abstract final class AppRoutes {
-  // Main tabs
-  static const String homePath = '/';
-  static const String homeName = 'home';
+  // Splash
+  static const String splash = '/splash';
 
-  static const String settingsPath = '/settings';
-  static const String settingsName = 'settings';
+  // Main tabs
+  static const String home = '/home';
 }

@@ -5,6 +5,7 @@
 - Colors: `lib/core/theme/app_colors.dart`
 - Theme configuration: `lib/core/theme/app_theme.dart`
 - Typography: `lib/core/theme/app_text_styles.dart`
+- Font family & weights: `lib/core/theme/app_font.dart`
 - Icons: Flutter `Icons.*` directly (no icon wrapper class)
 - Assets: `lib/core/constants/app_assets.dart`
 - Sizes & Spacing: [`02_tokens.md`](02_tokens.md)
@@ -16,7 +17,7 @@
 - **Single theme only:** Car Register runs on a single light theme with a white background, pale neutral surfaces, and brand red/navy accents. There is no light/dark mode switching.
 - **Direct color access:** All colors are accessed directly through `AppColors.*` (e.g. `AppColors.primary`, `AppColors.scaffoldBackgroundColor`). There is no `ThemeExtension`, no `context.color`, and no `MyColors`.
 - **Never use raw color values in UI code:** No `Color(0x...)` or random hex codes inside widgets. Every color must come from `AppColors`.
-- **System / Flutter fonts:** No custom downloaded font files (e.g. Cairo, Amiri, or Tajawal). We rely entirely on Flutter's default typography engine.
+- **Single custom font:** The app uses only the Cairo variable font (`assets/fonts/cairo/Cairo-VariableFont_slnt,wght.ttf`), registered in `pubspec.yaml` and applied through `AppFont.family`. No other font family is allowed.
 - **System / Flutter icons:** Use `Icons.*` directly from Flutter's Material icons package.
 - **Every color token has a purpose comment** describing where and when it is used.
 
@@ -72,7 +73,7 @@ All colors are defined as `static const Color` in `AppColors`:
 ## 3. Typography — `AppTextStyles`
 
 - File location: `lib/core/theme/app_text_styles.dart`
-- Uses system default fonts — no asset font loading required.
+- Uses the Cairo variable font only — loaded from the bundled asset.
 - Font sizes come from `AppSize.f*` tokens (`AppSize.f12`, `f14`, `f16`, `f20`, `f32`).
 - Line heights come from `AppConstants.lineHeightBody` and `lineHeightTitle`.
 - Text styles are accessed through static getters on `AppTextStyles`.
@@ -92,6 +93,23 @@ Examples:
 - `font16W700Primary`
 - `font20W700Primary`
 - `font32W800Brand`
+
+### Font Weights — `AppFontWeight`
+
+The only approved weights live in the `AppFontWeight` enum. Use it instead of
+raw `FontWeight.*` values:
+
+| Enum value | Flutter value |
+|---|---|
+| `AppFontWeight.regular` | `FontWeight.w400` |
+| `AppFontWeight.medium` | `FontWeight.w500` |
+| `AppFontWeight.bold` | `FontWeight.w700` |
+| `AppFontWeight.extraBold` | `FontWeight.w800` |
+
+- Read the Flutter value through `.value`: `AppFontWeight.extraBold.value`.
+- `AppTextStyles` is the only place that reads the enum. Widgets keep using
+  `AppTextStyles.*`.
+- A new weight is added to the enum, never written inline.
 
 **Rules:**
 - Never create inline `TextStyle(...)` inside UI widgets.
