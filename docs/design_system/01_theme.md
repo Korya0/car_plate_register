@@ -74,7 +74,7 @@ All colors are defined as `static const Color` in `AppColors`:
 
 - File location: `lib/core/theme/app_text_styles.dart`
 - Uses the Cairo variable font only — loaded from the bundled asset.
-- Font sizes come from `AppSize.f*` tokens (`AppSize.f12`, `f14`, `f16`, `f20`, `f32`).
+- Font sizes come from `AppSize.f*` tokens (`AppSize.f12`, `f13`, `f14`, `f15`, `f16`, `f20`, `f24`, `f30`, `f32`, `f34`).
 - Line heights come from `AppConstants.lineHeightBody` and `lineHeightTitle`.
 - Text styles are accessed through static getters on `AppTextStyles`.
 
@@ -87,12 +87,16 @@ font{Size}W{Weight}{Role}
 Examples:
 - `font12W500Secondary`
 - `font12W700Brand`
+- `font13W400Secondary`
 - `font14W500Primary`
 - `font14W700OnPrimary`
+- `font15W400Secondary`
 - `font16W500Primary`
 - `font16W700Primary`
 - `font20W700Primary`
+- `font30W800Primary`
 - `font32W800Brand`
+- `font34W800Primary`
 
 ### Font Weights — `AppFontWeight`
 
@@ -131,6 +135,8 @@ raw `FontWeight.*` values:
 - Defined centrally in `lib/core/constants/app_assets.dart`.
 - Categorized by type:
   - `AppAssets.appIcon`: Native app icon (`assets/native/app_icon.png`).
+  - `AppAssets.splashLogo`: Native splash logo (`assets/native/splash_logo.png`).
+  - `AppAssets.logo`: In-app logo (`assets/images/logo.png`).
 - Never hardcode asset path strings directly inside widgets.
 
 ---

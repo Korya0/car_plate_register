@@ -95,6 +95,7 @@ flowchart TD
    - Wrap the root widget in `ProviderScope` (or Bloc provider) with overrides for synchronous storage.
 2. **`lib/app/app.dart`:**
    - Build the root `MaterialApp.router` with `GoRouter`.
+   - Add `AppScrollBehavior` (`lib/core/theme/app_scroll_behavior.dart`) and set `scrollBehavior: const AppScrollBehavior()` on `MaterialApp.router` so Android's overscroll stretch/glow is disabled globally. This is a platform indicator, not a `CustomScrollView` bug; see [`references/core_architecture.md`](references/core_architecture.md) §3.
    - In `builder(context, child)`:
      - Invoke `AppSize.init(context)`.
      - Apply `context.preventTextScaling(child)`.

@@ -46,9 +46,9 @@ duration: Duration(milliseconds: 300)
 |---|---|---|---|
 | **Icons** | `icon*` | `icon16`, `icon24`, `icon32`, `icon48` | Icon sizes and icon button bounding boxes |
 | **Padding & Spacing** | `p*` | `p4`, `p8`, `p12`, `p16`, `p20`, `p24`, `p32`, `p40`, `p48` | `AppGap`, `EdgeInsets`, card insets |
-| **Fonts** | `f*` | `f12`, `f14`, `f16`, `f20`, `f24`, `f32` | Sizing for `AppTextStyles` |
+| **Fonts** | `f*` | `f12`, `f13`, `f14`, `f15`, `f16`, `f20`, `f24`, `f30`, `f32`, `f34` | Sizing for `AppTextStyles` |
 | **Heights** | `h*` | `h18`, `h40`, `h48`, `h56`, `h150` | Heights of buttons, inputs, cards |
-| **Widths** | `w*` | `w4`, `w24`, `w40`, `w48` | Specific widths, indicators, icons |
+| **Widths** | `w*` | `w4`, `w24`, `w40`, `w48`, `w200` | Specific widths, indicators, logos |
 | **Radii** | `r*` | `r4`, `r8`, `r12`, `r16`, `r24`, `circularRadius` | `BorderRadius.circular(...)` on cards & buttons |
 | **Borders & Dividers**| — | `borderWidth`, `dividerThickness`, `dividerHeight` | Borders, outlines, and horizontal dividers |
 
@@ -86,6 +86,10 @@ duration: Duration(milliseconds: 300)
    - `opacityTransparent = 0`, `opacitySubtle = 0.2`, `opacitySoft = 0.3`, `opacityFaint = 0.4`, `opacityMuted = 0.5`, `opacityFull = 1.0`
 8. **Scale:**
    - `scaleCompleted = 0.98`, `scaleNormal = 1`
+9. **Access Control:**
+   - `accessCodeMaxLength = 10`
+   - `accessCodeDemoValue = 'KORYA'` (temporary until the access API is wired)
+   - `accessCodeStagger60ms`
 
 ---
 

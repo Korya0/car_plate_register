@@ -43,6 +43,7 @@ When executing this skill, the AI agent **must generate and customize the 9 stan
 ### 6. `docs/ui/01_layout.md`
 - Screen shell layout: `CustomScrollView` + slivers (`CommonSliverAppBar`, `AppSliverList`, `AppSliverGrid`).
 - Safe areas placed inside scrollables (`SliverSafeArea`), never wrapping `CustomScrollView`.
+- Disable Android's platform overscroll stretch/glow globally via `AppScrollBehavior` (`scrollBehavior` on `MaterialApp.router`). The stretch is the default `MaterialScrollBehavior` indicator, not a `CustomScrollView` layout bug; document that distinction.
 - Directionality rules: `TextDirection.rtl` for Arabic, bidirectional padding (`EdgeInsetsDirectional`).
 - Tablet maximum content constraint (`AppSize.contentMaxWidth = 640`).
 

@@ -49,6 +49,16 @@ Scaffold(
 )
 ```
 
+### Overscroll (Android Stretch)
+
+The Android 12+ overscroll **stretch** is a platform `MaterialScrollBehavior` indicator (`StretchingOverscrollIndicator`), **not** a `CustomScrollView` layout bug. It is disabled globally in `lib/core/theme/app_scroll_behavior.dart` and wired in `lib/app.dart`:
+
+```dart
+scrollBehavior: const AppScrollBehavior(),
+```
+
+Never work around it by replacing `CustomScrollView` or by changing scroll physics per screen.
+
 ---
 
 ## 2. RTL Directionality

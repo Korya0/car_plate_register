@@ -136,5 +136,5 @@ Future<void> loadBrochures() async {}
 - No themes beyond the single approved theme.
 - No `ThemeExtension` color lookup.
 - No font family other than Cairo; no custom icon fonts.
-- No authentication layer.
+- No user accounts or email/password login; access control is limited to the Shared Access PIN and the local device lock.
 - No new `docs/` file for a rule; extend the existing nine.

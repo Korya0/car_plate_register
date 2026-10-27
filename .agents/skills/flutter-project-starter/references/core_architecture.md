@@ -41,6 +41,7 @@ import 'package:{{APP_PACKAGE}}/core/constants/app_constants.dart';
 import 'package:{{APP_PACKAGE}}/core/constants/app_sizes.dart';
 import 'package:{{APP_PACKAGE}}/core/constants/app_strings.dart';
 import 'package:{{APP_PACKAGE}}/core/router/app_router.dart';
+import 'package:{{APP_PACKAGE}}/core/theme/app_scroll_behavior.dart';
 import 'package:{{APP_PACKAGE}}/core/theme/app_theme.dart';
 import 'package:{{APP_PACKAGE}}/core/utils/context_extension.dart';
 
@@ -53,6 +54,7 @@ class {{APP_CLASS_NAME}} extends StatelessWidget {
     debugShowCheckedModeBanner: false,
     theme: AppTheme.theme,
     routerConfig: AppRouter.router,
+    scrollBehavior: const AppScrollBehavior(),
     locale: const Locale(AppConstants.arLocaleCode),
     supportedLocales: const [Locale(AppConstants.arLocaleCode)],
     localizationsDelegates: const [
@@ -103,6 +105,29 @@ class {{APP_CLASS_NAME}} extends StatelessWidget {
 - `AppTextStyles`:
   - Uses default Flutter system font engine.
   - Semantic roles: `font12W500Secondary`, `font14W500Primary`, `font14W700OnPrimary`, `font16W700Primary`, `font20W700Primary`, `font32W800Brand`.
+
+### Scroll Behavior (`app_scroll_behavior.dart`)
+
+Android 12+ applies a platform overscroll **stretch** effect to every scrollable. On screens whose content is shorter than the viewport (forms, empty states, splash-like screens), dragging looks like the whole screen is stretching. This is the platform `StretchingOverscrollIndicator` from the default `MaterialScrollBehavior`, **not** a `CustomScrollView` layout bug.
+
+Disable it globally so every screen behaves consistently:
+
+```dart
+import 'package:flutter/material.dart';
+
+class AppScrollBehavior extends MaterialScrollBehavior {
+  const AppScrollBehavior();
+
+  @override
+  Widget buildOverscrollIndicator(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) => child;
+}
+```
+
+Wire it in `MaterialApp.router` with `scrollBehavior: const AppScrollBehavior(),`. Scrolling still works; only the stretch/glow feedback is removed.
 
 ---
 
