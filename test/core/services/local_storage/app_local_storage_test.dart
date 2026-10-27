@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:car_register/core/services/local_storage/app_local_storage.dart';
-import 'package:car_register/core/services/local_storage/app_storage_keys.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -30,12 +29,12 @@ void main() {
     });
 
     test('contains, deletes and clears keys', () async {
-      await storage.write<bool>(AppStorageKeys.appLockEnabled, true);
+      await storage.write<bool>('flag', true);
 
-      expect(storage.contains(AppStorageKeys.appLockEnabled), isTrue);
+      expect(storage.contains('flag'), isTrue);
 
-      await storage.delete(AppStorageKeys.appLockEnabled);
-      expect(storage.contains(AppStorageKeys.appLockEnabled), isFalse);
+      await storage.delete('flag');
+      expect(storage.contains('flag'), isFalse);
 
       await storage.write<int>('one', 1);
       await storage.write<int>('two', 2);

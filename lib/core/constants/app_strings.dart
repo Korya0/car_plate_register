@@ -27,6 +27,16 @@ class AppStrings {
   static const String accessCodeInvalid = 'كود الوصول غير صالح';
   static const String accessCodeSubmit = 'دخول';
 
+  // Local auth
+  static const String localAuthResultCancelled = 'تم إلغاء التحقق';
+  static const String localAuthResultUnavailable = 'التحقق من الجهاز غير متاح';
+  static const String localAuthResultNotEnrolled =
+      'لا يوجد بصمة أو PIN أو نمط مضبوط على الجهاز';
+  static const String localAuthResultLockedOut =
+      'التحقق مقفول مؤقتًا، حاول لاحقًا';
+  static const String localAuthResultBusy = 'هناك طلب تحقق جارٍ بالفعل';
+  static const String localAuthResultError = 'تعذّر التحقق، حاول مرة أخرى';
+
   // Settings
   static const String settingsTitle = 'الإعدادات';
   static const String generalSection = 'عام';
