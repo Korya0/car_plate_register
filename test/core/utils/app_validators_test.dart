@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:car_register/core/constants/app_strings.dart';
@@ -37,4 +38,46 @@ void main() {
       expect(AppValidators.brochureNumber('1 2'), AppStrings.numberDigitsOnly);
     });
   });
+
+  group('AppValidators.accessCode', () {
+    test('rejects null, empty, and whitespace-only values', () {
+      expect(AppValidators.accessCode(null), AppStrings.accessCodeRequired);
+      expect(AppValidators.accessCode(''), AppStrings.accessCodeRequired);
+      expect(AppValidators.accessCode('   '), AppStrings.accessCodeRequired);
+    });
+
+    test('accepts any non-empty access code', () {
+      expect(AppValidators.accessCode('KORYA'), isNull);
+      expect(AppValidators.accessCode('  KORYA  '), isNull);
+    });
+  });
+
+  group('AppValidators.accessCodeFormatters', () {
+    test('keeps Latin letters and Western digits only', () {
+      expect(
+        _applyFormatters(AppValidators.accessCodeFormatters, 'KORYA١٢3!'),
+        'KORYA3',
+      );
+    });
+
+    test('caps the code at the configured maximum length', () {
+      expect(
+        _applyFormatters(AppValidators.accessCodeFormatters, 'ABCDEFGHIJKLM'),
+        'ABCDEFGHIJ',
+      );
+    });
+  });
+}
+
+String _applyFormatters(List<TextInputFormatter> formatters, String text) {
+  var value = TextEditingValue(
+    text: text,
+    selection: TextSelection.collapsed(offset: text.length),
+  );
+
+  for (final formatter in formatters) {
+    value = formatter.formatEditUpdate(const TextEditingValue(), value);
+  }
+
+  return value.text;
 }

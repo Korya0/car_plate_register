@@ -6,6 +6,7 @@ import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/constants/app_strings.dart';
 import 'package:car_register/core/router/app_router.dart';
+import 'package:car_register/core/theme/app_scroll_behavior.dart';
 import 'package:car_register/core/theme/app_theme.dart';
 import 'package:car_register/core/utils/context_extension.dart';
 
@@ -18,6 +19,7 @@ class CarRegisterApp extends StatelessWidget {
     debugShowCheckedModeBanner: false,
     theme: AppTheme.theme,
     routerConfig: AppRouter.router,
+    scrollBehavior: const AppScrollBehavior(),
     locale: const Locale(AppConstants.arLocaleCode),
     supportedLocales: const [Locale(AppConstants.arLocaleCode)],
     localizationsDelegates: const [
@@ -31,9 +33,18 @@ class CarRegisterApp extends StatelessWidget {
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: context.unfocus,
-          child: AnnotatedRegion<SystemUiOverlayStyle>(
-            value: AppTheme.systemOverlayStyle,
-            child: child ?? const SizedBox.shrink(),
+          child: NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              if (notification is ScrollStartNotification &&
+                  notification.dragDetails != null) {
+                context.unfocus();
+              }
+              return false;
+            },
+            child: AnnotatedRegion<SystemUiOverlayStyle>(
+              value: AppTheme.systemOverlayStyle,
+              child: child ?? const SizedBox.shrink(),
+            ),
           ),
         ),
       );

@@ -26,6 +26,12 @@ abstract final class AppTextStyles {
     color: AppColors.textBrand,
   );
 
+  static TextStyle get font13W400Secondary => TextStyle(
+    fontSize: AppSize.f13,
+    fontWeight: AppFontWeight.regular.value,
+    color: AppColors.textSecondary,
+  );
+
   static TextStyle get font14W500Primary => TextStyle(
     fontSize: AppSize.f14,
     fontWeight: AppFontWeight.medium.value,
@@ -93,6 +99,13 @@ abstract final class AppTextStyles {
   static TextStyle get font20W700Primary => TextStyle(
     fontSize: AppSize.f20,
     fontWeight: AppFontWeight.bold.value,
+    color: AppColors.textPrimary,
+    height: AppConstants.lineHeightTitle,
+  );
+
+  static TextStyle get font30W800Primary => TextStyle(
+    fontSize: AppSize.f30,
+    fontWeight: AppFontWeight.extraBold.value,
     color: AppColors.textPrimary,
     height: AppConstants.lineHeightTitle,
   );

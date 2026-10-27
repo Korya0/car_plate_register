@@ -6,30 +6,77 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:car_register/app.dart';
 import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_strings.dart';
+import 'package:car_register/core/router/app_router.dart';
+import 'package:car_register/core/router/app_routes.dart';
 import 'package:car_register/core/theme/app_colors.dart';
+import 'package:car_register/core/theme/app_scroll_behavior.dart';
+import 'package:car_register/core/widgets/app_primary_button.dart';
 
 void main() {
-  testWidgets(
-    'shows the splash, then the home shell and navigation',
-    (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const ProviderScope(child: CarRegisterApp()),
-      );
-      await tester.pumpAndSettle();
+  testWidgets('shows the access code, then the home shell', (
+    WidgetTester tester,
+  ) async {
+    AppRouter.router.go(AppRoutes.accessCode);
+    await tester.pumpWidget(
+      const ProviderScope(child: CarRegisterApp()),
+    );
+    await tester.pumpAndSettle();
 
-      expect(find.text(AppStrings.splashTitle), findsOneWidget);
-      expect(find.text(AppStrings.splashSubtitle), findsOneWidget);
+    expect(find.text(AppStrings.accessCodeTitle), findsOneWidget);
 
-      await tester.pump(AppConstants.splashDuration1500ms);
-      await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byType(TextField),
+      AppConstants.accessCodeDemoValue,
+    );
+    await tester.pump();
 
-      expect(find.text(AppStrings.splashTitle), findsNothing);
-      expect(find.text(AppStrings.homeTab), findsOneWidget);
-      expect(find.text(AppStrings.settingsTab), findsOneWidget);
-    },
-    // The splash timer is intentionally disabled for now.
-    skip: true,
-  );
+    final button = tester.widget<AppPrimaryButton>(
+      find.byType(AppPrimaryButton),
+    );
+    button.onPressed!();
+    await tester.pump();
+    await tester.pump(AppConstants.animationSlower500ms);
+    await tester.pumpAndSettle();
+
+    expect(find.text(AppStrings.accessCodeTitle), findsNothing);
+    expect(find.text(AppStrings.homeTab), findsOneWidget);
+    expect(find.text(AppStrings.settingsTab), findsOneWidget);
+  });
+
+  testWidgets('disables the platform overscroll stretch', (tester) async {
+    AppRouter.router.go(AppRoutes.accessCode);
+    await tester.pumpWidget(
+      const ProviderScope(child: CarRegisterApp()),
+    );
+    await tester.pumpAndSettle();
+
+    final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
+
+    expect(app.scrollBehavior, isA<AppScrollBehavior>());
+  });
+
+  testWidgets('dismisses the keyboard when a scrollable is dragged', (
+    tester,
+  ) async {
+    AppRouter.router.go(AppRoutes.accessCode);
+    await tester.pumpWidget(
+      const ProviderScope(child: CarRegisterApp()),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byType(TextField));
+    await tester.pump();
+
+    expect(tester.testTextInput.isVisible, isTrue);
+
+    await tester.dragFrom(
+      const Offset(400, 550),
+      const Offset(0, -100),
+    );
+    await tester.pump();
+
+    expect(tester.testTextInput.isVisible, isFalse);
+  });
 
   testWidgets('runs edge-to-edge with bars matching the app surface', (
     WidgetTester tester,

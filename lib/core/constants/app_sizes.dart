@@ -53,11 +53,13 @@ class AppSize {
 
   // Fonts
   static double get f12 => _scaled(12);
+  static double get f13 => _scaled(13);
   static double get f14 => _scaled(14);
   static double get f15 => _scaled(15);
   static double get f16 => _scaled(16);
   static double get f20 => _scaled(20);
   static double get f24 => _scaled(24);
+  static double get f30 => _scaled(30);
   static double get f32 => _scaled(32);
   static double get f34 => _scaled(34);
 
@@ -73,6 +75,7 @@ class AppSize {
   static double get w24 => _scaled(24);
   static double get w40 => _scaled(40);
   static double get w48 => _scaled(48);
+  static double get w100 => _scaled(100);
   static double get w200 => _scaled(200);
 
   // Radii

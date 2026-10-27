@@ -15,6 +15,11 @@ class AppConstants {
   static const int brochureNumberMinLength = 1;
   static const int brochureNumberMaxLength = 4;
 
+  // Access control
+  static const int accessCodeMaxLength = 10;
+  // Temporary until the access API is wired.
+  static const String accessCodeDemoValue = 'KORYA';
+
   // Touch
   // Unscaled on purpose: this is the accessibility floor, not a design size.
   static const double minTapTarget = 48;
@@ -35,8 +40,15 @@ class AppConstants {
   static const Duration pressFadeOut150ms = Duration(milliseconds: 150);
   static const Duration pressMinVisible100ms = Duration(milliseconds: 100);
   static const Duration searchDebounce300ms = Duration(milliseconds: 300);
-  static const Duration splashFade250ms = Duration(milliseconds: 250);
-  static const Duration splashDuration1500ms = Duration(milliseconds: 1500);
+  static const Duration accessCodeStagger60ms = Duration(milliseconds: 60);
+  static const Duration accessCodeLogoDelay500ms = Duration(milliseconds: 500);
+  static const Duration accessCodeLogoSlide700ms = Duration(milliseconds: 700);
+  static const Duration accessCodeDividerFillDelay500ms = Duration(
+    milliseconds: 500,
+  );
+  static const Duration accessCodeDividerFill700ms = Duration(
+    milliseconds: 700,
+  );
 
   // Opacity
   static const double opacityTransparent = 0;

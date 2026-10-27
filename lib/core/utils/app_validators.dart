@@ -9,6 +9,9 @@ class AppValidators {
   // Digits only — Western digits, no Arabic-Indic digits.
   static final RegExp _digitsOnlyRegex = RegExp(r'^[0-9]+$');
 
+  // Access code characters — Latin letters and Western digits only.
+  static final RegExp _accessCodeRegex = RegExp('[A-Za-z0-9]');
+
   // Brochure number: 1–4 digits, leading zeros allowed.
   static String? brochureNumber(String? value) {
     final number = value?.trim() ?? '';
@@ -27,5 +30,20 @@ class AppValidators {
   static List<TextInputFormatter> get brochureNumberFormatters => [
     FilteringTextInputFormatter.digitsOnly,
     LengthLimitingTextInputFormatter(AppConstants.brochureNumberMaxLength),
+  ];
+
+  // Access code is required.
+  static String? accessCode(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppStrings.accessCodeRequired;
+    }
+
+    return null;
+  }
+
+  // Latin letters and Western digits only, capped to the access code length.
+  static List<TextInputFormatter> get accessCodeFormatters => [
+    FilteringTextInputFormatter.allow(_accessCodeRegex),
+    LengthLimitingTextInputFormatter(AppConstants.accessCodeMaxLength),
   ];
 }

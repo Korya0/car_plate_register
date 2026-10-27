@@ -5,10 +5,6 @@ class AppStrings {
   static const String appName = 'سجّل';
   static const String pageNotFound = 'تعذّر فتح الصفحة';
 
-  // Splash
-  static const String splashTitle = 'سجّل';
-  static const String splashSubtitle = 'أرقام البروشورات';
-
   // Navigation
   static const String homeTab = 'الأرقام';
   static const String settingsTab = 'الإعدادات';
@@ -21,6 +17,15 @@ class AppStrings {
   static const String searchHint = 'ابحث عن رقم';
   static const String emptyTitle = 'لا توجد أرقام';
   static const String emptyMessage = 'أضف أول رقم بروشور للبدء';
+
+  // Access control
+  static const String accessCodeTitle = 'أدخل كود الوصول';
+  static const String accessCodeSubtitle =
+      'الكود الذي استلمته من المبرمج للوصول إلى البيانات';
+  static const String accessCodeLabel = 'كود الوصول';
+  static const String accessCodeRequired = 'أدخل الكود أولًا';
+  static const String accessCodeInvalid = 'كود الوصول غير صالح';
+  static const String accessCodeSubmit = 'دخول';
 
   // Settings
   static const String settingsTitle = 'الإعدادات';
