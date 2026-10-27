@@ -110,6 +110,13 @@ abstract final class AppTextStyles {
     height: AppConstants.lineHeightTitle,
   );
 
+  static TextStyle get font30W800OnSecondary => TextStyle(
+    fontSize: AppSize.f30,
+    fontWeight: AppFontWeight.extraBold.value,
+    color: AppColors.textOnSecondary,
+    height: AppConstants.lineHeightTitle,
+  );
+
   static TextStyle get font32W800Brand => TextStyle(
     fontSize: AppSize.f32,
     fontWeight: AppFontWeight.extraBold.value,
@@ -121,6 +128,13 @@ abstract final class AppTextStyles {
     fontSize: AppSize.f34,
     fontWeight: AppFontWeight.extraBold.value,
     color: AppColors.textPrimary,
+    height: AppConstants.lineHeightTitle,
+  );
+
+  static TextStyle get font150W800Watermark => TextStyle(
+    fontSize: AppSize.f150,
+    fontWeight: AppFontWeight.extraBold.value,
+    color: AppColors.textWatermark,
     height: AppConstants.lineHeightTitle,
   );
 }

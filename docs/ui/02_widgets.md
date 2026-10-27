@@ -24,6 +24,8 @@ Layout rules are in [`01_layout.md`](01_layout.md).
 | **Tap / Press Feedback** | `AppPressable` | `child`, `onPressed`, `fadeOpacity` |
 | **Text Input** | `AppTextField` | `controller`, `hint`, `validator`, `prefixIcon`, `keyboardType` |
 | **Section Header** | `AppSectionHeader` | `title`, `actionLabel`, `onAction` |
+| **Page Header** | `AppPageHeader` | `watermarkText`, `child` |
+| **Page Header Curve** | `AppPageHeaderCurve` | — |
 | **Dividers & Gaps** | `AppDivider`, `AppGap` | `AppGap.h(...)`, `AppGap.w(...)` |
 | **Empty State** | `AppEmptyView` | `title`, `subtitle`, `icon`, `actionButton` |
 | **Error State** | `AppErrorView` | `message`, `onRetry` |

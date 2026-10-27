@@ -1,8 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:car_register/app.dart';
 import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_strings.dart';
@@ -10,10 +5,15 @@ import 'package:car_register/core/router/app_router.dart';
 import 'package:car_register/core/router/app_routes.dart';
 import 'package:car_register/core/theme/app_colors.dart';
 import 'package:car_register/core/theme/app_scroll_behavior.dart';
+import 'package:car_register/core/widgets/app_page_header.dart';
 import 'package:car_register/core/widgets/app_primary_button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('shows the access code, then the home shell', (
+  testWidgets('shows the access code, then the home shell and brochures tab', (
     WidgetTester tester,
   ) async {
     AppRouter.router.go(AppRoutes.accessCode);
@@ -40,7 +40,33 @@ void main() {
 
     expect(find.text(AppStrings.accessCodeTitle), findsNothing);
     expect(find.text(AppStrings.homeTab), findsOneWidget);
-    expect(find.text(AppStrings.settingsTab), findsOneWidget);
+    expect(find.text(AppStrings.brochuresTab), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(AppPageHeader),
+        matching: find.text(AppStrings.homeHeaderWatermark),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byType(AppPageHeader),
+        matching: find.byType(CustomPaint),
+      ),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.text(AppStrings.brochuresTab));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('brochures-view')), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(AppPageHeader),
+        matching: find.text(AppStrings.brochuresHeaderWatermark),
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('disables the platform overscroll stretch', (tester) async {

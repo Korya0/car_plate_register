@@ -6,13 +6,16 @@ class AppStrings {
   static const String pageNotFound = 'تعذّر فتح الصفحة';
 
   // Navigation
-  static const String homeTab = 'الأرقام';
+  static const String homeTab = 'الرئيسية';
+  static const String brochuresTab = 'البروشورات';
   static const String settingsTab = 'الإعدادات';
   static const String back = 'رجوع';
 
   // Home
   static const String homeTitle = 'أرقام البروشورات';
   static const String homeSubtitle = 'سجّل أرقام البروشورات وابحث عنها بسهولة';
+  static const String homeHeaderWatermark = '#';
+  static const String brochuresHeaderWatermark = 'LIST';
   static const String addNumber = 'إضافة رقم';
   static const String searchHint = 'ابحث عن رقم';
   static const String emptyTitle = 'لا توجد أرقام';

@@ -4,4 +4,5 @@ abstract final class AppRoutes {
 
   // Main tabs
   static const String home = '/home';
+  static const String brochures = '/brochures';
 }

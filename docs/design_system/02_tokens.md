@@ -46,10 +46,10 @@ duration: Duration(milliseconds: 300)
 |---|---|---|---|
 | **Icons** | `icon*` | `icon16`, `icon24`, `icon32`, `icon48` | Icon sizes and icon button bounding boxes |
 | **Padding & Spacing** | `p*` | `p4`, `p8`, `p12`, `p16`, `p20`, `p24`, `p32`, `p40`, `p48` | `AppGap`, `EdgeInsets`, card insets |
-| **Fonts** | `f*` | `f12`, `f13`, `f14`, `f15`, `f16`, `f20`, `f24`, `f30`, `f32`, `f34` | Sizing for `AppTextStyles` |
+| **Fonts** | `f*` | `f12`, `f13`, `f14`, `f15`, `f16`, `f20`, `f24`, `f30`, `f32`, `f34`, `f150` | Sizing for `AppTextStyles` |
 | **Heights** | `h*` | `h18`, `h40`, `h48`, `h56`, `h150` | Heights of buttons, inputs, cards |
 | **Widths** | `w*` | `w4`, `w24`, `w40`, `w48`, `w200` | Specific widths, indicators, logos |
-| **Radii** | `r*` | `r4`, `r8`, `r12`, `r16`, `r24`, `circularRadius` | `BorderRadius.circular(...)` on cards & buttons |
+| **Radii** | `r*` | `r4`, `r8`, `r12`, `r16`, `r24`, `r40`, `circularRadius` | `BorderRadius.circular(...)` on cards & buttons |
 | **Borders & Dividers**| — | `borderWidth`, `dividerThickness`, `dividerHeight` | Borders, outlines, and horizontal dividers |
 
 ### Composite Layout Insets

@@ -62,6 +62,7 @@ class AppSize {
   static double get f30 => _scaled(30);
   static double get f32 => _scaled(32);
   static double get f34 => _scaled(34);
+  static double get f150 => _scaled(150);
 
   // Heights
   static double get h18 => _scaled(18);
@@ -83,7 +84,9 @@ class AppSize {
   static double get r8 => _scaled(8);
   static double get r12 => _scaled(12);
   static double get r16 => _scaled(16);
+  static double get r20 => _scaled(20);
   static double get r24 => _scaled(24);
+  static double get r40 => _scaled(40);
 
   // Round enough for pills and avatars
   static double get circularRadius => _scaled(99);
