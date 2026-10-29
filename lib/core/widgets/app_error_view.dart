@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-
 import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/constants/app_strings.dart';
 import 'package:car_register/core/theme/app_colors.dart';
 import 'package:car_register/core/theme/app_text_styles.dart';
 import 'package:car_register/core/widgets/app_gap.dart';
 import 'package:car_register/core/widgets/app_primary_button.dart';
+import 'package:flutter/material.dart';
 
 class AppErrorView extends StatelessWidget {
   const AppErrorView({
@@ -22,7 +21,6 @@ class AppErrorView extends StatelessWidget {
     child: Padding(
       padding: EdgeInsets.all(AppSize.p24),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
           // Icon
           Icon(

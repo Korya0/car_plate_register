@@ -21,25 +21,25 @@ class AppStrings {
   static const String clearSearch = 'مسح البحث';
   static const String moreOptions = 'خيارات إضافية';
   static const String deleteBrochure = 'حذف البروشور';
-  static const String deleteAll = 'حذف الكل';
+  static const String saveNumber = 'حفظ الرقم';
+  static const String searchNow = 'بحث';
   static const String noBrochuresYet = 'لا توجد أرقام بعد';
   static const String emptyCount = '000';
   static const String firstBrochurePrompt = 'ابدأ بتسجيل أول رقم بروشور.';
   static const String addFirstBrochure = 'سجّل أول رقم';
   static const String deleteBrochureTitle = 'حذف البروشور؟';
-  static const String deleteAllTitle = 'حذف كل البروشورات؟';
   static String deleteBrochureMessage(String number) =>
       'سيتم حذف الرقم $number من القائمة.';
-  static const String deleteAllMessage = 'سيتم حذف جميع الأرقام من القائمة.';
-  static String deletedMessage(String number) => 'تم حذف $number';
-  static const String allDeletedMessage = 'تم حذف جميع الأرقام';
+  static String selectedCount(int count) => 'تم تحديد $count';
+  static const String selectAll = 'اختيار الكل';
+  static const String clearAllSelection = 'إلغاء الكل';
+  static String deleteSelectedMessage(int count) =>
+      'سيتم حذف $count من الأرقام المحددة.';
+  static const String deleteSelected = 'حذف المحدد';
   static const String brochureDuplicateTitle = 'الرقم مسجّل مسبقًا';
   static const String brochureDuplicateMessage =
       'هذا الرقم موجود بالفعل في قائمة البروشورات.';
   static const String brochureInputErrorTitle = 'تعذّر إدخال الرقم';
-  static String addedAt(String time) => 'اليوم $time';
-  static String time(String hour, String minute) => '$hour:$minute';
-  static const String placeholderTime = '00:00';
 
   // Access control
   static const String accessCodeTitle = 'أدخل كود الوصول';
@@ -68,7 +68,6 @@ class AppStrings {
   // Actions
   static const String cancel = 'إلغاء';
   static const String delete = 'حذف';
-  static const String undo = 'تراجع';
   static const String okay = 'حسنًا';
 
   // Brochure numbers

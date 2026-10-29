@@ -28,7 +28,7 @@ Widget  ──►  AppTextStyles.*        ← Single source of truth for typogra
 // ✅ Correct
 Text(AppStrings.appName)
 Text(AppStrings.emptyTitle)
-Text(AppStrings.deleteAllMessage)
+Text(AppStrings.deleteBrochureMessage('123'))
 
 // ❌ Forbidden
 Text('سجل البروشورات')
@@ -43,6 +43,7 @@ Text('Delete')
 - Car brochure numbers can be from 1 to 4 digits.
 - Leading zeros must be preserved (`007`, `042`, etc.), which is why brochure numbers are stored and handled as `String`, not integer.
 - The UI must always display brochure numbers and counts using Western numerals (`0-9`).
+- Fields that only hold numbers or Latin codes (`AppTextField`) use `textDirection: TextDirection.ltr` with `textAlign: TextAlign.right`. Digits are LTR content; inheriting the app's RTL paragraph direction breaks caret placement and backspace inside Flutter ([flutter#43054](https://github.com/flutter/flutter/issues/43054)).
 
 ---
 

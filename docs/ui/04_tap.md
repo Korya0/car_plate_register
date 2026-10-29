@@ -63,3 +63,11 @@ Container(
 
 - Every interactive element must provide a touch target of at least **48 × 48 px** (`AppConstants.minTapTarget`).
 - For small visual glyphs (such as 16 px or 24 px icons), wrap them with `AppIconButton` or ensure padding expands the hit area to at least 48 px.
+
+---
+
+## 4. Keyboard & Focus
+
+- A text field requests focus the first time its screen appears (`autofocus: true`): home, search, and access code open with the keyboard ready.
+- After that, only the user reopens the keyboard. Delete, dialogs, validation errors, and navigation must never bring it back.
+- Always dismiss with `context.unfocus()` or the field's `FocusNode.unfocus()`. Both move focus to the enclosing scope; unfocusing the scope itself (`FocusScope.of(context).unfocus()`) leaves the field remembered, so Flutter restores it — and the keyboard — when a dialog closes.

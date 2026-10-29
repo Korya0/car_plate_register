@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_strings.dart';
-import 'package:car_register/core/theme/app_colors.dart';
+import 'package:car_register/core/widgets/app_pressable.dart';
 
 import '../../../../../support/home_test_helpers.dart';
 
@@ -20,31 +21,31 @@ void main() {
     expect(find.text(AppStrings.homeSearchHint), findsWidgets);
   });
 
-  testWidgets('opens the more options menu under its button with red text', (
+  testWidgets('saves from the field action and drops the options menu', (
     WidgetTester tester,
   ) async {
     await openHome(tester);
-    await addBrochure(tester, '123');
 
-    final button = find.byType(PopupMenuButton<String>);
-    final buttonRect = tester.getRect(button);
+    expect(find.byType(PopupMenuButton<String>), findsNothing);
+    expect(find.byTooltip(AppStrings.saveNumber), findsOneWidget);
 
-    await tester.tap(button);
+    AppPressable saveButton() => tester.widget<AppPressable>(
+      find.descendant(
+        of: find.byTooltip(AppStrings.saveNumber),
+        matching: find.byType(AppPressable),
+      ),
+    );
+
+    expect(saveButton().onPressed, isNull);
+
+    await tester.enterText(find.byType(TextField), '007');
+    await tester.pumpAndSettle();
+    expect(saveButton().onPressed, isNotNull);
+
+    await tester.tap(find.byTooltip(AppStrings.saveNumber));
+    await tester.pump(AppConstants.animationFast200ms);
     await tester.pumpAndSettle();
 
-    final menuItem = find.byType(PopupMenuItem<String>);
-    expect(menuItem, findsOneWidget);
-
-    final menuRect = tester.getRect(menuItem);
-    expect(menuRect.top, greaterThanOrEqualTo(buttonRect.bottom));
-    expect(menuRect.left, closeTo(buttonRect.left, 0.5));
-
-    final label = tester.widget<Text>(find.text(AppStrings.deleteAll));
-    expect(label.style?.color, AppColors.textBrand);
-
-    await tester.tap(find.text(AppStrings.deleteAll));
-    await tester.pumpAndSettle();
-
-    expect(find.text(AppStrings.deleteAllTitle), findsOneWidget);
+    expect(find.text('007', findRichText: true), findsOneWidget);
   });
 }

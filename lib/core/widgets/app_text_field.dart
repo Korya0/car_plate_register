@@ -1,14 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import 'package:flutter_animate/flutter_animate.dart';
-
 import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/theme/app_colors.dart';
 import 'package:car_register/core/theme/app_text_styles.dart';
 import 'package:car_register/core/utils/context_extension.dart';
 import 'package:car_register/core/widgets/app_gap.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class AppTextField extends StatefulWidget {
   const AppTextField({
@@ -41,6 +39,8 @@ class AppTextField extends StatefulWidget {
     this.hasError = false,
     this.highlightOnFocus = true,
     this.maxLines = AppConstants.maxOneLine,
+    this.textDirection = TextDirection.ltr,
+    this.textAlign = TextAlign.right,
   });
 
   final String? label;
@@ -71,6 +71,8 @@ class AppTextField extends StatefulWidget {
   final bool hasError;
   final bool highlightOnFocus;
   final int? maxLines;
+  final TextDirection textDirection;
+  final TextAlign textAlign;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -171,6 +173,8 @@ class _AppTextFieldState extends State<AppTextField> {
                             focusNode: _focusNode,
                             obscureText: widget.obscureText,
                             autofocus: widget.autofocus,
+                            textDirection: widget.textDirection,
+                            textAlign: widget.textAlign,
                             maxLines: widget.maxLines,
                             maxLength: widget.maxLength,
                             onChanged: (value) {
@@ -197,6 +201,7 @@ class _AppTextFieldState extends State<AppTextField> {
                               focusedBorder: InputBorder.none,
                               counterText: '',
                               isDense: true,
+
                               contentPadding: widget.leading == null
                                   ? EdgeInsets.symmetric(
                                       horizontal: AppSize.p16,
@@ -211,7 +216,6 @@ class _AppTextFieldState extends State<AppTextField> {
                         if (widget.trailing != null) ...[
                           AppGap.w(AppSize.p8),
                           widget.trailing!,
-                          AppGap.w(AppSize.p12),
                         ],
                       ],
                     ),

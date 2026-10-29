@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/constants/app_strings.dart';
@@ -8,24 +6,24 @@ import 'package:car_register/core/utils/app_validators.dart';
 import 'package:car_register/core/widgets/app_gap.dart';
 import 'package:car_register/core/widgets/app_icon_button.dart';
 import 'package:car_register/core/widgets/app_text_field.dart';
-import 'package:car_register/features/home/presentation/widgets/brochure_options_menu.dart';
 import 'package:car_register/features/home/presentation/widgets/home_indexed_label.dart';
+import 'package:flutter/material.dart';
 
 class SearchHeaderContent extends StatelessWidget {
   const SearchHeaderContent({
     required this.searchController,
     required this.searchFocusNode,
     required this.onSearchChanged,
+    required this.onSubmit,
     required this.onBack,
-    required this.onDeleteAll,
     super.key,
   });
 
   final TextEditingController searchController;
   final FocusNode searchFocusNode;
   final ValueChanged<String> onSearchChanged;
+  final VoidCallback onSubmit;
   final VoidCallback onBack;
-  final VoidCallback onDeleteAll;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -44,9 +42,6 @@ class SearchHeaderContent extends StatelessWidget {
           ),
 
           const Spacer(),
-
-          // More options
-          BrochureOptionsMenu(onDeleteAll: onDeleteAll),
         ],
       ),
       AppGap.h(AppSize.p12),
@@ -65,30 +60,39 @@ class SearchHeaderContent extends StatelessWidget {
         autofocus: true,
         hint: AppStrings.brochuresSearchHint,
         onChanged: onSearchChanged,
+        onSubmitted: (_) => onSubmit(),
         keepKeyboardOpenOnSubmitted: true,
         keyboardType: TextInputType.number,
         textInputAction: TextInputAction.search,
         maxLength: AppConstants.brochureNumberMaxLength,
         inputFormatters: AppValidators.brochureNumberFormatters,
-        leading: Padding(
-          padding: EdgeInsetsDirectional.only(start: AppSize.p12),
-          child: Icon(
-            Icons.search,
-            size: AppSize.icon24,
-            color: AppColors.iconSecondary,
+        trailing: ValueListenableBuilder<TextEditingValue>(
+          valueListenable: searchController,
+          builder: (context, value, _) => Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Clear
+              if (value.text.isNotEmpty)
+                AppIconButton(
+                  icon: Icons.close,
+                  tooltip: AppStrings.clearSearch,
+                  color: AppColors.iconSecondary,
+                  onPressed: () {
+                    searchController.clear();
+                    onSearchChanged('');
+                  },
+                ),
+
+              // Submit
+              AppIconButton(
+                icon: Icons.send_rounded,
+                tooltip: AppStrings.searchNow,
+                color: AppColors.iconPrimary,
+                onPressed: value.text.trim().isEmpty ? null : onSubmit,
+              ),
+            ],
           ),
         ),
-        trailing: searchController.text.isNotEmpty
-            ? AppIconButton(
-                icon: Icons.close,
-                tooltip: AppStrings.clearSearch,
-                color: AppColors.iconSecondary,
-                onPressed: () {
-                  searchController.clear();
-                  onSearchChanged('');
-                },
-              )
-            : null,
         backgroundColor: AppColors.scaffoldBackgroundColor,
         borderColor: AppColors.textOnSecondary,
       ),

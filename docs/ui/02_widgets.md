@@ -32,7 +32,7 @@ Layout rules are in [`01_layout.md`](01_layout.md).
 | **Sliver Grid** | `AppSliverGrid` | `itemCount`, `itemBuilder`, `maxCrossAxisExtent` / `crossAxisCount`, spacing |
 | **Bottom Sheet** | `AppBottomSheet` | `context`, `child` |
 | **Confirmation Dialog** | `CustomConfirmationDialog` | `context`, `title`, `message`, `confirmText`, `cancelText` |
-| **In-App Toast** | `AppToast` | Top overlay, optional undo action |
+| **In-App Toast** | `AppToast` | Top overlay, optional action |
 
 ### Home Widget Inventory (Located in `lib/features/home/presentation/widgets/`)
 
@@ -43,22 +43,21 @@ Shared by the home and search screens (root of `widgets/`):
 | **Indexed Header Label** | `HomeIndexedLabel` | `index`, `label` |
 | **Page Header** | `HomePageHeader` | `watermarkText`, `child`, `fillWatermarkHeight` |
 | **Page Header Curve** | `HomePageHeaderCurve` | — |
-| **Brochure List Body** | `BrochureListBody` | `query`, `emptyState`, `noMatchesState`, `onDelete` |
-| **Brochure Options Menu** | `BrochureOptionsMenu` | `onDeleteAll` |
-| **Brochure Row** | `HomeBrochureEntryRow` | `brochure`, `query`, `onDelete`; `.loading()` |
+| **Brochure List Body** | `BrochureListBody` | `entries`, `query`, `emptyState`, `noMatchesState`, `onConfirmDelete`, `onConfirmDeleteMany`, `onDelete` |
+| **Brochure Card** | `HomeBrochureEntryRow` | `brochure`, `query`, `onPressed`; `.loading()` |
 | **Empty State** | `HomeBrochureEmptyState` | `title`, `subtitle`, `onAdd` |
 
 Home-only (`widgets/home/`):
 
 | Need / Purpose | Widget | Key Parameters |
 |---|---|---|
-| **Home Header Content** | `HomeHeaderContent` | `numberController`, `numberFocusNode`, `onSave`, `onSearch`, `onDeleteAll` |
+| **Home Header Content** | `HomeHeaderContent` | `numberController`, `numberFocusNode`, `onSave`, `onSearch` |
 
 Search-only (`widgets/search/`):
 
 | Need / Purpose | Widget | Key Parameters |
 |---|---|---|
-| **Search Header Content** | `SearchHeaderContent` | `searchController`, `searchFocusNode`, `onSearchChanged`, `onBack`, `onDeleteAll` |
+| **Search Header Content** | `SearchHeaderContent` | `searchController`, `searchFocusNode`, `onSearchChanged`, `onSubmit`, `onBack` |
 
 ---
 
@@ -114,17 +113,28 @@ class BrochureCard extends StatelessWidget {
 - Mark constructors as `const` whenever all fields are immutable.
 - Use `const` widget invocations in layout trees to prevent unnecessary rebuilds.
 
-### Brochure List Rows
+### Brochure Cards
 
 The home feature owns brochure entry, while search is a separate route inside the
-same feature. `HomeBrochureEntryRow.loading()` renders loading placeholders
-inside the same row layout as real entries. Keep row spacing, alignment, and
-separators in `HomeBrochureEntryRow` so loading and loaded lists stay visually
-aligned. `BrochureListBody` renders the shared loading, error, empty, no-match,
-and list states for both screens.
+same feature. Brochures render as bordered cards in a four-column grid
+(`AppSliverGrid.count`), so the unused width of a phone screen is used instead of
+leaving a single column stretched. Cards have no dividers and no fill: they are outlined
+over the page background, and the border, radius, and padding live in
+`HomeBrochureEntryRow`, which also holds
+`HomeBrochureEntryRow.loading()` so placeholders sit in the same card layout as
+real entries. `BrochureListBody` renders the shared loading, error, empty,
+no-match, grid, and selection states for both screens.
 
-Saved brochures render below the header on both screens. The home screen shows
-the empty state without an add action because the entry field is already on
-screen. Search filters the same brochure provider list and never renders a
-results-count label. `HomeBrochureEmptyState` supports a title-only mode for
-searches with no matches by omitting `subtitle` and `onAdd`.
+Saved brochures render below the header on both screens. A single tap on a card
+opens its delete confirmation dialog, and a confirmed delete removes the card
+silently — no toast. A long press starts selection mode instead: every card shows
+a selection circle in its top start corner, drawn as an overlay so the card and
+its number keep the same size and position, tapping a card toggles it, and a bar
+above the grid offers
+«اختيار الكل» / «إلغاء الكل» plus a delete action for the selected cards (with its
+own confirmation and count). Closing the bar leaves selection mode. Cards show
+the number only (no date or time), do not swipe, and carry no delete icon. There is no selection mode, no select-all, no delete-all, and no undo. The home screen
+shows the empty state without an add action because the entry field is already on
+screen. Search filters the same brochure store and never renders a results-count
+label. `HomeBrochureEmptyState` supports a title-only mode for searches with no
+matches by omitting `subtitle` and `onAdd`.

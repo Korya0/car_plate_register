@@ -9,8 +9,10 @@ import 'package:car_register/core/constants/app_strings.dart';
 import 'package:car_register/core/router/app_router.dart';
 import 'package:car_register/core/router/app_routes.dart';
 import 'package:car_register/core/widgets/app_primary_button.dart';
+import 'package:car_register/features/home/presentation/mock/brochure_mock_store.dart';
 
 Future<void> openHome(WidgetTester tester) async {
+  BrochureMockStore.reset();
   AppRouter.router.go(AppRoutes.accessCode);
   await tester.pumpWidget(
     const ProviderScope(child: CarRegisterApp()),
@@ -44,5 +46,18 @@ Future<void> addBrochure(WidgetTester tester, String number) async {
   await tester.testTextInput.receiveAction(TextInputAction.send);
   await tester.pumpAndSettle();
   tester.testTextInput.hide();
+  await tester.pumpAndSettle();
+}
+
+Future<void> openDeleteDialog(WidgetTester tester, String number) async {
+  await tester.tap(find.text(number, findRichText: true));
+  await tester.pump();
+  await tester.pump(AppConstants.pressMinVisible100ms);
+  await tester.pumpAndSettle();
+}
+
+Future<void> tapToDelete(WidgetTester tester, String number) async {
+  await openDeleteDialog(tester, number);
+  await tester.tap(find.text(AppStrings.delete).last);
   await tester.pumpAndSettle();
 }

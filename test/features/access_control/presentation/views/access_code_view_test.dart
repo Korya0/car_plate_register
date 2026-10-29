@@ -54,6 +54,18 @@ void main() {
     expect(find.byType(AppPrimaryButton), findsOneWidget);
   });
 
+  testWidgets('opens with the access code field ready for typing', (
+    tester,
+  ) async {
+    await tester.pumpWidget(buildApp(buildRouter()));
+    await tester.pumpAndSettle();
+
+    final field = tester.widget<TextField>(find.byType(TextField));
+
+    expect(field.focusNode?.hasFocus, isTrue);
+    expect(tester.testTextInput.isVisible, isTrue);
+  });
+
   testWidgets('slides the logo from the opposite side to its start position', (
     tester,
   ) async {

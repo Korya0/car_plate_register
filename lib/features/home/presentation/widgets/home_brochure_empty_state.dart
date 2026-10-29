@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
-
 import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/constants/app_strings.dart';
 import 'package:car_register/core/theme/app_text_styles.dart';
 import 'package:car_register/core/widgets/app_gap.dart';
 import 'package:car_register/core/widgets/app_primary_button.dart';
+import 'package:flutter/material.dart';
 
 class HomeBrochureEmptyState extends StatelessWidget {
   const HomeBrochureEmptyState({
@@ -23,7 +22,6 @@ class HomeBrochureEmptyState extends StatelessWidget {
     child: Padding(
       padding: EdgeInsets.all(AppSize.p24),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
           // Count
           Text(AppStrings.emptyCount, style: AppTextStyles.font150W800Disabled),

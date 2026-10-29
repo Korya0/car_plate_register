@@ -1,30 +1,25 @@
-import 'package:flutter/material.dart';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:go_router/go_router.dart';
-
 import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_strings.dart';
 import 'package:car_register/core/router/app_routes.dart';
 import 'package:car_register/core/utils/app_validators.dart';
 import 'package:car_register/core/widgets/custom_confirmation_dialog.dart';
-import 'package:car_register/features/home/presentation/providers/brochure_list_provider.dart';
-import 'package:car_register/features/home/presentation/views/brochure_actions.dart';
+import 'package:car_register/features/home/domain/entities/brochure_entity.dart';
+import 'package:car_register/features/home/presentation/mock/brochure_mock_store.dart';
 import 'package:car_register/features/home/presentation/widgets/brochure_list_body.dart';
 import 'package:car_register/features/home/presentation/widgets/home/home_header_content.dart';
 import 'package:car_register/features/home/presentation/widgets/home_brochure_empty_state.dart';
 import 'package:car_register/features/home/presentation/widgets/home_page_header.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-class HomeView extends ConsumerStatefulWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
-  ConsumerState<HomeView> createState() => _HomeViewState();
+  State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends ConsumerState<HomeView>
-    with BrochureActions<HomeView> {
+class _HomeViewState extends State<HomeView> {
   final TextEditingController _numberController = TextEditingController();
   final FocusNode _numberFocusNode = FocusNode();
   bool _isSaving = false;
@@ -36,13 +31,40 @@ class _HomeViewState extends ConsumerState<HomeView>
     super.dispose();
   }
 
-  @override
-  void dismissKeyboard() => _numberFocusNode.unfocus();
+  void _dismissKeyboard() => _numberFocusNode.unfocus();
 
-  // Opens the search screen.
-  void _openSearch() {
-    dismissKeyboard();
-    context.push(AppRoutes.search);
+  // Confirms deleting one entry; `false` keeps it.
+  Future<bool> _confirmDelete(BrochureEntity entry) async {
+    _dismissKeyboard();
+    final confirmed = await CustomConfirmationDialog.show(
+      context: context,
+      title: AppStrings.deleteBrochureTitle,
+      message: AppStrings.deleteBrochureMessage(entry.number),
+      confirmText: AppStrings.delete,
+      cancelText: AppStrings.cancel,
+    );
+    return mounted && confirmed == true;
+  }
+
+  // Confirms deleting the selected entries; `false` keeps them.
+  Future<bool> _confirmDeleteMany(int count) async {
+    _dismissKeyboard();
+    final confirmed = await CustomConfirmationDialog.show(
+      context: context,
+      title: AppStrings.deleteBrochureTitle,
+      message: AppStrings.deleteSelectedMessage(count),
+      confirmText: AppStrings.delete,
+      cancelText: AppStrings.cancel,
+    );
+    return mounted && confirmed == true;
+  }
+
+  // Deletes one entry.
+  void _deleteEntry(BrochureEntity entry) {
+    final deleted = BrochureMockStore.delete(entry.id);
+    if (deleted == null) return;
+
+    setState(() {});
   }
 
   // Validates and adds a number.
@@ -52,6 +74,7 @@ class _HomeViewState extends ConsumerState<HomeView>
     final number = _numberController.text.trim();
     final validationMessage = AppValidators.brochureNumber(number);
     if (validationMessage != null) {
+      _dismissKeyboard();
       await CustomConfirmationDialog.show(
         context: context,
         title: AppStrings.brochureInputErrorTitle,
@@ -62,8 +85,10 @@ class _HomeViewState extends ConsumerState<HomeView>
       return;
     }
 
-    final records = ref.read(brochureListProvider).value;
-    if (records?.any((entry) => entry.number == number) ?? false) {
+    final exists = BrochureMockStore.entries.any(
+      (entry) => entry.number == number,
+    );
+    if (exists) {
       await _showDuplicateDialog();
       return;
     }
@@ -72,7 +97,7 @@ class _HomeViewState extends ConsumerState<HomeView>
     await Future<void>.delayed(AppConstants.animationFast200ms);
     if (!mounted) return;
 
-    final added = ref.read(brochureListProvider.notifier).add(number);
+    final added = BrochureMockStore.add(number);
     if (added == null) {
       setState(() => _isSaving = false);
       await _showDuplicateDialog();
@@ -84,13 +109,16 @@ class _HomeViewState extends ConsumerState<HomeView>
   }
 
   // Shows duplicate warning.
-  Future<void> _showDuplicateDialog() => CustomConfirmationDialog.show(
-    context: context,
-    title: AppStrings.brochureDuplicateTitle,
-    message: AppStrings.brochureDuplicateMessage,
-    confirmText: AppStrings.okay,
-    cancelText: AppStrings.cancel,
-  );
+  Future<void> _showDuplicateDialog() async {
+    _dismissKeyboard();
+    await CustomConfirmationDialog.show(
+      context: context,
+      title: AppStrings.brochureDuplicateTitle,
+      message: AppStrings.brochureDuplicateMessage,
+      confirmText: AppStrings.okay,
+      cancelText: AppStrings.cancel,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,18 +134,24 @@ class _HomeViewState extends ConsumerState<HomeView>
               numberController: _numberController,
               numberFocusNode: _numberFocusNode,
               onSave: _saveNumber,
-              onSearch: _openSearch,
-              onDeleteAll: () => confirmDeleteAll(),
+              onSearch: () async {
+                _dismissKeyboard();
+                await context.push(AppRoutes.search);
+                if (mounted) setState(() {});
+              },
             ),
           ),
 
           // Body
           Expanded(
             child: BrochureListBody(
+              entries: BrochureMockStore.entries,
               query: '',
               emptyState: const HomeBrochureEmptyState(),
               noMatchesState: const HomeBrochureEmptyState(subtitle: null),
-              onDelete: (entry) => confirmDelete(entry),
+              onConfirmDelete: _confirmDelete,
+              onConfirmDeleteMany: _confirmDeleteMany,
+              onDelete: _deleteEntry,
             ),
           ),
         ],

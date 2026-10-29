@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/constants/app_strings.dart';
@@ -9,8 +7,8 @@ import 'package:car_register/core/utils/app_validators.dart';
 import 'package:car_register/core/widgets/app_gap.dart';
 import 'package:car_register/core/widgets/app_icon_button.dart';
 import 'package:car_register/core/widgets/app_text_field.dart';
-import 'package:car_register/features/home/presentation/widgets/brochure_options_menu.dart';
 import 'package:car_register/features/home/presentation/widgets/home_indexed_label.dart';
+import 'package:flutter/material.dart';
 
 class HomeHeaderContent extends StatelessWidget {
   const HomeHeaderContent({
@@ -18,7 +16,6 @@ class HomeHeaderContent extends StatelessWidget {
     required this.numberFocusNode,
     required this.onSave,
     required this.onSearch,
-    required this.onDeleteAll,
     super.key,
   });
 
@@ -26,7 +23,6 @@ class HomeHeaderContent extends StatelessWidget {
   final FocusNode numberFocusNode;
   final VoidCallback onSave;
   final VoidCallback onSearch;
-  final VoidCallback onDeleteAll;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -42,9 +38,6 @@ class HomeHeaderContent extends StatelessWidget {
               style: AppTextStyles.font20W700OnSecondary,
             ),
           ),
-
-          // More options
-          BrochureOptionsMenu(onDeleteAll: onDeleteAll),
 
           // Search
           AppIconButton(
@@ -73,14 +66,19 @@ class HomeHeaderContent extends StatelessWidget {
         keepKeyboardOpenOnSubmitted: true,
         keyboardType: TextInputType.number,
         textInputAction: TextInputAction.send,
+        autofocus: true,
         maxLength: AppConstants.brochureNumberMaxLength,
         inputFormatters: AppValidators.brochureNumberFormatters,
-        leading: Padding(
-          padding: EdgeInsetsDirectional.only(start: AppSize.p12),
-          child: Icon(
-            Icons.tag,
-            size: AppSize.icon24,
-            color: AppColors.iconSecondary,
+
+        // Save action
+        trailing: ValueListenableBuilder<TextEditingValue>(
+          valueListenable: numberController,
+          builder: (context, value, _) => AppIconButton(
+            icon: Icons.send_rounded,
+
+            tooltip: AppStrings.saveNumber,
+            color: AppColors.iconPrimary,
+            onPressed: value.text.trim().isEmpty ? null : onSave,
           ),
         ),
         backgroundColor: AppColors.scaffoldBackgroundColor,

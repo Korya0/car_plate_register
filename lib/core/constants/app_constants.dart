@@ -50,6 +50,10 @@ class AppConstants {
   static const Duration accessCodeDividerFill700ms = Duration(
     milliseconds: 700,
   );
+  static const Duration homeHeaderCurveDelay300ms = Duration(
+    milliseconds: 300,
+  );
+  static const Duration homeHeaderCurveDraw900ms = Duration(milliseconds: 900);
 
   // Opacity
   static const double opacityTransparent = 0;

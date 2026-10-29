@@ -84,6 +84,7 @@ duration: Duration(milliseconds: 300)
    - `searchDebounce300ms`, `toastDuration2s`, `hapticGap200ms`
    - `accessCodeStagger60ms`, `accessCodeLogoDelay500ms`, `accessCodeLogoSlide700ms`
    - `accessCodeDividerFillDelay500ms`, `accessCodeDividerFill700ms`
+   - `homeHeaderCurveDelay300ms`, `homeHeaderCurveDraw900ms`
    - `slideOffsetNone = 0`, `slideOffsetSmall = 0.2`
 7. **Opacities:**
    - `opacityPressed = 0.55`, `opacityDisabled = 0.45`

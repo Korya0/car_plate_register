@@ -91,6 +91,7 @@ class _AccessCodeFormState extends State<AccessCodeForm> {
           validator: AppValidators.accessCode,
           keyboardType: TextInputType.visiblePassword,
           inputFormatters: AppValidators.accessCodeFormatters,
+          autofocus: true,
         ).animate().slideX(
           begin: 0.15,
           end: 0,

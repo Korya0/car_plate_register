@@ -17,8 +17,11 @@ extension ContextExtension on BuildContext {
     child: child,
   );
 
-  // Focus
-  void unfocus() => FocusScope.of(this).unfocus();
+  // Focus: move focus to the enclosing scope so a dialog that opens right
+  // after does not restore focus (and the keyboard) to the field on close.
+  void unfocus() => FocusManager.instance.primaryFocus?.unfocus(
+    disposition: UnfocusDisposition.scope,
+  );
 
   // Motion
   bool get reduceMotion => MediaQuery.maybeDisableAnimationsOf(this) ?? false;

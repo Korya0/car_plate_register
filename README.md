@@ -67,8 +67,7 @@
 - **Add &amp; Save**: Record car brochure numbers from 1 to 4 digits.
 - **Leading Zeros**: Numbers are stored as `String`, so `007` stays `007`.
 - **Search &amp; Count**: Search any number and see the total registered count.
-- **Delete with Undo**: Delete a single number with confirmation and an Undo option.
-- **Delete All**: Clear every number with a clear confirmation dialog.
+- **Delete**: Delete a single number after a confirmation dialog.
 
 </details>
 

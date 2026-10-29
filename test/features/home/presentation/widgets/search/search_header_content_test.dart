@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/constants/app_strings.dart';
-import 'package:car_register/core/theme/app_colors.dart';
+import 'package:car_register/core/widgets/app_pressable.dart';
 import 'package:car_register/features/home/presentation/widgets/home_page_header.dart';
 
 import '../../../../../support/home_test_helpers.dart';
@@ -25,33 +25,33 @@ void main() {
     expect(icon.size, AppSize.icon20);
   });
 
-  testWidgets('opens the more options menu under its button with red text', (
+  testWidgets('submits from the field action without an options menu', (
     WidgetTester tester,
   ) async {
     await openHome(tester);
     await addBrochure(tester, '123');
     await openSearch(tester);
 
-    final button = find.byType(PopupMenuButton<String>);
-    final buttonRect = tester.getRect(button);
+    expect(find.byType(PopupMenuButton<String>), findsNothing);
+    expect(find.byTooltip(AppStrings.searchNow), findsOneWidget);
 
-    await tester.tap(button);
+    AppPressable submitButton() => tester.widget<AppPressable>(
+      find.descendant(
+        of: find.byTooltip(AppStrings.searchNow),
+        matching: find.byType(AppPressable),
+      ),
+    );
+
+    expect(submitButton().onPressed, isNull);
+
+    await tester.enterText(find.byType(TextField), '1');
+    await tester.pumpAndSettle();
+    expect(submitButton().onPressed, isNotNull);
+
+    await tester.tap(find.byTooltip(AppStrings.searchNow));
     await tester.pumpAndSettle();
 
-    final menuItem = find.byType(PopupMenuItem<String>);
-    expect(menuItem, findsOneWidget);
-
-    final menuRect = tester.getRect(menuItem);
-    expect(menuRect.top, greaterThanOrEqualTo(buttonRect.bottom));
-    expect(menuRect.left, closeTo(buttonRect.left, 0.5));
-
-    final label = tester.widget<Text>(find.text(AppStrings.deleteAll));
-    expect(label.style?.color, AppColors.textBrand);
-
-    await tester.tap(find.text(AppStrings.deleteAll));
-    await tester.pumpAndSettle();
-
-    expect(find.text(AppStrings.deleteAllTitle), findsOneWidget);
+    expect(tester.testTextInput.isVisible, isFalse);
   });
 
   testWidgets('shows the search field and clears it', (

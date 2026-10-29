@@ -1,26 +1,23 @@
-import 'package:flutter/material.dart';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:go_router/go_router.dart';
-
 import 'package:car_register/core/constants/app_strings.dart';
 import 'package:car_register/core/router/app_routes.dart';
-import 'package:car_register/features/home/presentation/views/brochure_actions.dart';
+import 'package:car_register/core/widgets/custom_confirmation_dialog.dart';
+import 'package:car_register/features/home/domain/entities/brochure_entity.dart';
+import 'package:car_register/features/home/presentation/mock/brochure_mock_store.dart';
 import 'package:car_register/features/home/presentation/widgets/brochure_list_body.dart';
 import 'package:car_register/features/home/presentation/widgets/home_brochure_empty_state.dart';
 import 'package:car_register/features/home/presentation/widgets/home_page_header.dart';
 import 'package:car_register/features/home/presentation/widgets/search/search_header_content.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-class SearchView extends ConsumerStatefulWidget {
+class SearchView extends StatefulWidget {
   const SearchView({super.key});
 
   @override
-  ConsumerState<SearchView> createState() => _SearchViewState();
+  State<SearchView> createState() => _SearchViewState();
 }
 
-class _SearchViewState extends ConsumerState<SearchView>
-    with BrochureActions<SearchView> {
+class _SearchViewState extends State<SearchView> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
 
@@ -31,12 +28,45 @@ class _SearchViewState extends ConsumerState<SearchView>
     super.dispose();
   }
 
-  @override
-  void dismissKeyboard() => _searchFocusNode.unfocus();
+  void _dismissKeyboard() => _searchFocusNode.unfocus();
+
+  // Confirms deleting one entry; `false` keeps it.
+  Future<bool> _confirmDelete(BrochureEntity entry) async {
+    _dismissKeyboard();
+    final confirmed = await CustomConfirmationDialog.show(
+      context: context,
+      title: AppStrings.deleteBrochureTitle,
+      message: AppStrings.deleteBrochureMessage(entry.number),
+      confirmText: AppStrings.delete,
+      cancelText: AppStrings.cancel,
+    );
+    return mounted && confirmed == true;
+  }
+
+  // Confirms deleting the selected entries; `false` keeps them.
+  Future<bool> _confirmDeleteMany(int count) async {
+    _dismissKeyboard();
+    final confirmed = await CustomConfirmationDialog.show(
+      context: context,
+      title: AppStrings.deleteBrochureTitle,
+      message: AppStrings.deleteSelectedMessage(count),
+      confirmText: AppStrings.delete,
+      cancelText: AppStrings.cancel,
+    );
+    return mounted && confirmed == true;
+  }
+
+  // Deletes one entry.
+  void _deleteEntry(BrochureEntity entry) {
+    final deleted = BrochureMockStore.delete(entry.id);
+    if (deleted == null) return;
+
+    setState(() {});
+  }
 
   // Returns to home.
   void _goBack() {
-    dismissKeyboard();
+    _dismissKeyboard();
     if (context.canPop()) {
       context.pop();
     } else {
@@ -59,18 +89,21 @@ class _SearchViewState extends ConsumerState<SearchView>
               searchController: _searchController,
               searchFocusNode: _searchFocusNode,
               onSearchChanged: (_) => setState(() {}),
+              onSubmit: _dismissKeyboard,
               onBack: _goBack,
-              onDeleteAll: () => confirmDeleteAll(),
             ),
           ),
 
           // Body
           Expanded(
             child: BrochureListBody(
+              entries: BrochureMockStore.entries,
               query: query,
               emptyState: HomeBrochureEmptyState(onAdd: _goBack),
               noMatchesState: const HomeBrochureEmptyState(subtitle: null),
-              onDelete: (entry) => confirmDelete(entry),
+              onConfirmDelete: _confirmDelete,
+              onConfirmDeleteMany: _confirmDeleteMany,
+              onDelete: _deleteEntry,
             ),
           ),
         ],
