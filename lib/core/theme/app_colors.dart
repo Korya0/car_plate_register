@@ -61,8 +61,6 @@ abstract final class AppColors {
   static const Color textOnPrimary = Color(0xFFFFFFFF);
   // Text on secondary actions
   static const Color textOnSecondary = Color(0xFFFFFFFF);
-  // Decorative watermark text on navy surfaces
-  static const Color textWatermark = Color(0x1AFFFFFF);
 
   // Invisible fills and gradients
   static const Color transparent = Color(0x00000000);

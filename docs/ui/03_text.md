@@ -28,7 +28,7 @@ Widget  ──►  AppTextStyles.*        ← Single source of truth for typogra
 // ✅ Correct
 Text(AppStrings.appName)
 Text(AppStrings.emptyTitle)
-Text(AppStrings.confirmDeleteMessage)
+Text(AppStrings.deleteAllMessage)
 
 // ❌ Forbidden
 Text('سجل البروشورات')
@@ -51,7 +51,7 @@ Text('Delete')
 - Every `Text` widget must use a semantic style from `AppTextStyles`:
   ```dart
   Text(
-    AppStrings.homeTitle,
+    AppStrings.homeEntryTitle,
     style: AppTextStyles.font20W700Primary,
   )
   ```

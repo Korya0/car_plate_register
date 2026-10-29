@@ -1,19 +1,22 @@
+import 'package:flutter/material.dart';
+
 import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/theme/app_colors.dart';
 import 'package:car_register/core/theme/app_text_styles.dart';
-import 'package:car_register/core/widgets/app_page_header_curve.dart';
-import 'package:flutter/material.dart';
+import 'package:car_register/features/home/presentation/widgets/home_page_header_curve.dart';
 
-class AppPageHeader extends StatelessWidget {
-  const AppPageHeader({
+class HomePageHeader extends StatelessWidget {
+  const HomePageHeader({
     required this.watermarkText,
     super.key,
     this.child,
+    this.fillWatermarkHeight = false,
   });
 
   final String watermarkText;
   final Widget? child;
+  final bool fillWatermarkHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +32,10 @@ class AppPageHeader extends StatelessWidget {
         child: Stack(
           alignment: AlignmentDirectional.center,
           children: [
+            // Watermark
             Positioned.fill(
               child: FittedBox(
-                fit: BoxFit.scaleDown,
+                fit: fillWatermarkHeight ? BoxFit.fitHeight : BoxFit.scaleDown,
                 child: Text(
                   watermarkText,
                   maxLines: AppConstants.maxOneLine,
@@ -39,7 +43,11 @@ class AppPageHeader extends StatelessWidget {
                 ),
               ),
             ),
-            const Positioned.fill(child: AppPageHeaderCurve()),
+
+            // Curve
+            const Positioned.fill(child: HomePageHeaderCurve()),
+
+            // Content
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(
                 AppSize.p24,

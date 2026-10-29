@@ -28,7 +28,7 @@ allowed only when it clarifies the technology (`FirestoreSyncService`,
 
 | Element | Rule | Example |
 |---|---|---|
-| Screen-level view | `View` suffix, **never** `Page` or `Screen` | `BrochuresView`, `AddBrochureView` |
+| Screen-level view | `View` suffix, **never** `Page` or `Screen` | `HomeView`, `SearchView`, `AccessCodeView` |
 | Widget | named by responsibility; `Widget` suffix not required | `BrochureCard` |
 | Riverpod notifier | `Notifier` suffix | `BrochureListNotifier` |
 | Notifier state | `<Feature>State`; variants `extends` it | `BrochureListState` → `BrochureListLoaded` |

@@ -32,20 +32,13 @@ class AppErrorView extends StatelessWidget {
           ),
           AppGap.h(AppSize.p16),
 
-          // Title
-          Text(
-            AppStrings.errorWidgetTitle,
-            textAlign: TextAlign.center,
-            style: AppTextStyles.font16W700Primary,
-          ),
-          AppGap.h(AppSize.p8),
-
           // Message
           Text(
             message,
             textAlign: TextAlign.center,
             style: AppTextStyles.font14W500Secondary,
           ),
+          // Retry
           if (onRetry != null) ...[
             AppGap.h(AppSize.p24),
             AppPrimaryButton(label: AppStrings.tryAgain, onPressed: onRetry),

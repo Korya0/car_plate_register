@@ -1,72 +1,91 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+
 import 'package:car_register/app.dart';
-import 'package:car_register/core/constants/app_constants.dart';
+import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/constants/app_strings.dart';
 import 'package:car_register/core/router/app_router.dart';
 import 'package:car_register/core/router/app_routes.dart';
 import 'package:car_register/core/theme/app_colors.dart';
 import 'package:car_register/core/theme/app_scroll_behavior.dart';
-import 'package:car_register/core/widgets/app_page_header.dart';
-import 'package:car_register/core/widgets/app_primary_button.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:car_register/core/widgets/app_text_field.dart';
+
+import 'support/home_test_helpers.dart';
 
 void main() {
-  testWidgets('shows the access code, then the home shell and brochures tab', (
+  testWidgets('reuses AppTextField with readable text on every screen', (
     WidgetTester tester,
   ) async {
+    await openHome(tester);
+
+    expect(find.byType(AppTextField), findsOneWidget);
+    expect(
+      tester.widget<TextField>(find.byType(TextField)).style?.color,
+      AppColors.textPrimary,
+    );
+
+    await tester.tap(find.byTooltip(AppStrings.brochuresSearchHint));
+    await tester.pumpAndSettle();
+    expect(find.byType(AppTextField), findsOneWidget);
+    expect(
+      tester.widget<TextField>(find.byType(TextField)).style?.color,
+      AppColors.textPrimary,
+    );
+
     AppRouter.router.go(AppRoutes.accessCode);
-    await tester.pumpWidget(
-      const ProviderScope(child: CarRegisterApp()),
+    await tester.pumpAndSettle();
+    expect(find.byType(AppTextField), findsOneWidget);
+    expect(
+      tester.widget<TextField>(find.byType(TextField)).style?.color,
+      AppColors.textPrimary,
     );
+  });
+
+  testWidgets('uses rounded red focus borders on all text fields', (
+    WidgetTester tester,
+  ) async {
+    void expectFocusedBorder() {
+      final fieldContainer = find
+          .ancestor(
+            of: find.byType(TextField),
+            matching: find.byWidgetPredicate((widget) {
+              if (widget is! Container) return false;
+              final decoration = widget.decoration;
+              return decoration is BoxDecoration &&
+                  decoration.borderRadius != null;
+            }),
+          )
+          .first;
+      final decoration =
+          tester.widget<Container>(fieldContainer).decoration! as BoxDecoration;
+
+      expect(decoration.border!.top.color, AppColors.borderBrand);
+      expect(decoration.borderRadius, BorderRadius.circular(AppSize.r12));
+    }
+
+    await openHome(tester);
+    await tester.tap(find.byType(TextField));
+    await tester.pumpAndSettle();
+    expectFocusedBorder();
+    tester.testTextInput.hide();
     await tester.pumpAndSettle();
 
-    expect(find.text(AppStrings.accessCodeTitle), findsOneWidget);
-
-    await tester.enterText(
-      find.byType(TextField),
-      AppConstants.accessCodeDemoValue,
-    );
-    await tester.pump();
-
-    final button = tester.widget<AppPrimaryButton>(
-      find.byType(AppPrimaryButton),
-    );
-    button.onPressed!();
-    await tester.pump();
-    await tester.pump(AppConstants.animationSlower500ms);
+    await tester.tap(find.byTooltip(AppStrings.brochuresSearchHint));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(TextField));
+    await tester.pumpAndSettle();
+    expectFocusedBorder();
+    tester.testTextInput.hide();
     await tester.pumpAndSettle();
 
-    expect(find.text(AppStrings.accessCodeTitle), findsNothing);
-    expect(find.text(AppStrings.homeTab), findsOneWidget);
-    expect(find.text(AppStrings.brochuresTab), findsOneWidget);
-    expect(
-      find.descendant(
-        of: find.byType(AppPageHeader),
-        matching: find.text(AppStrings.homeHeaderWatermark),
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.descendant(
-        of: find.byType(AppPageHeader),
-        matching: find.byType(CustomPaint),
-      ),
-      findsOneWidget,
-    );
-
-    await tester.tap(find.text(AppStrings.brochuresTab));
+    AppRouter.router.go(AppRoutes.accessCode);
     await tester.pumpAndSettle();
-
-    expect(find.byKey(const Key('brochures-view')), findsOneWidget);
-    expect(
-      find.descendant(
-        of: find.byType(AppPageHeader),
-        matching: find.text(AppStrings.brochuresHeaderWatermark),
-      ),
-      findsOneWidget,
-    );
+    await tester.tap(find.byType(TextField));
+    await tester.pumpAndSettle();
+    expectFocusedBorder();
   });
 
   testWidgets('disables the platform overscroll stretch', (tester) async {

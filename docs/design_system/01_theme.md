@@ -74,7 +74,7 @@ All colors are defined as `static const Color` in `AppColors`:
 
 - File location: `lib/core/theme/app_text_styles.dart`
 - Uses the Cairo variable font only — loaded from the bundled asset.
-- Font sizes come from `AppSize.f*` tokens (`AppSize.f12`, `f13`, `f14`, `f15`, `f16`, `f20`, `f24`, `f30`, `f32`, `f34`).
+- Font sizes come from `AppSize.f*` tokens (`AppSize.f12`, `f13`, `f14`, `f15`, `f16`, `f20`, `f24`, `f30`, `f32`, `f34`, `f40`, `f48`, `f150`).
 - Line heights come from `AppConstants.lineHeightBody` and `lineHeightTitle`.
 - Text styles are accessed through static getters on `AppTextStyles`.
 
@@ -124,8 +124,8 @@ raw `FontWeight.*` values:
 
 ## 4. Icons
 
-- Use Flutter's standard `Icons.*` directly (e.g. `Icons.add`, `Icons.delete_outline`, `Icons.search`, `Icons.arrow_back_ios_new`).
-- Size icons using `AppSize.icon*` tokens (`icon16`, `icon24`, `icon32`, `icon48`).
+- Use Flutter's standard `Icons.*` directly (e.g. `Icons.add`, `Icons.delete_outline_rounded`, `Icons.search`, `Icons.arrow_back_ios_new`).
+- Size icons using `AppSize.icon*` tokens (`icon16`, `icon20`, `icon24`, `icon32`, `icon48`).
 - Color icons using `AppColors.iconPrimary`, `AppColors.iconSecondary`, etc.
 
 ---

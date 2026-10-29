@@ -5,7 +5,7 @@ import 'package:car_register/core/theme/app_colors.dart';
 import 'package:car_register/core/theme/app_text_styles.dart';
 import 'package:car_register/core/widgets/app_gap.dart';
 import 'package:car_register/core/widgets/app_primary_button.dart';
-import 'package:car_register/core/widgets/app_secondary_button.dart';
+import 'package:car_register/core/widgets/app_text_button.dart';
 
 class CustomConfirmationDialog {
   const CustomConfirmationDialog._();
@@ -51,9 +51,10 @@ class CustomConfirmationDialog {
                 Row(
                   children: [
                     Expanded(
-                      child: AppSecondaryButton(
+                      child: AppTextButton(
                         label: cancelText,
                         onPressed: () => Navigator.of(context).pop(false),
+                        textStyle: AppTextStyles.font16W700Primary,
                       ),
                     ),
                     AppGap.w(AppSize.p12),

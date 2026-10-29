@@ -14,6 +14,7 @@ class AppConstants {
   // Brochure numbers
   static const int brochureNumberMinLength = 1;
   static const int brochureNumberMaxLength = 4;
+  static const int brochureListSkeletonCount = 3;
 
   // Access control
   static const int accessCodeMaxLength = 10;
@@ -56,9 +57,14 @@ class AppConstants {
   static const double opacitySoft = 0.3;
   static const double opacityFaint = 0.4;
   static const double opacityMuted = 0.5;
+  static const double opacityWatermark = 0.7;
   static const double opacityFull = 1;
   static const double opacityPressed = 0.55;
   static const double opacityDisabled = 0.45;
+
+  // Motion
+  static const double slideOffsetNone = 0;
+  static const double slideOffsetSmall = 0.2;
 
   // Scale
   static const double scaleCompleted = 0.98;

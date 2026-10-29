@@ -9,23 +9,37 @@ Strings and wording are in [`03_text.md`](03_text.md).
 
 ## 1. Screen Shell
 
-**Every route-level screen (`View`) uses `CustomScrollView`.** There is one primary template:
+Use a scrollable only for the content that should move. Screens with a fixed
+header and a scrollable results area keep the header outside the scroll view:
 
 ```dart
 Scaffold(
-  body: CustomScrollView(
-    slivers: [
-      const CommonSliverAppBar(title: AppStrings.homeTitle),
-      AppSliverList(
-        padding: AppSize.shp,
-        itemCount: brochures.length,
-        itemBuilder: (context, index) => BrochureCard(brochure: brochures[index]),
+  body: Column(
+    children: [
+      const HomePageHeader(...),
+      Expanded(
+        child: CustomScrollView(
+          slivers: [
+            AppSliverList(
+              padding: AppSize.shp,
+              itemCount: brochures.length,
+              itemBuilder: (context, index) =>
+                  BrochureCard(brochure: brochures[index]),
+            ),
+          ],
+        ),
       ),
-      SliverToBoxAdapter(child: AppGap.h(AppSize.sbp)),
     ],
   ),
 )
 ```
+
+The home screen owns brochure entry, while search is a separate route inside the
+same feature. Both screens keep the saved brochures list below the header and
+share the same page header, list body, and empty state. Opening search pushes a
+new route; back returns to home. The search screen filters the same brochure
+provider list. Only the list area scrolls, and the list never shows a
+results-count label.
 
 ### Screens Without an App Bar
 
@@ -91,6 +105,6 @@ Column(
 
 ## 4. Screen-Level Views
 
-- **Naming:** Every full screen is suffixed with `View` (e.g. `HomeView`, `SettingsView`, `BrochuresView`). The suffixes `Page` and `Screen` are strictly forbidden.
+- **Naming:** Every full screen is suffixed with `View` (e.g. `HomeView`, `SearchView`, `AccessCodeView`). The suffixes `Page` and `Screen` are strictly forbidden.
 - **Responsibility:** A `View` coordinates layout and watches Riverpod providers. It does not perform network calls or database writes directly.
 - **Max Content Width:** On wide screens (tablets), content should be constrained to `AppSize.contentMaxWidth` (640) to prevent stretched inputs or overly wide cards.

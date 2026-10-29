@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:car_register/core/constants/app_constants.dart';
@@ -20,11 +21,20 @@ class AppTextField extends StatefulWidget {
     this.obscureText = false,
     this.autofocus = false,
     this.onChanged,
+    this.onSubmitted,
+    this.keepKeyboardOpenOnSubmitted = false,
     this.validator,
     this.inputFormatters,
     this.keyboardType,
+    this.textInputAction,
+    this.maxLength,
     this.leading,
     this.trailing,
+    this.backgroundColor = AppColors.scaffoldBackgroundColor,
+    this.borderColor = AppColors.dividerColor,
+    this.focusedBorderColor = AppColors.borderBrand,
+    this.textStyle,
+    this.hintStyle,
     this.isDisabled = false,
     this.readOnly = false,
     this.onTap,
@@ -41,11 +51,20 @@ class AppTextField extends StatefulWidget {
   final bool obscureText;
   final bool autofocus;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final bool keepKeyboardOpenOnSubmitted;
   final FormFieldValidator<String>? validator;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final int? maxLength;
   final Widget? leading;
   final Widget? trailing;
+  final Color backgroundColor;
+  final Color borderColor;
+  final Color focusedBorderColor;
+  final TextStyle? textStyle;
+  final TextStyle? hintStyle;
   final bool isDisabled;
   final bool readOnly;
   final VoidCallback? onTap;
@@ -88,15 +107,13 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final fillColor = widget.isDisabled
-        ? AppColors.surfaceDisabled
-        : AppColors.secondaryScaffoldBackgroundColor;
+    final textStyle =
+        widget.textStyle ??
+        (widget.isDisabled
+            ? AppTextStyles.font14W500Secondary
+            : AppTextStyles.font14W500Primary);
 
-    final textStyle = widget.isDisabled
-        ? AppTextStyles.font14W500Secondary
-        : AppTextStyles.font14W500Primary;
-
-    final hintStyle = AppTextStyles.font14W500Secondary;
+    final hintStyle = widget.hintStyle ?? AppTextStyles.font14W500Secondary;
     final errorStyle = AppTextStyles.font12W500Error;
     final effectiveHint = widget.hint ?? widget.hintText;
 
@@ -104,10 +121,13 @@ class _AppTextFieldState extends State<AppTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
+        // Label
         if (widget.label != null) ...[
           Text(widget.label!, style: AppTextStyles.font14W700Primary),
           AppGap.h(AppSize.p8),
         ],
+
+        // Field
         FormField<String>(
           initialValue: widget.controller?.text,
           validator: (value) {
@@ -124,15 +144,15 @@ class _AppTextFieldState extends State<AppTextField> {
                   final borderColor = widget.hasError || field.hasError
                       ? AppColors.primary
                       : _focusNode.hasFocus && widget.highlightOnFocus
-                      ? AppColors.borderBrand
-                      : AppColors.dividerColor;
+                      ? widget.focusedBorderColor
+                      : widget.borderColor;
 
                   return Container(
                     height: widget.maxLines == AppConstants.maxOneLine
                         ? AppSize.h48
                         : null,
                     decoration: BoxDecoration(
-                      color: fillColor,
+                      color: widget.backgroundColor,
                       borderRadius: BorderRadius.circular(AppSize.r12),
                       border: Border.all(
                         color: borderColor,
@@ -146,83 +166,45 @@ class _AppTextFieldState extends State<AppTextField> {
                           AppGap.w(AppSize.p8),
                         ],
                         Expanded(
-                          child: Actions(
-                            actions: {
-                              ExtendSelectionVerticallyToAdjacentPageIntent:
-                                  CallbackAction<
-                                    ExtendSelectionVerticallyToAdjacentPageIntent
-                                  >(
-                                    onInvoke: (intent) {
-                                      final controller = widget.controller;
-                                      if (controller != null) {
-                                        final text = controller.text;
-                                        final newOffset = intent.forward
-                                            ? text.length
-                                            : 0;
-                                        controller.selection =
-                                            TextSelection.collapsed(
-                                              offset: newOffset,
-                                            );
-                                      }
-                                      return null;
-                                    },
-                                  ),
+                          child: TextField(
+                            controller: widget.controller,
+                            focusNode: _focusNode,
+                            obscureText: widget.obscureText,
+                            autofocus: widget.autofocus,
+                            maxLines: widget.maxLines,
+                            maxLength: widget.maxLength,
+                            onChanged: (value) {
+                              field.didChange(value);
+                              widget.onChanged?.call(value);
                             },
-                            child: Focus(
-                              onKeyEvent: (node, event) {
-                                if (event is KeyDownEvent &&
-                                    (event.logicalKey ==
-                                            LogicalKeyboardKey.pageDown ||
-                                        event.logicalKey ==
-                                            LogicalKeyboardKey.pageUp)) {
-                                  final controller = widget.controller;
-                                  if (controller != null) {
-                                    final text = controller.text;
-                                    final newOffset =
-                                        event.logicalKey ==
-                                            LogicalKeyboardKey.pageDown
-                                        ? text.length
-                                        : 0;
-                                    controller.selection =
-                                        TextSelection.collapsed(
-                                          offset: newOffset,
-                                        );
-                                  }
-                                  return KeyEventResult.handled;
-                                }
-                                return KeyEventResult.ignored;
-                              },
-                              child: TextField(
-                                controller: widget.controller,
-                                focusNode: _focusNode,
-                                obscureText: widget.obscureText,
-                                autofocus: widget.autofocus,
-                                maxLines: widget.maxLines,
-                                onChanged: (value) {
-                                  field.didChange(value);
-                                  widget.onChanged?.call(value);
-                                },
-                                inputFormatters: widget.inputFormatters,
-                                keyboardType: widget.keyboardType,
-                                enabled: !widget.isDisabled,
-                                readOnly: widget.readOnly,
-                                onTap: widget.onTap,
-                                style: textStyle,
-                                decoration: InputDecoration(
-                                  hintText: effectiveHint,
-                                  hintStyle: hintStyle,
-                                  border: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  isDense: true,
-                                  contentPadding: EdgeInsets.symmetric(
-                                    horizontal: widget.leading == null
-                                        ? AppSize.p16
-                                        : 0,
-                                    vertical: AppSize.p12,
-                                  ),
-                                ),
-                              ),
+                            onSubmitted: widget.onSubmitted,
+                            onEditingComplete:
+                                widget.keepKeyboardOpenOnSubmitted
+                                ? () {}
+                                : null,
+                            inputFormatters: widget.inputFormatters,
+                            keyboardType: widget.keyboardType,
+                            textInputAction: widget.textInputAction,
+                            enabled: !widget.isDisabled,
+                            readOnly: widget.readOnly,
+                            onTap: widget.onTap,
+                            style: textStyle,
+                            decoration: InputDecoration(
+                              hintText: effectiveHint,
+                              hintStyle: hintStyle,
+                              border: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              counterText: '',
+                              isDense: true,
+                              contentPadding: widget.leading == null
+                                  ? EdgeInsets.symmetric(
+                                      horizontal: AppSize.p16,
+                                      vertical: AppSize.p12,
+                                    )
+                                  : EdgeInsets.symmetric(
+                                      vertical: AppSize.p12,
+                                    ),
                             ),
                           ),
                         ),
@@ -236,6 +218,7 @@ class _AppTextFieldState extends State<AppTextField> {
                   );
                 },
               ),
+              // Error
               if (field.hasError) ...[
                 AppGap.h(AppSize.p4),
                 _FieldErrorText(
@@ -268,8 +251,8 @@ class _FieldErrorText extends StatelessWidget {
           curve: Curves.easeOut,
         )
         .slideY(
-          begin: 0.2,
-          end: 0,
+          begin: AppConstants.slideOffsetSmall,
+          end: AppConstants.slideOffsetNone,
           duration: AppConstants.animationFast200ms,
           curve: Curves.easeOut,
         );

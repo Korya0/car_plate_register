@@ -89,16 +89,58 @@ abstract final class AppTextStyles {
     height: AppConstants.lineHeightBody,
   );
 
+  static TextStyle get font16W500OnSecondary => TextStyle(
+    fontSize: AppSize.f16,
+    fontWeight: AppFontWeight.medium.value,
+    color: AppColors.textOnSecondary,
+    height: AppConstants.lineHeightBody,
+  );
+
   static TextStyle get font16W700Primary => TextStyle(
     fontSize: AppSize.f16,
     fontWeight: AppFontWeight.bold.value,
     color: AppColors.textPrimary,
     height: AppConstants.lineHeightTitle,
   );
+  static TextStyle get font16W700Watermark => TextStyle(
+    fontSize: AppSize.f16,
+    fontWeight: AppFontWeight.bold.value,
+    color: AppColors.textOnSecondary.withValues(
+      alpha: AppConstants.opacityWatermark,
+    ),
+    height: AppConstants.lineHeightTitle,
+  );
+  static TextStyle get font16W700OnSecondary => TextStyle(
+    fontSize: AppSize.f16,
+    fontWeight: AppFontWeight.bold.value,
+    color: AppColors.textOnSecondary,
+    height: AppConstants.lineHeightTitle,
+  );
+
+  static TextStyle get font16W700BrandOnSecondary => TextStyle(
+    fontSize: AppSize.f16,
+    fontWeight: AppFontWeight.bold.value,
+    color: AppColors.primary,
+    height: AppConstants.lineHeightTitle,
+  );
 
   static TextStyle get font20W700Primary => TextStyle(
     fontSize: AppSize.f20,
     fontWeight: AppFontWeight.bold.value,
+    color: AppColors.textPrimary,
+    height: AppConstants.lineHeightTitle,
+  );
+
+  static TextStyle get font20W700OnSecondary => TextStyle(
+    fontSize: AppSize.f20,
+    fontWeight: AppFontWeight.bold.value,
+    color: AppColors.textOnSecondary,
+    height: AppConstants.lineHeightTitle,
+  );
+
+  static TextStyle get font24W800Primary => TextStyle(
+    fontSize: AppSize.f24,
+    fontWeight: AppFontWeight.extraBold.value,
     color: AppColors.textPrimary,
     height: AppConstants.lineHeightTitle,
   );
@@ -112,6 +154,20 @@ abstract final class AppTextStyles {
 
   static TextStyle get font30W800OnSecondary => TextStyle(
     fontSize: AppSize.f30,
+    fontWeight: AppFontWeight.extraBold.value,
+    color: AppColors.textOnSecondary,
+    height: AppConstants.lineHeightTitle,
+  );
+
+  static TextStyle get font32W800Primary => TextStyle(
+    fontSize: AppSize.f32,
+    fontWeight: AppFontWeight.extraBold.value,
+    color: AppColors.textPrimary,
+    height: AppConstants.lineHeightTitle,
+  );
+
+  static TextStyle get font34W800OnSecondary => TextStyle(
+    fontSize: AppSize.f34,
     fontWeight: AppFontWeight.extraBold.value,
     color: AppColors.textOnSecondary,
     height: AppConstants.lineHeightTitle,
@@ -131,10 +187,61 @@ abstract final class AppTextStyles {
     height: AppConstants.lineHeightTitle,
   );
 
+  static TextStyle get font34W800Brand => TextStyle(
+    fontSize: AppSize.f34,
+    fontWeight: AppFontWeight.extraBold.value,
+    color: AppColors.textBrand,
+    height: AppConstants.lineHeightTitle,
+  );
+
+  static TextStyle get font40W800Primary => TextStyle(
+    fontSize: AppSize.f40,
+    fontWeight: AppFontWeight.extraBold.value,
+    color: AppColors.textPrimary,
+    height: AppConstants.lineHeightTitle,
+  );
+
+  static TextStyle get font40W800Brand => TextStyle(
+    fontSize: AppSize.f40,
+    fontWeight: AppFontWeight.extraBold.value,
+    color: AppColors.textBrand,
+    height: AppConstants.lineHeightTitle,
+  );
+
+  static TextStyle get font40W800OnSecondary => TextStyle(
+    fontSize: AppSize.f40,
+    fontWeight: AppFontWeight.extraBold.value,
+    color: AppColors.textOnSecondary,
+    height: AppConstants.lineHeightTitle,
+  );
+
+  static TextStyle get font48W800Primary => TextStyle(
+    fontSize: AppSize.f48,
+    fontWeight: AppFontWeight.extraBold.value,
+    color: AppColors.textPrimary,
+    height: AppConstants.lineHeightTitle,
+  );
+
+  static TextStyle get font48W800OnSecondary => TextStyle(
+    fontSize: AppSize.f48,
+    fontWeight: AppFontWeight.extraBold.value,
+    color: AppColors.textOnSecondary,
+    height: AppConstants.lineHeightTitle,
+  );
+
+  static TextStyle get font150W800Disabled => TextStyle(
+    fontSize: AppSize.f150,
+    fontWeight: AppFontWeight.extraBold.value,
+    color: AppColors.surfaceDisabled,
+    height: AppConstants.lineHeightTitle,
+  );
+
   static TextStyle get font150W800Watermark => TextStyle(
     fontSize: AppSize.f150,
     fontWeight: AppFontWeight.extraBold.value,
-    color: AppColors.textWatermark,
+    color: AppColors.textSecondary.withValues(
+      alpha: AppConstants.opacityFaint,
+    ),
     height: AppConstants.lineHeightTitle,
   );
 }

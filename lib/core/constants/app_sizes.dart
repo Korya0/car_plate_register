@@ -31,6 +31,7 @@ class AppSize {
 
   // Icons
   static double get icon16 => _scaled(16);
+  static double get icon20 => _scaled(20);
   static double get icon24 => _scaled(24);
   static double get icon32 => _scaled(32);
   static double get icon48 => _scaled(48);
@@ -62,13 +63,18 @@ class AppSize {
   static double get f30 => _scaled(30);
   static double get f32 => _scaled(32);
   static double get f34 => _scaled(34);
+  static double get f40 => _scaled(40);
+  static double get f48 => _scaled(48);
   static double get f150 => _scaled(150);
 
   // Heights
+  static double get h12 => _scaled(12);
   static double get h18 => _scaled(18);
+  static double get h24 => _scaled(24);
   static double get h40 => _scaled(40);
   static double get h48 => _scaled(48);
   static double get h56 => _scaled(56);
+  static double get h64 => _scaled(64);
   static double get h150 => _scaled(150);
 
   // Widths
@@ -93,6 +99,7 @@ class AppSize {
 
   // Borders
   static double get borderWidth => _scaled(1);
+  static double get borderWidthThick => _scaled(2);
   static double get dividerThickness => _scaled(1);
   static double get dividerHeight => _scaled(16);
 
