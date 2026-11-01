@@ -1,4 +1,4 @@
-import 'package:car_register/features/home/domain/entities/brochure_entity.dart';
+import 'package:car_register/features/home/mock/brochure_entity.dart';
 
 class BrochureMockStore {
   BrochureMockStore._();

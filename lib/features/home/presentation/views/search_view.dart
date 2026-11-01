@@ -1,8 +1,8 @@
 import 'package:car_register/core/constants/app_strings.dart';
 import 'package:car_register/core/router/app_routes.dart';
 import 'package:car_register/core/widgets/custom_confirmation_dialog.dart';
-import 'package:car_register/features/home/domain/entities/brochure_entity.dart';
-import 'package:car_register/features/home/presentation/mock/brochure_mock_store.dart';
+import 'package:car_register/features/home/mock/brochure_entity.dart';
+import 'package:car_register/features/home/mock/brochure_mock_store.dart';
 import 'package:car_register/features/home/presentation/widgets/brochure_list_body.dart';
 import 'package:car_register/features/home/presentation/widgets/home_brochure_empty_state.dart';
 import 'package:car_register/features/home/presentation/widgets/home_page_header.dart';

@@ -8,7 +8,7 @@ import 'package:car_register/core/widgets/app_gap.dart';
 import 'package:car_register/core/widgets/app_icon_button.dart';
 import 'package:car_register/core/widgets/app_sliver_grid.dart';
 import 'package:car_register/core/widgets/app_text_button.dart';
-import 'package:car_register/features/home/domain/entities/brochure_entity.dart';
+import 'package:car_register/features/home/mock/brochure_entity.dart';
 import 'package:car_register/features/home/presentation/widgets/home_brochure_entry_row.dart';
 
 class BrochureListBody extends StatefulWidget {
