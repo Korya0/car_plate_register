@@ -1,6 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:car_register/core/services/firebase/firebase_options.dart';
 import 'package:car_register/core/services/local_storage/app_local_storage.dart';
 import 'package:car_register/core/services/local_storage/app_secure_storage.dart';
 
@@ -21,6 +24,12 @@ final class AppInitializer {
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+
+    if (!kIsWeb) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
 
     final localStorage = await AppLocalStorageImpl.open();
     final secureStorage = await AppSecureStorage.open();

@@ -1,0 +1,26 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: Checks if the access code exists and is currently active
+    function isCodeActive(code) {
+      return exists(/databases/$(database)/documents/access_codes/$(code))
+        && get(/databases/$(database)/documents/access_codes/$(code)).data.isActive == true;
+    }
+
+    // Access codes: Read allowed to verify the entered code.
+    // Writes should be managed from the Console or backend.
+    match /access_codes/{code} {
+      allow get: if true;
+      allow list: if false;
+      allow write: if false;
+
+      // Plates sub-collection: Allowed only if the parent access code is active
+      match /plates/{plateId} {
+        allow read, write: if isCodeActive(code);
+      }
+    }
+  }
+}
+

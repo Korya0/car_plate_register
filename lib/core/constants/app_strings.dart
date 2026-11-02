@@ -48,6 +48,7 @@ class AppStrings {
   static const String accessCodeLabel = 'كود الوصول';
   static const String accessCodeRequired = 'أدخل الكود أولًا';
   static const String accessCodeInvalid = 'كود الوصول غير صالح';
+  static const String accessCodeDisabled = 'كود الوصول معطّل، تواصل مع المسؤول';
   static const String accessCodeSubmit = 'دخول';
 
   // Local auth
@@ -74,4 +75,5 @@ class AppStrings {
   static const String numberRequired = 'أدخل رقم البروشور';
   static const String numberDigitsOnly = 'يُسمح بالأرقام فقط';
   static const String numberLength = 'يجب أن يتكون الرقم من 1 إلى 4 أرقام';
+  static const String numberCannotBeAllZeros = 'لا يمكن أن يكون الرقم 0000';
 }
