@@ -3,7 +3,7 @@ import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/theme/app_colors.dart';
 import 'package:car_register/core/theme/app_text_styles.dart';
 import 'package:car_register/core/widgets/app_pressable.dart';
-import 'package:car_register/features/home/mock/brochure_entity.dart';
+import 'package:car_register/features/home/domain/entities/brochure_entity.dart';
 import 'package:flutter/material.dart';
 
 class HomeBrochureEntryRow extends StatelessWidget {

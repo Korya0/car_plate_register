@@ -1,14 +1,20 @@
-import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_strings.dart';
 import 'package:car_register/core/router/app_routes.dart';
+import 'package:car_register/core/utils/app_logger.dart';
 import 'package:car_register/core/utils/app_validators.dart';
 import 'package:car_register/core/widgets/custom_confirmation_dialog.dart';
-import 'package:car_register/features/home/mock/brochure_entity.dart';
-import 'package:car_register/features/home/mock/brochure_mock_store.dart';
+import 'package:car_register/features/home/data/data_sources/brochure_remote_data_source.dart';
+import 'package:car_register/features/home/data/repositories/brochure_repository_impl.dart';
+import 'package:car_register/features/home/domain/entities/brochure_entity.dart';
+import 'package:car_register/features/home/domain/use_cases/add_brochure_use_case.dart';
+import 'package:car_register/features/home/domain/use_cases/delete_brochure_use_case.dart';
+import 'package:car_register/features/home/domain/use_cases/get_brochures_use_case.dart';
+import 'package:car_register/features/home/presentation/view_models/home_view_model.dart';
 import 'package:car_register/features/home/presentation/widgets/brochure_list_body.dart';
 import 'package:car_register/features/home/presentation/widgets/home/home_header_content.dart';
 import 'package:car_register/features/home/presentation/widgets/home_brochure_empty_state.dart';
 import 'package:car_register/features/home/presentation/widgets/home_page_header.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,18 +28,45 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final TextEditingController _numberController = TextEditingController();
   final FocusNode _numberFocusNode = FocusNode();
-  bool _isSaving = false;
+  late final HomeViewModel _viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Manual Dependency Injection
+    final remoteDataSource = BrochureRemoteDataSourceImpl(
+      firestore: FirebaseFirestore.instance,
+    );
+
+    final repository = BrochureRepositoryImpl(
+      remoteDataSource: remoteDataSource,
+      logger: const AppLogger(),
+    );
+
+    final getUseCase = GetBrochuresUseCase(repository: repository);
+    final addUseCase = AddBrochureUseCase(repository: repository);
+    final deleteUseCase = DeleteBrochureUseCase(repository: repository);
+
+    _viewModel = HomeViewModel(
+      getBrochuresUseCase: getUseCase,
+      addBrochureUseCase: addUseCase,
+      deleteBrochureUseCase: deleteUseCase,
+    );
+
+    _viewModel.loadBrochures();
+  }
 
   @override
   void dispose() {
     _numberController.dispose();
     _numberFocusNode.dispose();
+    _viewModel.dispose();
     super.dispose();
   }
 
   void _dismissKeyboard() => _numberFocusNode.unfocus();
 
-  // Confirms deleting one entry; `false` keeps it.
   Future<bool> _confirmDelete(BrochureEntity entry) async {
     _dismissKeyboard();
     final confirmed = await CustomConfirmationDialog.show(
@@ -46,7 +79,6 @@ class _HomeViewState extends State<HomeView> {
     return mounted && confirmed == true;
   }
 
-  // Confirms deleting the selected entries; `false` keeps them.
   Future<bool> _confirmDeleteMany(int count) async {
     _dismissKeyboard();
     final confirmed = await CustomConfirmationDialog.show(
@@ -59,19 +91,13 @@ class _HomeViewState extends State<HomeView> {
     return mounted && confirmed == true;
   }
 
-  // Deletes one entry.
   void _deleteEntry(BrochureEntity entry) {
-    final deleted = BrochureMockStore.delete(entry.id);
-    if (deleted == null) return;
-
-    setState(() {});
+    _viewModel.deleteBrochure(entry);
   }
 
-  // Validates and adds a number.
   Future<void> _saveNumber() async {
-    if (_isSaving) return;
-
     final number = _numberController.text.trim();
+
     final validationMessage = AppValidators.brochureNumber(number);
     if (validationMessage != null) {
       _dismissKeyboard();
@@ -85,39 +111,27 @@ class _HomeViewState extends State<HomeView> {
       return;
     }
 
-    final exists = BrochureMockStore.entries.any(
-      (entry) => entry.number == number,
-    );
-    if (exists) {
-      await _showDuplicateDialog();
-      return;
-    }
+    final success = await _viewModel.addBrochure(number);
 
-    setState(() => _isSaving = true);
-    await Future<void>.delayed(AppConstants.animationFast200ms);
     if (!mounted) return;
 
-    final added = BrochureMockStore.add(number);
-    if (added == null) {
-      setState(() => _isSaving = false);
-      await _showDuplicateDialog();
+    if (success) {
+      _numberController.clear();
       return;
     }
 
-    _numberController.clear();
-    setState(() => _isSaving = false);
-  }
-
-  // Shows duplicate warning.
-  Future<void> _showDuplicateDialog() async {
-    _dismissKeyboard();
-    await CustomConfirmationDialog.show(
-      context: context,
-      title: AppStrings.brochureDuplicateTitle,
-      message: AppStrings.brochureDuplicateMessage,
-      confirmText: AppStrings.okay,
-      cancelText: AppStrings.cancel,
-    );
+    final error = _viewModel.errorText.value;
+    if (error != null && error.isNotEmpty) {
+      _dismissKeyboard();
+      await CustomConfirmationDialog.show(
+        context: context,
+        title: AppStrings.brochureDuplicateTitle,
+        message: error,
+        confirmText: AppStrings.okay,
+        cancelText: AppStrings.cancel,
+      );
+      _viewModel.clearError();
+    }
   }
 
   @override
@@ -126,7 +140,6 @@ class _HomeViewState extends State<HomeView> {
       key: const Key('home-view'),
       body: Column(
         children: [
-          // Header
           HomePageHeader(
             watermarkText: AppStrings.homeHeaderWatermark,
             fillWatermarkHeight: true,
@@ -137,21 +150,26 @@ class _HomeViewState extends State<HomeView> {
               onSearch: () async {
                 _dismissKeyboard();
                 await context.push(AppRoutes.search);
-                if (mounted) setState(() {});
+                if (mounted) {
+                  _viewModel.loadBrochures();
+                }
               },
             ),
           ),
-
-          // Body
           Expanded(
-            child: BrochureListBody(
-              entries: BrochureMockStore.entries,
-              query: '',
-              emptyState: const HomeBrochureEmptyState(),
-              noMatchesState: const HomeBrochureEmptyState(subtitle: null),
-              onConfirmDelete: _confirmDelete,
-              onConfirmDeleteMany: _confirmDeleteMany,
-              onDelete: _deleteEntry,
+            child: ValueListenableBuilder<List<BrochureEntity>>(
+              valueListenable: _viewModel.entries,
+              builder: (context, entries, child) {
+                return BrochureListBody(
+                  entries: entries,
+                  query: '',
+                  emptyState: const HomeBrochureEmptyState(),
+                  noMatchesState: const HomeBrochureEmptyState(subtitle: null),
+                  onConfirmDelete: _confirmDelete,
+                  onConfirmDeleteMany: _confirmDeleteMany,
+                  onDelete: _deleteEntry,
+                );
+              },
             ),
           ),
         ],
