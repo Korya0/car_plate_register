@@ -1,8 +1,3 @@
-import 'package:flutter/material.dart';
-
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/constants/app_strings.dart';
@@ -12,6 +7,10 @@ import 'package:car_register/core/utils/app_validators.dart';
 import 'package:car_register/core/widgets/app_gap.dart';
 import 'package:car_register/core/widgets/app_primary_button.dart';
 import 'package:car_register/core/widgets/app_text_field.dart';
+import 'package:car_register/features/access_control/presentation/scopes/access_code_scope.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 
 class AccessCodeForm extends StatefulWidget {
   const AccessCodeForm({super.key});
@@ -22,112 +21,109 @@ class AccessCodeForm extends StatefulWidget {
 
 class _AccessCodeFormState extends State<AccessCodeForm> {
   final TextEditingController _controller = TextEditingController();
-  bool _isLoading = false;
-  String? _errorText;
 
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_handleChanged);
+    _controller.addListener(_handleTextChanged);
+  }
+
+  void _handleTextChanged() {
+    AccessCodeScope.of(context).clearError();
+  }
+
+  Future<void> _submit() async {
+    final viewModel = AccessCodeScope.of(context);
+    final code = _controller.text;
+    final success = await viewModel.submit(code);
+
+    if (!mounted) return;
+
+    if (success) {
+      context.go(AppRoutes.home);
+    }
   }
 
   @override
   void dispose() {
     _controller
-      ..removeListener(_handleChanged)
+      ..removeListener(_handleTextChanged)
       ..dispose();
     super.dispose();
   }
 
-  void _handleChanged() => setState(() => _errorText = null);
-
-  Future<void> _submit() async {
-    if (_controller.text.trim().isEmpty || _isLoading) return;
-
-    setState(() {
-      _isLoading = true;
-      _errorText = null;
-    });
-
-    await Future<void>.delayed(AppConstants.animationSlower500ms);
-
-    if (!mounted) return;
-
-    if (_controller.text.trim() == AppConstants.accessCodeDemoValue) {
-      context.go(AppRoutes.home);
-      return;
-    }
-
-    setState(() {
-      _isLoading = false;
-      _errorText = AppStrings.accessCodeInvalid;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    final canSubmit = _controller.text.trim().isNotEmpty && !_isLoading;
+    final viewModel = AccessCodeScope.of(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Label
-        Text(
-          AppStrings.accessCodeLabel,
-          style: AppTextStyles.font13W400Secondary,
-        ).animate().slideX(
-          begin: 0.15,
-          end: 0,
-          duration: AppConstants.animationFast200ms,
-          delay: AppConstants.accessCodeStagger60ms * 4,
-          curve: Curves.easeOut,
-        ),
+    return AnimatedBuilder(
+      animation: Listenable.merge([viewModel, _controller]),
+      builder: (context, child) {
+        final canSubmit =
+            _controller.text.trim().isNotEmpty && !viewModel.isLoading;
 
-        AppGap.h(AppSize.p8),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Label
+            Text(
+              AppStrings.accessCodeLabel,
+              style: AppTextStyles.font13W400Secondary,
+            ).animate().slideX(
+                  begin: 0.15,
+                  end: 0,
+                  duration: AppConstants.animationFast200ms,
+                  delay: AppConstants.accessCodeStagger60ms * 4,
+                  curve: Curves.easeOut,
+                ),
 
-        // Field
-        AppTextField(
-          controller: _controller,
-          validator: AppValidators.accessCode,
-          keyboardType: TextInputType.visiblePassword,
-          inputFormatters: AppValidators.accessCodeFormatters,
-          autofocus: true,
-        ).animate().slideX(
-          begin: 0.15,
-          end: 0,
-          duration: AppConstants.animationFast200ms,
-          delay: AppConstants.accessCodeStagger60ms * 5,
-          curve: Curves.easeOut,
-        ),
+            AppGap.h(AppSize.p8),
 
-        AppGap.h(AppSize.p16),
+            // Field
+            AppTextField(
+              controller: _controller,
+              validator: AppValidators.accessCode,
+              keyboardType: TextInputType.visiblePassword,
+              inputFormatters: AppValidators.accessCodeFormatters,
+              autofocus: true,
+            ).animate().slideX(
+                  begin: 0.15,
+                  end: 0,
+                  duration: AppConstants.animationFast200ms,
+                  delay: AppConstants.accessCodeStagger60ms * 5,
+                  curve: Curves.easeOut,
+                ),
 
-        // Submit
-        AppPrimaryButton(
-          label: AppStrings.accessCodeSubmit,
-          onPressed: canSubmit ? _submit : null,
-          isLoading: _isLoading,
-          expand: true,
-        ).animate().slideX(
-          begin: 0.15,
-          end: 0,
-          duration: AppConstants.animationFast200ms,
-          delay: AppConstants.accessCodeStagger60ms * 6,
-          curve: Curves.easeOut,
-        ),
+            AppGap.h(AppSize.p16),
 
-        // Error
-        if (_errorText != null) ...[
-          AppGap.h(AppSize.p12),
-          Text(
-            _errorText!,
-            style: AppTextStyles.font14W500Error,
-          ).animate().fadeIn(
-            duration: AppConstants.animationFast200ms,
-            curve: Curves.easeOut,
-          ),
-        ],
-      ],
+            // Submit
+            AppPrimaryButton(
+              label: AppStrings.accessCodeSubmit,
+              onPressed: canSubmit ? _submit : null,
+              isLoading: viewModel.isLoading,
+              expand: true,
+            ).animate().slideX(
+                  begin: 0.15,
+                  end: 0,
+                  duration: AppConstants.animationFast200ms,
+                  delay: AppConstants.accessCodeStagger60ms * 6,
+                  curve: Curves.easeOut,
+                ),
+
+            // Error Message
+            if (viewModel.errorText != null) ...[
+              AppGap.h(AppSize.p12),
+              Text(
+                viewModel.errorText!,
+                style: AppTextStyles.font14W500Error,
+              ).animate().fadeIn(
+                    duration: AppConstants.animationFast200ms,
+                    curve: Curves.easeOut,
+                  ),
+            ],
+          ],
+        );
+      },
     );
   }
 }
