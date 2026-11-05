@@ -31,9 +31,9 @@ class BrochureRepositoryImpl implements BrochureRepository {
   // revoked; everything else is treated as a generic network error.
   Failure _mapFirebaseError(FirebaseException e) {
     if (e.code == 'permission-denied' || e.code == 'not-found') {
-      return AccessCodeFailure(message: AppStrings.accessCodeChangedMessage);
+      return const AccessCodeFailure(message: AppStrings.accessCodeChangedMessage);
     }
-    return NetworkFailure(message: AppStrings.errorWidgetTitle);
+    return const NetworkFailure(message: AppStrings.errorWidgetTitle);
   }
 
   @override
