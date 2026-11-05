@@ -119,10 +119,12 @@ class _SearchViewState extends ConsumerState<SearchView> {
   void _deleteEntry(BrochureEntity entry) {
     final accessCode = ref.read(accessCodeProvider).value;
     if (accessCode.isEmpty) return;
-    ref.read(homeViewModelProvider.notifier).deleteBrochure(
-      accessCode: accessCode,
-      id: entry.id,
-    );
+    ref
+        .read(homeViewModelProvider.notifier)
+        .deleteBrochure(
+          accessCode: accessCode,
+          id: entry.id,
+        );
   }
 
   void _goBack() {

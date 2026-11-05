@@ -40,9 +40,7 @@ class HomeState {
       isLoading: isLoading ?? this.isLoading,
       error: clearError ? null : (error ?? this.error),
       query: query ?? this.query,
-      loadingIds: clearLoadingIds
-          ? const {}
-          : (loadingIds ?? this.loadingIds),
+      loadingIds: clearLoadingIds ? const {} : (loadingIds ?? this.loadingIds),
     );
   }
 }
@@ -53,7 +51,9 @@ class HomeViewModel extends Notifier<HomeState> {
 
   Future<void> loadBrochures({required String accessCode}) async {
     state = state.copyWith(isLoading: true, clearError: true);
-    final result = await ref.read(getBrochuresUseCaseProvider)(accessCode: accessCode);
+    final result = await ref.read(getBrochuresUseCaseProvider)(
+      accessCode: accessCode,
+    );
     state = state.copyWith(isLoading: false);
     switch (result) {
       case Success(:final data):
@@ -78,7 +78,11 @@ class HomeViewModel extends Notifier<HomeState> {
 
     state = state.copyWith(
       brochures: [
-        BrochureEntity(id: tempId, number: formattedNumber, createdAt: DateTime.now()),
+        BrochureEntity(
+          id: tempId,
+          number: formattedNumber,
+          createdAt: DateTime.now(),
+        ),
         ...state.brochures,
       ],
       loadingIds: {...state.loadingIds, tempId},
@@ -144,10 +148,12 @@ class HomeViewModel extends Notifier<HomeState> {
       clearError: true,
     );
 
-    final result = await ref.read(deleteBrochureUseCaseProvider).many(
-      accessCode: accessCode,
-      ids: ids,
-    );
+    final result = await ref
+        .read(deleteBrochureUseCaseProvider)
+        .many(
+          accessCode: accessCode,
+          ids: ids,
+        );
     state = state.copyWith(loadingIds: state.loadingIds..removeAll(ids));
     switch (result) {
       case Success():

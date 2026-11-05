@@ -98,9 +98,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
   Future<void> _loadBrochures() async {
     final accessCode = ref.read(accessCodeProvider).value;
     if (accessCode.isEmpty) return;
-    await ref.read(homeViewModelProvider.notifier).loadBrochures(
-      accessCode: accessCode,
-    );
+    await ref
+        .read(homeViewModelProvider.notifier)
+        .loadBrochures(
+          accessCode: accessCode,
+        );
   }
 
   void _dismissKeyboard() => _numberFocusNode.unfocus();
@@ -143,19 +145,23 @@ class _HomeViewState extends ConsumerState<HomeView> {
     final number = _numberController.text.trim();
     if (number.isEmpty) return;
     if (ref.read(accessCodeProvider).value.isEmpty) return;
-    ref.read(homeViewModelProvider.notifier).addBrochure(
-      accessCode: ref.read(accessCodeProvider).value,
-      number: number,
-    );
+    ref
+        .read(homeViewModelProvider.notifier)
+        .addBrochure(
+          accessCode: ref.read(accessCodeProvider).value,
+          number: number,
+        );
     _numberController.clear();
   }
 
   void _deleteEntry(BrochureEntity entry) {
     final accessCode = ref.read(accessCodeProvider).value;
     if (accessCode.isEmpty) return;
-    ref.read(homeViewModelProvider.notifier).deleteBrochure(
-      accessCode: accessCode,
-      id: entry.id,
-    );
+    ref
+        .read(homeViewModelProvider.notifier)
+        .deleteBrochure(
+          accessCode: accessCode,
+          id: entry.id,
+        );
   }
 }

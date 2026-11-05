@@ -59,5 +59,5 @@ class AccessCodeViewModel extends Notifier<AccessCodeState> {
 
 final accessCodeViewModelProvider =
     NotifierProvider<AccessCodeViewModel, AccessCodeState>(
-  AccessCodeViewModel.new,
-);
+      AccessCodeViewModel.new,
+    );

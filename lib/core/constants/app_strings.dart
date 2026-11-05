@@ -61,13 +61,19 @@ class AppStrings {
   static const String localAuthResultBusy = 'هناك طلب تحقق جارٍ بالفعل';
   static const String localAuthResultError = 'تعذّر التحقق، حاول مرة أخرى';
 
-  static const String localAuthReasonDelete =
-      'للتأكيد على عملية حذف البروشور';
+  static const String localAuthReasonDelete = 'للتأكيد على عملية حذف البروشور';
 
   // States
   static const String emptyTitle = 'لا توجد أرقام';
   static const String errorWidgetTitle = 'تعذّر إكمال العملية';
   static const String tryAgain = 'إعادة المحاولة';
+
+  // Network
+  static const String networkErrorTitle = 'تعذّر الاتصال بالشبكة';
+  static const String networkUnavailableMessage =
+      'لا يوجد اتصال بالإنترنت. تحقق من اتصالك وحاول مرة أخرى.';
+  static const String networkTimeoutMessage =
+      'انتهت مهلة الاتصال. تحقق من اتصالك بالإنترنت وحاول مرة أخرى.';
 
   // Actions
   static const String cancel = 'إلغاء';

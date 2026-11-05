@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -61,7 +62,16 @@ class AccessControlRepositoryImpl implements AccessControlRepository {
         stackTrace: st,
       );
       return const Result.failure(
-        NetworkFailure(message: AppStrings.errorWidgetTitle),
+        NetworkFailure(message: AppStrings.networkUnavailableMessage),
+      );
+    } on TimeoutException catch (e, st) {
+      logger.error(
+        'Timeout error while validating access code',
+        error: e,
+        stackTrace: st,
+      );
+      return const Result.failure(
+        NetworkFailure(message: AppStrings.networkTimeoutMessage),
       );
     } catch (e, st) {
       logger.error(

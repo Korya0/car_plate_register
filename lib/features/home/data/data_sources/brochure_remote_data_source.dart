@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:car_register/features/home/data/models/brochure_model.dart';
@@ -32,6 +34,8 @@ class BrochureRemoteDataSourceImpl implements BrochureRemoteDataSource {
 
   final FirebaseFirestore firestore;
 
+  static const Duration _timeout = Duration(seconds: 30);
+
   static const String _accessCodesCollection = 'access_codes';
   static const String _platesCollection = 'plates';
 
@@ -48,7 +52,8 @@ class BrochureRemoteDataSourceImpl implements BrochureRemoteDataSource {
   }) async {
     final snapshot = await _platesRef(accessCode)
         .orderBy('createdAt', descending: true)
-        .get();
+        .get()
+        .timeout(_timeout);
 
     return snapshot.docs.map(BrochureModel.fromFirestore).toList();
   }
@@ -68,7 +73,7 @@ class BrochureRemoteDataSourceImpl implements BrochureRemoteDataSource {
       createdAt: now,
     );
 
-    await docRef.set(model.toMap());
+    await docRef.set(model.toMap()).timeout(_timeout);
     return model;
   }
 
@@ -77,7 +82,7 @@ class BrochureRemoteDataSourceImpl implements BrochureRemoteDataSource {
   Future<void> deleteBrochure({
     required String accessCode,
     required String id,
-  }) => _platesRef(accessCode).doc(id).delete();
+  }) => _platesRef(accessCode).doc(id).delete().timeout(_timeout);
 
   @override
   // Deletes multiple brochures in a batch.
@@ -92,6 +97,6 @@ class BrochureRemoteDataSourceImpl implements BrochureRemoteDataSource {
       batch.delete(ref.doc(id));
     }
 
-    await batch.commit();
+    await batch.commit().timeout(_timeout);
   }
 }

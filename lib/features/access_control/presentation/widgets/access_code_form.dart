@@ -39,12 +39,15 @@ class _AccessCodeFormState extends ConsumerState<AccessCodeForm> {
     super.dispose();
   }
 
-  void _handleChanged() => ref.read(accessCodeViewModelProvider.notifier).clearError();
+  void _handleChanged() =>
+      ref.read(accessCodeViewModelProvider.notifier).clearError();
 
   Future<void> _submit() async {
     if (_controller.text.trim().isEmpty) return;
 
-    await ref.read(accessCodeViewModelProvider.notifier).validate(_controller.text.trim());
+    await ref
+        .read(accessCodeViewModelProvider.notifier)
+        .validate(_controller.text.trim());
 
     if (!mounted) return;
 

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/constants/app_strings.dart';
 import 'package:car_register/core/theme/app_colors.dart';
@@ -12,6 +10,7 @@ import 'package:car_register/features/home/domain/entities/brochure_entity.dart'
 import 'package:car_register/features/home/presentation/widgets/home_brochure_entry_row.dart';
 import 'package:car_register/features/local_auth/domain/local_auth_result.dart';
 import 'package:car_register/features/local_auth/presentation/local_auth_guard.dart';
+import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class BrochureListBody extends StatefulWidget {
@@ -205,8 +204,8 @@ class _BrochureListBodyState extends State<BrochureListBody> {
               );
               if (isLoading) {
                 return Skeletonizer(
-                  effect: ShimmerEffect(
-                    duration: const Duration(milliseconds: 1200),
+                  effect: const ShimmerEffect(
+                    duration: Duration(milliseconds: 1200),
                   ),
                   child: row,
                 );

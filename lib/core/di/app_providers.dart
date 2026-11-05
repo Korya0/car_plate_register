@@ -23,4 +23,6 @@ final appSecureStorageProvider = Provider<AppSecureStorage>(
   ),
 );
 
-final accessCodeProvider = Provider<ValueNotifier<String>>((ref) => ValueNotifier(''));
+final accessCodeProvider = Provider<ValueNotifier<String>>(
+  (ref) => ValueNotifier(''),
+);

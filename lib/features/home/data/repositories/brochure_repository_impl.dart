@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:io';
 
@@ -122,6 +123,24 @@ class BrochureRepositoryImpl implements BrochureRepository {
       return const Result.failure(
         NetworkFailure(message: AppStrings.errorWidgetTitle),
       );
+    } on SocketException catch (e, st) {
+      logger.error(
+        'Network error adding brochure',
+        error: e,
+        stackTrace: st,
+      );
+      return const Result.failure(
+        NetworkFailure(message: AppStrings.networkUnavailableMessage),
+      );
+    } on TimeoutException catch (e, st) {
+      logger.error(
+        'Timeout error adding brochure',
+        error: e,
+        stackTrace: st,
+      );
+      return const Result.failure(
+        NetworkFailure(message: AppStrings.networkTimeoutMessage),
+      );
     } catch (e, st) {
       logger.error(
         'Unexpected error adding brochure',
@@ -159,6 +178,24 @@ class BrochureRepositoryImpl implements BrochureRepository {
       );
       return const Result.failure(
         NetworkFailure(message: AppStrings.errorWidgetTitle),
+      );
+    } on SocketException catch (e, st) {
+      logger.error(
+        'Network error deleting brochure',
+        error: e,
+        stackTrace: st,
+      );
+      return const Result.failure(
+        NetworkFailure(message: AppStrings.networkUnavailableMessage),
+      );
+    } on TimeoutException catch (e, st) {
+      logger.error(
+        'Timeout error deleting brochure',
+        error: e,
+        stackTrace: st,
+      );
+      return const Result.failure(
+        NetworkFailure(message: AppStrings.networkTimeoutMessage),
       );
     } catch (e, st) {
       logger.error(
@@ -199,6 +236,24 @@ class BrochureRepositoryImpl implements BrochureRepository {
       );
       return const Result.failure(
         NetworkFailure(message: AppStrings.errorWidgetTitle),
+      );
+    } on SocketException catch (e, st) {
+      logger.error(
+        'Network error deleting multiple brochures',
+        error: e,
+        stackTrace: st,
+      );
+      return const Result.failure(
+        NetworkFailure(message: AppStrings.networkUnavailableMessage),
+      );
+    } on TimeoutException catch (e, st) {
+      logger.error(
+        'Timeout error deleting multiple brochures',
+        error: e,
+        stackTrace: st,
+      );
+      return const Result.failure(
+        NetworkFailure(message: AppStrings.networkTimeoutMessage),
       );
     } catch (e, st) {
       logger.error(
