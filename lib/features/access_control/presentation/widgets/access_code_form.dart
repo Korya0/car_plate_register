@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,18 +12,17 @@ import 'package:car_register/core/utils/app_validators.dart';
 import 'package:car_register/core/widgets/app_gap.dart';
 import 'package:car_register/core/widgets/app_primary_button.dart';
 import 'package:car_register/core/widgets/app_text_field.dart';
+import 'package:car_register/features/access_control/presentation/providers/access_control_view_model.dart';
 
-class AccessCodeForm extends StatefulWidget {
+class AccessCodeForm extends ConsumerStatefulWidget {
   const AccessCodeForm({super.key});
 
   @override
-  State<AccessCodeForm> createState() => _AccessCodeFormState();
+  ConsumerState<AccessCodeForm> createState() => _AccessCodeFormState();
 }
 
-class _AccessCodeFormState extends State<AccessCodeForm> {
+class _AccessCodeFormState extends ConsumerState<AccessCodeForm> {
   final TextEditingController _controller = TextEditingController();
-  bool _isLoading = false;
-  String? _errorText;
 
   @override
   void initState() {
@@ -39,34 +38,25 @@ class _AccessCodeFormState extends State<AccessCodeForm> {
     super.dispose();
   }
 
-  void _handleChanged() => setState(() => _errorText = null);
+  void _handleChanged() => ref.read(accessCodeViewModelProvider.notifier).clearError();
 
   Future<void> _submit() async {
-    if (_controller.text.trim().isEmpty || _isLoading) return;
+    if (_controller.text.trim().isEmpty) return;
 
-    setState(() {
-      _isLoading = true;
-      _errorText = null;
-    });
-
-    await Future<void>.delayed(AppConstants.animationSlower500ms);
+    await ref.read(accessCodeViewModelProvider.notifier).validate(_controller.text.trim());
 
     if (!mounted) return;
 
-    if (_controller.text.trim() == AppConstants.accessCodeDemoValue) {
+    final state = ref.read(accessCodeViewModelProvider);
+    if (state.accessCode != null) {
       context.go(AppRoutes.home);
-      return;
     }
-
-    setState(() {
-      _isLoading = false;
-      _errorText = AppStrings.accessCodeInvalid;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final canSubmit = _controller.text.trim().isNotEmpty && !_isLoading;
+    final state = ref.watch(accessCodeViewModelProvider);
+    final canSubmit = _controller.text.trim().isNotEmpty && !state.isLoading;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +96,7 @@ class _AccessCodeFormState extends State<AccessCodeForm> {
         AppPrimaryButton(
           label: AppStrings.accessCodeSubmit,
           onPressed: canSubmit ? _submit : null,
-          isLoading: _isLoading,
+          isLoading: state.isLoading,
           expand: true,
         ).animate().slideX(
           begin: 0.15,
@@ -117,10 +107,10 @@ class _AccessCodeFormState extends State<AccessCodeForm> {
         ),
 
         // Error
-        if (_errorText != null) ...[
+        if (state.error != null) ...[
           AppGap.h(AppSize.p12),
           Text(
-            _errorText!,
+            state.error!,
             style: AppTextStyles.font14W500Error,
           ).animate().fadeIn(
             duration: AppConstants.animationFast200ms,
