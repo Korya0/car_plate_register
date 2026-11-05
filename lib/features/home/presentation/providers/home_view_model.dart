@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:car_register/core/error/failure.dart';
 import 'package:car_register/core/error/result.dart';
 import 'package:car_register/features/home/domain/entities/brochure_entity.dart';
 import 'package:car_register/features/home/domain/validators/brochure_number_validator.dart';
@@ -14,6 +15,7 @@ class HomeState {
     this.error,
     this.query = '',
     this.loadingIds = const {},
+    this.accessCodeInvalid = false,
   });
 
   final List<BrochureEntity> brochures;
@@ -21,6 +23,7 @@ class HomeState {
   final String? error;
   final String query;
   final Set<String> loadingIds;
+  final bool accessCodeInvalid;
 
   List<BrochureEntity> get visibleEntries =>
       brochures.where((entry) => entry.number.contains(query)).toList();
@@ -31,9 +34,11 @@ class HomeState {
     String? error,
     String? query,
     Set<String>? loadingIds,
+    bool? accessCodeInvalid,
     bool clearError = false,
     bool clearBrochures = false,
     bool clearLoadingIds = false,
+    bool clearAccessCodeInvalid = false,
   }) {
     return HomeState(
       brochures: clearBrochures ? const [] : (brochures ?? this.brochures),
@@ -41,6 +46,9 @@ class HomeState {
       error: clearError ? null : (error ?? this.error),
       query: query ?? this.query,
       loadingIds: clearLoadingIds ? const {} : (loadingIds ?? this.loadingIds),
+      accessCodeInvalid: clearAccessCodeInvalid
+          ? false
+          : (accessCodeInvalid ?? this.accessCodeInvalid),
     );
   }
 }
@@ -59,7 +67,14 @@ class HomeViewModel extends Notifier<HomeState> {
       case Success(:final data):
         state = state.copyWith(brochures: data);
       case FailureResult(:final failure):
-        state = state.copyWith(error: failure.message);
+        if (failure is AccessCodeFailure) {
+          state = state.copyWith(
+            accessCodeInvalid: true,
+            error: failure.message,
+          );
+        } else {
+          state = state.copyWith(error: failure.message);
+        }
     }
   }
 
@@ -100,10 +115,18 @@ class HomeViewModel extends Notifier<HomeState> {
       case Success():
         await loadBrochures(accessCode: accessCode);
       case FailureResult(:final failure):
-        state = state.copyWith(
-          brochures: state.brochures.where((e) => e.id != tempId).toList(),
-          error: failure.message,
-        );
+        if (failure is AccessCodeFailure) {
+          state = state.copyWith(
+            brochures: state.brochures.where((e) => e.id != tempId).toList(),
+            accessCodeInvalid: true,
+            error: failure.message,
+          );
+        } else {
+          state = state.copyWith(
+            brochures: state.brochures.where((e) => e.id != tempId).toList(),
+            error: failure.message,
+          );
+        }
     }
   }
 
@@ -128,11 +151,20 @@ class HomeViewModel extends Notifier<HomeState> {
       case Success():
         await loadBrochures(accessCode: accessCode);
       case FailureResult(:final failure):
-        state = state.copyWith(
-          brochures: [...state.brochures, deleted]
-            ..sort((a, b) => b.createdAt.compareTo(a.createdAt)),
-          error: failure.message,
-        );
+        if (failure is AccessCodeFailure) {
+          state = state.copyWith(
+            brochures: [...state.brochures, deleted]
+              ..sort((a, b) => b.createdAt.compareTo(a.createdAt)),
+            accessCodeInvalid: true,
+            error: failure.message,
+          );
+        } else {
+          state = state.copyWith(
+            brochures: [...state.brochures, deleted]
+              ..sort((a, b) => b.createdAt.compareTo(a.createdAt)),
+            error: failure.message,
+          );
+        }
     }
   }
 
@@ -159,11 +191,20 @@ class HomeViewModel extends Notifier<HomeState> {
       case Success():
         await loadBrochures(accessCode: accessCode);
       case FailureResult(:final failure):
-        state = state.copyWith(
-          brochures: [...state.brochures, ...deleted]
-            ..sort((a, b) => b.createdAt.compareTo(a.createdAt)),
-          error: failure.message,
-        );
+        if (failure is AccessCodeFailure) {
+          state = state.copyWith(
+            brochures: [...state.brochures, ...deleted]
+              ..sort((a, b) => b.createdAt.compareTo(a.createdAt)),
+            accessCodeInvalid: true,
+            error: failure.message,
+          );
+        } else {
+          state = state.copyWith(
+            brochures: [...state.brochures, ...deleted]
+              ..sort((a, b) => b.createdAt.compareTo(a.createdAt)),
+            error: failure.message,
+          );
+        }
     }
   }
 

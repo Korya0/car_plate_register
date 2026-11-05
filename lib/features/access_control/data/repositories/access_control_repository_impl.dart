@@ -47,6 +47,16 @@ class AccessControlRepositoryImpl implements AccessControlRepository {
       logger.info('Access code validated successfully: $trimmed');
       return Result.success(model.toEntity());
     } on FirebaseException catch (e, st) {
+      if (e.code == 'permission-denied' || e.code == 'not-found') {
+        logger.error(
+          'Access code invalid or revoked',
+          error: e,
+          stackTrace: st,
+        );
+        return const Result.failure(
+          AccessCodeFailure(message: AppStrings.accessCodeChangedMessage),
+        );
+      }
       logger.error(
         'Firebase error while validating access code',
         error: e,

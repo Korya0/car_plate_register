@@ -26,6 +26,16 @@ class BrochureRepositoryImpl implements BrochureRepository {
   final LinkedHashMap<String, BrochureEntity> _platesByNumber =
       LinkedHashMap<String, BrochureEntity>();
 
+  // Maps Firestore errors to domain failures. Permission-denied / not-found
+  // on the access code path means the shared access code changed or was
+  // revoked; everything else is treated as a generic network error.
+  Failure _mapFirebaseError(FirebaseException e) {
+    if (e.code == 'permission-denied' || e.code == 'not-found') {
+      return AccessCodeFailure(message: AppStrings.accessCodeChangedMessage);
+    }
+    return NetworkFailure(message: AppStrings.errorWidgetTitle);
+  }
+
   @override
   // Checks in O(1) if a brochure number already exists.
   bool containsNumber(String number) {
@@ -120,9 +130,7 @@ class BrochureRepositoryImpl implements BrochureRepository {
       return Result.success(entity);
     } on FirebaseException catch (e, st) {
       logger.error('Firebase error adding brochure', error: e, stackTrace: st);
-      return const Result.failure(
-        NetworkFailure(message: AppStrings.errorWidgetTitle),
-      );
+      return Result.failure(_mapFirebaseError(e));
     } on SocketException catch (e, st) {
       logger.error(
         'Network error adding brochure',
@@ -172,16 +180,14 @@ class BrochureRepositoryImpl implements BrochureRepository {
       return const Result.success(null);
     } on FirebaseException catch (e, st) {
       logger.error(
-        'Firebase error deleting brochure',
+        'Firebase error fetching brochures',
         error: e,
         stackTrace: st,
       );
-      return const Result.failure(
-        NetworkFailure(message: AppStrings.errorWidgetTitle),
-      );
+      return Result.failure(_mapFirebaseError(e));
     } on SocketException catch (e, st) {
       logger.error(
-        'Network error deleting brochure',
+        'Network error fetching brochures',
         error: e,
         stackTrace: st,
       );
@@ -190,7 +196,7 @@ class BrochureRepositoryImpl implements BrochureRepository {
       );
     } on TimeoutException catch (e, st) {
       logger.error(
-        'Timeout error deleting brochure',
+        'Timeout error fetching brochures',
         error: e,
         stackTrace: st,
       );
@@ -199,7 +205,7 @@ class BrochureRepositoryImpl implements BrochureRepository {
       );
     } catch (e, st) {
       logger.error(
-        'Unexpected error deleting brochure',
+        'Unexpected error fetching brochures',
         error: e,
         stackTrace: st,
       );
@@ -234,9 +240,7 @@ class BrochureRepositoryImpl implements BrochureRepository {
         error: e,
         stackTrace: st,
       );
-      return const Result.failure(
-        NetworkFailure(message: AppStrings.errorWidgetTitle),
-      );
+      return Result.failure(_mapFirebaseError(e));
     } on SocketException catch (e, st) {
       logger.error(
         'Network error deleting multiple brochures',

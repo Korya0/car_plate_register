@@ -75,6 +75,11 @@ class AppStrings {
   static const String networkTimeoutMessage =
       'انتهت مهلة الاتصال. تحقق من اتصالك بالإنترنت وحاول مرة أخرى.';
 
+  // Access code
+  static const String accessCodeChangedTitle = 'تم تغيير كود الوصول';
+  static const String accessCodeChangedMessage =
+      'كود الوصول الذي تستخدمه تغير أو تعطل. يرجى إدخال كود جديد للمتابعة.';
+
   // Actions
   static const String cancel = 'إلغاء';
   static const String delete = 'حذف';

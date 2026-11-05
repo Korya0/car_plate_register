@@ -23,6 +23,7 @@ class BrochureListBody extends StatefulWidget {
     required this.onConfirmDeleteMany,
     required this.onDelete,
     this.loadingIds = const {},
+    this.isLoading = false,
     super.key,
   });
 
@@ -31,6 +32,7 @@ class BrochureListBody extends StatefulWidget {
   final Widget emptyState;
   final Widget noMatchesState;
   final Set<String> loadingIds;
+  final bool isLoading;
 
   /// Asks the user before deleting one brochure; `false` keeps it.
   final Future<bool> Function(BrochureEntity entry) onConfirmDelete;
@@ -154,8 +156,23 @@ class _BrochureListBodyState extends State<BrochureListBody> {
         // )
         // ------------------------------------------------------------------
 
+        // Loading skeletons (initial load)
+        if (widget.isLoading && widget.entries.isEmpty)
+          AppSliverGrid.count(
+            padding: EdgeInsetsDirectional.only(
+              start: AppSize.p20,
+              end: AppSize.p20,
+              top: AppSize.p12,
+            ),
+            crossAxisCount: _columns,
+            mainAxisSpacing: AppSize.p8,
+            crossAxisSpacing: AppSize.p8,
+            itemCount: 4,
+            itemBuilder: (context, index) =>
+                const HomeBrochureEntryRow.loading(),
+          )
         // Empty
-        if (widget.entries.isEmpty)
+        else if (widget.entries.isEmpty)
           SliverFillRemaining(hasScrollBody: false, child: widget.emptyState)
         // No matches
         else if (visibleEntries.isEmpty)

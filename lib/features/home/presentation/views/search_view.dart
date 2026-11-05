@@ -46,6 +46,14 @@ class _SearchViewState extends ConsumerState<SearchView> {
     final state = ref.watch(homeViewModelProvider);
     final query = _searchController.text.trim();
 
+    if (state.accessCodeInvalid && mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ref.read(accessCodeProvider).value = '';
+        context.go(AppRoutes.accessCode);
+      });
+    }
+
     return Scaffold(
       key: const Key('search-view'),
       body: Column(
@@ -68,6 +76,7 @@ class _SearchViewState extends ConsumerState<SearchView> {
               entries: state.brochures,
               query: query,
               loadingIds: state.loadingIds,
+              isLoading: state.isLoading,
               emptyState: HomeBrochureEmptyState(onAdd: _goBack),
               noMatchesState: const HomeBrochureEmptyState(subtitle: null),
               onConfirmDelete: _confirmDelete,

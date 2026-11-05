@@ -9,10 +9,8 @@ import 'package:car_register/core/constants/app_strings.dart';
 import 'package:car_register/core/router/app_router.dart';
 import 'package:car_register/core/router/app_routes.dart';
 import 'package:car_register/core/widgets/app_primary_button.dart';
-import 'package:car_register/features/home/mock/brochure_mock_store.dart';
 
 Future<void> openHome(WidgetTester tester) async {
-  BrochureMockStore.reset();
   AppRouter.router.go(AppRoutes.accessCode);
   await tester.pumpWidget(
     const ProviderScope(child: CarRegisterApp()),

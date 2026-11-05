@@ -27,3 +27,7 @@ class ValidationFailure extends Failure {
 class UnknownFailure extends Failure {
   const UnknownFailure({required super.message});
 }
+
+class AccessCodeFailure extends Failure {
+  const AccessCodeFailure({required super.message});
+}

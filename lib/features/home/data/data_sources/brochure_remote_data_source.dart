@@ -34,7 +34,7 @@ class BrochureRemoteDataSourceImpl implements BrochureRemoteDataSource {
 
   final FirebaseFirestore firestore;
 
-  static const Duration _timeout = Duration(seconds: 30);
+  static const Duration _timeout = Duration(seconds: 10);
 
   static const String _accessCodesCollection = 'access_codes';
   static const String _platesCollection = 'plates';

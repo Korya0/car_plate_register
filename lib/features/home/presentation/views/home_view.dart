@@ -56,6 +56,14 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
     final state = ref.watch(homeViewModelProvider);
 
+    if (state.accessCodeInvalid && mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ref.read(accessCodeProvider).value = '';
+        context.go(AppRoutes.accessCode);
+      });
+    }
+
     return Scaffold(
       key: const Key('home-view'),
       body: Column(
@@ -79,6 +87,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
               entries: state.brochures,
               query: '',
               loadingIds: state.loadingIds,
+              isLoading: state.isLoading,
               emptyState: const HomeBrochureEmptyState(),
               noMatchesState: const HomeBrochureEmptyState(subtitle: null),
               onConfirmDelete: _confirmDelete,
