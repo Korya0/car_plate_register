@@ -47,10 +47,9 @@
 <br/>
 <br/>
 
-| | |
-|:---:|:---:|
-| <img src="assets/native/app_icon.png" width="180"/> | <img src="assets/native/app_icon.png" width="180"/> |
-| **Live Demo** | **All Views** |
+| Access Control | Home | Search | Delete |
+|:---:|:---:|:---:|:---:|
+| <img src="screenshots/access_control.jpeg" width="180"/> | <img src="screenshots/home.jpeg" width="180"/> | <img src="screenshots/search.jpeg" width="180"/> | <img src="screenshots/delete.jpeg" width="180"/> |
 
 </div>
 
@@ -72,46 +71,14 @@
 </details>
 
 <details>
-<summary><b>🔗 Shared Data</b></summary>
-<br>
-
-- **Multi-Device Access**: The same data is available on multiple devices.
-- **Shared Access PIN**: Enter the PIN once per device — never again for daily use.
-- **Sync Changes**: Additions and deletions sync across devices.
-- **Device Revocation**: Revoke a lost device or change the PIN when needed.
-- **No Traditional Login**: No email/password accounts, and no in-app PIN creation screen.
-
-</details>
-
-<details>
-<summary><b>📴 Offline &amp; Synchronization</b></summary>
-<br>
-
-- **Offline First**: Work without internet using a local database.
-- **Auto Sync**: Pending changes sync automatically when the connection returns.
-- **No Duplicates**: Retries never create duplicate records.
-- **No Resurrection**: Deleted records never come back after sync.
-- **Conflict Handling**: Safe behavior when several devices edit at the same time.
-
-</details>
-
-<details>
 <summary><b>🔒 App Lock</b></summary>
 <br>
 
-- **Local PIN**: Lock the app with a device-local PIN.
-- **Biometrics**: Fingerprint support when available and enabled.
-- **Separate From Sharing**: The app lock PIN is independent of the Shared Access PIN.
-
-</details>
-
-<details>
-<summary><b>📄 CSV Import &amp; Export</b></summary>
-<br>
-
-- **Import &amp; Export**: Move numbers in and out as CSV.
-- **Leading Zeros Preserved**: `007` stays `007` in CSV.
-- **Validation**: Imported data is validated before it is saved.
+- **Device-Local PIN**: Lock the app with the device's local PIN/pattern authentication.
+- **Biometrics**: Fingerprint support when available and enabled on the device.
+- **Auth Guard**: Opt-in `runWithLocalAuth` guard wraps sensitive actions behind authentication.
+- **Result Handling**: Covers success, cancelled, unavailable, not enrolled, locked out, busy, and error states.
+- **Availability Check**: Verifies device authentication support before prompting.
 
 </details>
 
@@ -124,12 +91,9 @@
 - **Framework**: `Flutter`
 - **Language**: `Dart`
 - **State Management**: `Riverpod`
-- **Local Database**: `SQLite / Drift`
 - **Cloud Database**: `Firebase Firestore`
 - **Architecture**: `Feature-First Clean Architecture`
 - **Testing**: `Unit, Widget, Integration Tests`
-- **CI/CD**: `GitHub Actions`
-- **Delivery**: `Signed Android APK`
 
 <img src="https://img.shields.io/badge/-%20-C8CBCD?style=flat-square" width="100%" height="2" alt="" />
 
