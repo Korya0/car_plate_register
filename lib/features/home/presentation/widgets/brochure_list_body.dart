@@ -8,7 +8,7 @@ import 'package:car_register/core/widgets/app_gap.dart';
 import 'package:car_register/core/widgets/app_icon_button.dart';
 import 'package:car_register/core/widgets/app_sliver_grid.dart';
 import 'package:car_register/core/widgets/app_text_button.dart';
-import 'package:car_register/features/home/mock/brochure_entity.dart';
+import 'package:car_register/features/home/domain/entities/brochure_entity.dart';
 import 'package:car_register/features/home/presentation/widgets/home_brochure_entry_row.dart';
 
 class BrochureListBody extends StatefulWidget {
@@ -44,7 +44,7 @@ class BrochureListBody extends StatefulWidget {
 class _BrochureListBodyState extends State<BrochureListBody> {
   static const int _columns = 4;
 
-  final Set<int> _selectedIds = {};
+  final Set<String> _selectedIds = {};
 
   bool _isSelecting = false;
 

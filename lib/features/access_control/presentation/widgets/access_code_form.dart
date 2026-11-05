@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/constants/app_strings.dart';
+import 'package:car_register/core/di/app_providers.dart';
 import 'package:car_register/core/router/app_routes.dart';
 import 'package:car_register/core/theme/app_text_styles.dart';
 import 'package:car_register/core/utils/app_validators.dart';
@@ -49,6 +50,7 @@ class _AccessCodeFormState extends ConsumerState<AccessCodeForm> {
 
     final state = ref.read(accessCodeViewModelProvider);
     if (state.accessCode != null) {
+      ref.read(accessCodeProvider).value = _controller.text.trim();
       context.go(AppRoutes.home);
     }
   }

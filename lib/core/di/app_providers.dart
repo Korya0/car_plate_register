@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:car_register/core/services/local_storage/app_local_storage.dart';
 import 'package:car_register/core/services/local_storage/app_secure_storage.dart';
 import 'package:car_register/core/utils/app_logger.dart';
@@ -22,3 +22,5 @@ final appSecureStorageProvider = Provider<AppSecureStorage>(
     'appSecureStorageProvider must be overridden in main()',
   ),
 );
+
+final accessCodeProvider = Provider<ValueNotifier<String>>((ref) => ValueNotifier(''));
