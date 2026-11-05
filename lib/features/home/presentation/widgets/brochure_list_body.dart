@@ -10,6 +10,9 @@ import 'package:car_register/core/widgets/app_sliver_grid.dart';
 import 'package:car_register/core/widgets/app_text_button.dart';
 import 'package:car_register/features/home/domain/entities/brochure_entity.dart';
 import 'package:car_register/features/home/presentation/widgets/home_brochure_entry_row.dart';
+import 'package:car_register/features/local_auth/domain/local_auth_result.dart';
+import 'package:car_register/features/local_auth/presentation/local_auth_guard.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class BrochureListBody extends StatefulWidget {
   const BrochureListBody({
@@ -20,6 +23,7 @@ class BrochureListBody extends StatefulWidget {
     required this.onConfirmDelete,
     required this.onConfirmDeleteMany,
     required this.onDelete,
+    this.loadingIds = const {},
     super.key,
   });
 
@@ -27,6 +31,7 @@ class BrochureListBody extends StatefulWidget {
   final String query;
   final Widget emptyState;
   final Widget noMatchesState;
+  final Set<String> loadingIds;
 
   /// Asks the user before deleting one brochure; `false` keeps it.
   final Future<bool> Function(BrochureEntity entry) onConfirmDelete;
@@ -79,7 +84,16 @@ class _BrochureListBodyState extends State<BrochureListBody> {
 
   // Asks for confirmation, then removes one brochure.
   Future<void> _confirmThenDelete(BrochureEntity entry) async {
-    if (await widget.onConfirmDelete(entry)) widget.onDelete(entry);
+    if (!await widget.onConfirmDelete(entry)) return;
+    if (!mounted) return;
+    final result = await context.runWithLocalAuth(
+      reason: AppStrings.localAuthReasonDelete,
+      action: () async {
+        if (!mounted) return;
+        widget.onDelete(entry);
+      },
+    );
+    if (!result.isSuccess && mounted) _stopSelecting();
   }
 
   // Asks for confirmation, then removes every selected brochure.
@@ -89,11 +103,19 @@ class _BrochureListBodyState extends State<BrochureListBody> {
         .toList();
     if (selected.isEmpty) return;
     if (!await widget.onConfirmDeleteMany(selected.length)) return;
+    if (!mounted) return;
 
-    for (final entry in selected) {
-      widget.onDelete(entry);
-    }
-    if (mounted) _stopSelecting();
+    final result = await context.runWithLocalAuth(
+      reason: AppStrings.localAuthReasonDelete,
+      action: () async {
+        if (!mounted) return;
+        for (final entry in selected) {
+          widget.onDelete(entry);
+        }
+        if (mounted) _stopSelecting();
+      },
+    );
+    if (!result.isSuccess && mounted) _stopSelecting();
   }
 
   @override
@@ -168,7 +190,8 @@ class _BrochureListBodyState extends State<BrochureListBody> {
             itemCount: visibleEntries.length,
             itemBuilder: (context, index) {
               final entry = visibleEntries[index];
-              return HomeBrochureEntryRow(
+              final isLoading = widget.loadingIds.contains(entry.id);
+              final row = HomeBrochureEntryRow(
                 brochure: entry,
                 query: widget.query,
                 isSelecting: _isSelecting,
@@ -180,6 +203,15 @@ class _BrochureListBodyState extends State<BrochureListBody> {
                     ? () => _toggleSelected(entry)
                     : () => _startSelecting(entry),
               );
+              if (isLoading) {
+                return Skeletonizer(
+                  effect: ShimmerEffect(
+                    duration: const Duration(milliseconds: 1200),
+                  ),
+                  child: row,
+                );
+              }
+              return row;
             },
           ),
           SliverToBoxAdapter(child: AppGap.h(AppSize.sbp)),

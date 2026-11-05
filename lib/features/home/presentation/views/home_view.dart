@@ -78,6 +78,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
             child: BrochureListBody(
               entries: state.brochures,
               query: '',
+              loadingIds: state.loadingIds,
               emptyState: const HomeBrochureEmptyState(),
               noMatchesState: const HomeBrochureEmptyState(subtitle: null),
               onConfirmDelete: _confirmDelete,

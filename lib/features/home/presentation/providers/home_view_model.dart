@@ -13,12 +13,14 @@ class HomeState {
     this.isLoading = false,
     this.error,
     this.query = '',
+    this.loadingIds = const {},
   });
 
   final List<BrochureEntity> brochures;
   final bool isLoading;
   final String? error;
   final String query;
+  final Set<String> loadingIds;
 
   List<BrochureEntity> get visibleEntries =>
       brochures.where((entry) => entry.number.contains(query)).toList();
@@ -28,14 +30,19 @@ class HomeState {
     bool? isLoading,
     String? error,
     String? query,
+    Set<String>? loadingIds,
     bool clearError = false,
     bool clearBrochures = false,
+    bool clearLoadingIds = false,
   }) {
     return HomeState(
       brochures: clearBrochures ? const [] : (brochures ?? this.brochures),
       isLoading: isLoading ?? this.isLoading,
       error: clearError ? null : (error ?? this.error),
       query: query ?? this.query,
+      loadingIds: clearLoadingIds
+          ? const {}
+          : (loadingIds ?? this.loadingIds),
     );
   }
 }
@@ -66,17 +73,33 @@ class HomeViewModel extends Notifier<HomeState> {
       return;
     }
 
-    state = state.copyWith(isLoading: true, clearError: true);
+    final formattedNumber = BrochureNumberValidator.format(number);
+    final tempId = 'temp:$formattedNumber';
+
+    state = state.copyWith(
+      brochures: [
+        BrochureEntity(id: tempId, number: formattedNumber, createdAt: DateTime.now()),
+        ...state.brochures,
+      ],
+      loadingIds: {...state.loadingIds, tempId},
+      clearError: true,
+    );
+
     final result = await ref.read(addBrochureUseCaseProvider)(
       accessCode: accessCode,
-      number: number,
+      number: formattedNumber,
     );
-    state = state.copyWith(isLoading: false);
+    state = state.copyWith(
+      loadingIds: state.loadingIds..remove(tempId),
+    );
     switch (result) {
       case Success():
         await loadBrochures(accessCode: accessCode);
       case FailureResult(:final failure):
-        state = state.copyWith(error: failure.message);
+        state = state.copyWith(
+          brochures: state.brochures.where((e) => e.id != tempId).toList(),
+          error: failure.message,
+        );
     }
   }
 
@@ -84,17 +107,28 @@ class HomeViewModel extends Notifier<HomeState> {
     required String accessCode,
     required String id,
   }) async {
-    state = state.copyWith(isLoading: true, clearError: true);
+    final deleted = state.brochures.firstWhere((e) => e.id == id);
+
+    state = state.copyWith(
+      brochures: state.brochures.where((e) => e.id != id).toList(),
+      loadingIds: {...state.loadingIds, id},
+      clearError: true,
+    );
+
     final result = await ref.read(deleteBrochureUseCaseProvider)(
       accessCode: accessCode,
       id: id,
     );
-    state = state.copyWith(isLoading: false);
+    state = state.copyWith(loadingIds: state.loadingIds..remove(id));
     switch (result) {
       case Success():
         await loadBrochures(accessCode: accessCode);
       case FailureResult(:final failure):
-        state = state.copyWith(error: failure.message);
+        state = state.copyWith(
+          brochures: [...state.brochures, deleted]
+            ..sort((a, b) => b.createdAt.compareTo(a.createdAt)),
+          error: failure.message,
+        );
     }
   }
 
@@ -102,17 +136,28 @@ class HomeViewModel extends Notifier<HomeState> {
     required String accessCode,
     required List<String> ids,
   }) async {
-    state = state.copyWith(isLoading: true, clearError: true);
+    final deleted = state.brochures.where((e) => ids.contains(e.id)).toList();
+
+    state = state.copyWith(
+      brochures: state.brochures.where((e) => !ids.contains(e.id)).toList(),
+      loadingIds: {...state.loadingIds, ...ids},
+      clearError: true,
+    );
+
     final result = await ref.read(deleteBrochureUseCaseProvider).many(
       accessCode: accessCode,
       ids: ids,
     );
-    state = state.copyWith(isLoading: false);
+    state = state.copyWith(loadingIds: state.loadingIds..removeAll(ids));
     switch (result) {
       case Success():
         await loadBrochures(accessCode: accessCode);
       case FailureResult(:final failure):
-        state = state.copyWith(error: failure.message);
+        state = state.copyWith(
+          brochures: [...state.brochures, ...deleted]
+            ..sort((a, b) => b.createdAt.compareTo(a.createdAt)),
+          error: failure.message,
+        );
     }
   }
 

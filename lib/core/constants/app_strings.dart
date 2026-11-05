@@ -61,6 +61,9 @@ class AppStrings {
   static const String localAuthResultBusy = 'هناك طلب تحقق جارٍ بالفعل';
   static const String localAuthResultError = 'تعذّر التحقق، حاول مرة أخرى';
 
+  static const String localAuthReasonDelete =
+      'للتأكيد على عملية حذف البروشور';
+
   // States
   static const String emptyTitle = 'لا توجد أرقام';
   static const String errorWidgetTitle = 'تعذّر إكمال العملية';

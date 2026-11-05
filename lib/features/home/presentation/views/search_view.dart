@@ -67,6 +67,7 @@ class _SearchViewState extends ConsumerState<SearchView> {
             child: BrochureListBody(
               entries: state.brochures,
               query: query,
+              loadingIds: state.loadingIds,
               emptyState: HomeBrochureEmptyState(onAdd: _goBack),
               noMatchesState: const HomeBrochureEmptyState(subtitle: null),
               onConfirmDelete: _confirmDelete,
