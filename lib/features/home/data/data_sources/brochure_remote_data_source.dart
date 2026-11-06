@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:car_register/core/constants/app_constants.dart';
+import 'package:car_register/core/constants/firebase_constants.dart';
 import 'package:car_register/features/home/data/models/brochure_model.dart';
 
 abstract interface class BrochureRemoteDataSource {
@@ -34,10 +36,8 @@ class BrochureRemoteDataSourceImpl implements BrochureRemoteDataSource {
 
   final FirebaseFirestore firestore;
 
-  static const Duration _timeout = Duration(seconds: 10);
-
-  static const String _accessCodesCollection = 'access_codes';
-  static const String _platesCollection = 'plates';
+  static const String _accessCodesCollection = FirebaseCollectionKeys.accessCodes;
+  static const String _platesCollection = FirebaseCollectionKeys.plates;
 
   CollectionReference<Map<String, dynamic>> _platesRef(String accessCode) =>
       firestore
@@ -53,7 +53,7 @@ class BrochureRemoteDataSourceImpl implements BrochureRemoteDataSource {
     final snapshot = await _platesRef(accessCode)
         .orderBy('createdAt', descending: true)
         .get()
-        .timeout(_timeout);
+        .timeout(AppConstants.networkRequestTimeout);
 
     return snapshot.docs.map(BrochureModel.fromFirestore).toList();
   }
@@ -73,7 +73,7 @@ class BrochureRemoteDataSourceImpl implements BrochureRemoteDataSource {
       createdAt: now,
     );
 
-    await docRef.set(model.toMap()).timeout(_timeout);
+    await docRef.set(model.toMap()).timeout(AppConstants.networkRequestTimeout);
     return model;
   }
 
@@ -82,7 +82,7 @@ class BrochureRemoteDataSourceImpl implements BrochureRemoteDataSource {
   Future<void> deleteBrochure({
     required String accessCode,
     required String id,
-  }) => _platesRef(accessCode).doc(id).delete().timeout(_timeout);
+  }) => _platesRef(accessCode).doc(id).delete().timeout(AppConstants.networkRequestTimeout);
 
   @override
   // Deletes multiple brochures in a batch.
@@ -97,6 +97,6 @@ class BrochureRemoteDataSourceImpl implements BrochureRemoteDataSource {
       batch.delete(ref.doc(id));
     }
 
-    await batch.commit().timeout(_timeout);
+    await batch.commit().timeout(AppConstants.networkRequestTimeout);
   }
 }

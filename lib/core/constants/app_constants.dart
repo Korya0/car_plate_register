@@ -22,6 +22,9 @@ class AppConstants {
   // Temporary until the access API is wired.
   static const String accessCodeDemoValue = 'KORYA';
 
+  // Network
+  static const Duration networkRequestTimeout = Duration(seconds: 10);
+
   // Touch
   // Unscaled on purpose: this is the accessibility floor, not a design size.
   static const double minTapTarget = 48;
