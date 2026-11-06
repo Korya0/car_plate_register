@@ -75,7 +75,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
               numberController: _numberController,
               numberFocusNode: _numberFocusNode,
               onSave: _saveNumber,
-              registeredCount: state.brochures.length,
               onSearch: () {
                 _dismissKeyboard();
                 context.push(AppRoutes.search);

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart' show CupertinoActivityIndicator;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,19 +15,21 @@ import 'package:car_register/core/widgets/app_text_field.dart';
 import 'package:car_register/features/access_control/presentation/views/access_code_view.dart';
 
 void main() {
-  Widget buildApp(GoRouter router) => MaterialApp.router(
-    routerConfig: router,
-    locale: const Locale('ar'),
-    supportedLocales: const [Locale('ar')],
-    localizationsDelegates: const [
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
-    ],
-    builder: (context, child) {
-      AppSize.init(context);
-      return child ?? const SizedBox.shrink();
-    },
+  Widget buildApp(GoRouter router) => ProviderScope(
+    child: MaterialApp.router(
+      routerConfig: router,
+      locale: const Locale('ar'),
+      supportedLocales: const [Locale('ar')],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      builder: (context, child) {
+        AppSize.init(context);
+        return child ?? const SizedBox.shrink();
+      },
+    ),
   );
 
   GoRouter buildRouter() => GoRouter(

@@ -149,6 +149,21 @@ class _BrochureListBodyState extends State<BrochureListBody> {
             child: widget.noMatchesState,
           )
         else ...[
+          // Registered count — lives in the cards section, above the cards.
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsetsDirectional.only(
+                start: AppSize.p20,
+                end: AppSize.p20,
+                top: AppSize.p12,
+              ),
+              child: Text(
+                AppStrings.registeredCount(widget.entries.length),
+                style: AppTextStyles.font16W500Primary,
+              ),
+            ),
+          ),
+
           // Selection bar
           if (_isSelecting)
             SliverToBoxAdapter(

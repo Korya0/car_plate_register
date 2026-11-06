@@ -24,15 +24,22 @@ class AccessCodeForm extends ConsumerStatefulWidget {
 
 class _AccessCodeFormState extends ConsumerState<AccessCodeForm> {
   final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(_handleChanged);
+    // The access code screen always opens with the keyboard up: focus the
+    // field as soon as the form is mounted so the user can start typing.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _focusNode.requestFocus();
+    });
   }
 
   @override
   void dispose() {
+    _focusNode.dispose();
     _controller
       ..removeListener(_handleChanged)
       ..dispose();
@@ -83,6 +90,7 @@ class _AccessCodeFormState extends ConsumerState<AccessCodeForm> {
         // Field
         AppTextField(
           controller: _controller,
+          focusNode: _focusNode,
           validator: AppValidators.accessCode,
           keyboardType: TextInputType.visiblePassword,
           inputFormatters: AppValidators.accessCodeFormatters,
