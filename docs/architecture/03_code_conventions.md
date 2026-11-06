@@ -7,6 +7,8 @@
 - Check `core/` before writing new shared code — never duplicate across features.
 - **No cross-feature imports:** each feature is an isolated vertical slice; only
   `core/` is shared.
+- **Router exception:** `core/router/` may import `features/<feature>/presentation/views/`
+  for one purpose only — route builders. No other file in `core/` imports a feature.
 - `core/` never imports a feature. If core needs feature-aware behavior, the
   feature supplies it through a provider or a callback.
 - Shared UI goes flat in `lib/core/widgets/`. This project does not use widget
@@ -92,6 +94,9 @@ Future<void> loadBrochures() async {}
 - Never import a feature from another feature.
 - Never import a `data/` or `domain/` file directly into a `View`. Go through a
   provider.
+- Exception: a `View` may import `domain/entities/` to type provider state
+  (`AsyncValue<List<BrochureEntity>>`). `data/`, models, and use cases never
+  reach a view.
 
 ## 6. State & providers
 

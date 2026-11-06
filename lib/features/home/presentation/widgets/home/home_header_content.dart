@@ -16,6 +16,7 @@ class HomeHeaderContent extends StatelessWidget {
     required this.numberFocusNode,
     required this.onSave,
     required this.onSearch,
+    required this.registeredCount,
     super.key,
   });
 
@@ -23,6 +24,7 @@ class HomeHeaderContent extends StatelessWidget {
   final FocusNode numberFocusNode;
   final VoidCallback onSave;
   final VoidCallback onSearch;
+  final int registeredCount;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -46,7 +48,14 @@ class HomeHeaderContent extends StatelessWidget {
             color: AppColors.textOnSecondary,
             onPressed: onSearch,
           ),
-        ],
+      ],
+      ),
+
+      // Counter
+      AppGap.h(AppSize.p8),
+      Text(
+        AppStrings.registeredCount(registeredCount),
+        style: AppTextStyles.font16W500OnSecondary,
       ),
       AppGap.h(AppSize.p12),
 

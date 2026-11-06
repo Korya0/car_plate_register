@@ -31,7 +31,9 @@ class BrochureRepositoryImpl implements BrochureRepository {
   // revoked; everything else is treated as a generic network error.
   Failure _mapFirebaseError(FirebaseException e) {
     if (e.code == 'permission-denied' || e.code == 'not-found') {
-      return const AccessCodeFailure(message: AppStrings.accessCodeChangedMessage);
+      return const AccessCodeFailure(
+        message: AppStrings.accessCodeChangedMessage,
+      );
     }
     return const NetworkFailure(message: AppStrings.errorWidgetTitle);
   }
@@ -59,7 +61,9 @@ class BrochureRepositoryImpl implements BrochureRepository {
         _platesByNumber[entity.number] = entity;
       }
 
-      logger.info('Loaded ${_platesByNumber.length} brochures for $accessCode');
+      logger.info(
+        'Loaded ${_platesByNumber.length} brochures for access code session',
+      );
       return Result.success(_platesByNumber.values.toList());
     } on FirebaseException catch (e, st) {
       logger.error(

@@ -63,6 +63,7 @@ Every failure is a sealed `Failure` with a user-safe `message`:
 | `DatabaseFailure` | Drift query or transaction failed |
 | `SyncFailure` | Firestore push/pull or conflict resolution failed |
 | `ValidationFailure` | input rejected before persistence |
+| `AccessCodeFailure` | Shared Access code rejected on the server (permission-denied/not-found); the UI reacts differently — it routes back to access-code entry |
 | `UnknownFailure` | nothing else fits; always logs the original |
 
 - There is **no** `AuthFailure`. The app has no authentication.

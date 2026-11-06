@@ -16,6 +16,7 @@ class AppStrings {
   static const String homeEntryTitle = 'أدخل رقم البروشور';
   static const String allBrochuresTitle = 'كل الأرقام المسجلة';
   static const String headerSlash = '/';
+  static String registeredCount(int count) => 'عدد الأرقام المسجلة: $count';
   static const String homeSearchHint = 'أدخل رقم البروشور';
   static const String brochuresSearchHint = 'ابحث عن رقم بروشور';
   static const String clearSearch = 'مسح البحث';

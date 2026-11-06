@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:car_register/features/local_auth/data/local_auth_service.dart';
-import 'package:car_register/features/local_auth/domain/local_auth_result.dart';
+import 'package:car_register/core/services/device_auth/local_auth_service.dart';
+import 'package:car_register/core/services/device_auth/local_auth_result.dart';
 
 class FakeLocalAuthService implements LocalAuthService {
   FakeLocalAuthService({

@@ -1,7 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_auth/local_auth.dart';
 
-import 'package:car_register/features/local_auth/domain/local_auth_result.dart';
+import 'package:car_register/core/services/device_auth/local_auth_result.dart';
+import 'package:car_register/core/utils/app_logger.dart';
 
 abstract interface class LocalAuthService {
   Future<bool> isAvailable();
@@ -9,13 +9,15 @@ abstract interface class LocalAuthService {
   Future<LocalAuthResult> authenticate({required String reason});
 }
 
-final localAuthServiceProvider = Provider<LocalAuthService>(
-  (ref) => DeviceLocalAuthService(),
-);
-
+// Maps local_auth exceptions to typed results; unavailable hardware and
+// unknown errors always log the original once.
 final class DeviceLocalAuthService implements LocalAuthService {
-  DeviceLocalAuthService({LocalAuthentication? authentication})
-    : _authentication = authentication ?? LocalAuthentication();
+  DeviceLocalAuthService({
+    required this.logger,
+    LocalAuthentication? authentication,
+  }) : _authentication = authentication ?? LocalAuthentication();
+
+  final AppLogger logger;
 
   final LocalAuthentication _authentication;
 
@@ -23,9 +25,19 @@ final class DeviceLocalAuthService implements LocalAuthService {
   Future<bool> isAvailable() async {
     try {
       return await _authentication.isDeviceSupported();
-    } on LocalAuthException {
+    } on LocalAuthException catch (e, st) {
+      logger.warning(
+        'Device authentication support check failed',
+        error: e,
+        stackTrace: st,
+      );
       return false;
-    } catch (_) {
+    } catch (e, st) {
+      logger.error(
+        'Device authentication support check failed unexpectedly',
+        error: e,
+        stackTrace: st,
+      );
       return false;
     }
   }
@@ -41,7 +53,12 @@ final class DeviceLocalAuthService implements LocalAuthService {
       return success ? LocalAuthResult.success : LocalAuthResult.cancelled;
     } on LocalAuthException catch (error) {
       return _mapException(error.code);
-    } catch (_) {
+    } catch (e, st) {
+      logger.error(
+        'Device authentication failed unexpectedly',
+        error: e,
+        stackTrace: st,
+      );
       return LocalAuthResult.error;
     }
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
+import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/theme/app_colors.dart';
 import 'package:car_register/core/theme/app_text_styles.dart';
@@ -18,7 +19,7 @@ class AppDivider extends StatelessWidget {
        baseColor = null,
        animateFill = false,
        fillDelay = Duration.zero,
-       fillDuration = const Duration(milliseconds: 700),
+       fillDuration = AppConstants.dividerFill700ms,
        _isVertical = false,
        _isBrand = false;
 
@@ -33,7 +34,7 @@ class AppDivider extends StatelessWidget {
        baseColor = null,
        animateFill = false,
        fillDelay = Duration.zero,
-       fillDuration = const Duration(milliseconds: 700),
+       fillDuration = AppConstants.dividerFill700ms,
        _isVertical = true,
        _isBrand = false;
 
@@ -45,7 +46,7 @@ class AppDivider extends StatelessWidget {
     this.baseColor,
     this.animateFill = false,
     this.fillDelay = Duration.zero,
-    this.fillDuration = const Duration(milliseconds: 700),
+    this.fillDuration = AppConstants.dividerFill700ms,
   }) : height = null,
        indent = null,
        endIndent = null,

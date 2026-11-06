@@ -44,7 +44,9 @@ class AccessControlRepositoryImpl implements AccessControlRepository {
         );
       }
 
-      logger.info('Access code validated successfully: $trimmed');
+      logger.info(
+        'Access code validated successfully',
+      );
       return Result.success(model.toEntity());
     } on FirebaseException catch (e, st) {
       if (e.code == 'permission-denied' || e.code == 'not-found') {

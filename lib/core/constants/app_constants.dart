@@ -14,7 +14,8 @@ class AppConstants {
   // Brochure numbers
   static const int brochureNumberMinLength = 1;
   static const int brochureNumberMaxLength = 4;
-  static const int brochureListSkeletonCount = 3;
+  static const int brochureGridColumns = 4;
+  static const int brochureListSkeletonCount = 4;
 
   // Access control
   static const int accessCodeMaxLength = 10;
@@ -54,6 +55,8 @@ class AppConstants {
     milliseconds: 300,
   );
   static const Duration homeHeaderCurveDraw900ms = Duration(milliseconds: 900);
+  static const Duration skeletonShimmer1200ms = Duration(milliseconds: 1200);
+  static const Duration dividerFill700ms = Duration(milliseconds: 700);
 
   // Opacity
   static const double opacityTransparent = 0;

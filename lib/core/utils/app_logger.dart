@@ -15,8 +15,12 @@ class AppLogger {
     _log('SUCCESS', message);
   }
 
-  void warning(String message) {
-    _log('WARNING', message);
+  void warning(
+    String message, {
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    _log('WARNING', message, error: error, stackTrace: stackTrace);
   }
 
   void error(String message, {Object? error, StackTrace? stackTrace}) {

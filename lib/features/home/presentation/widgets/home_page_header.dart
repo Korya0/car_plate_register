@@ -4,6 +4,7 @@ import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/theme/app_colors.dart';
 import 'package:car_register/core/theme/app_text_styles.dart';
+import 'package:car_register/core/widgets/app_gap.dart';
 import 'package:car_register/features/home/presentation/widgets/home_page_header_curve.dart';
 
 class HomePageHeader extends StatelessWidget {
@@ -55,7 +56,7 @@ class HomePageHeader extends StatelessWidget {
                 AppSize.p24,
                 AppSize.p32,
               ),
-              child: child ?? SizedBox(height: AppSize.h150),
+              child: child ?? AppGap.h(AppSize.h150),
             ),
           ],
         ),

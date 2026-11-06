@@ -1,3 +1,4 @@
+import 'package:car_register/core/constants/app_constants.dart';
 import 'package:car_register/core/constants/app_sizes.dart';
 import 'package:car_register/core/constants/app_strings.dart';
 import 'package:car_register/core/theme/app_colors.dart';
@@ -8,8 +9,8 @@ import 'package:car_register/core/widgets/app_sliver_grid.dart';
 import 'package:car_register/core/widgets/app_text_button.dart';
 import 'package:car_register/features/home/domain/entities/brochure_entity.dart';
 import 'package:car_register/features/home/presentation/widgets/home_brochure_entry_row.dart';
-import 'package:car_register/features/local_auth/domain/local_auth_result.dart';
-import 'package:car_register/features/local_auth/presentation/local_auth_guard.dart';
+import 'package:car_register/core/services/device_auth/local_auth_guard.dart';
+import 'package:car_register/core/services/device_auth/local_auth_result.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -48,8 +49,6 @@ class BrochureListBody extends StatefulWidget {
 }
 
 class _BrochureListBodyState extends State<BrochureListBody> {
-  static const int _columns = 4;
-
   final Set<String> _selectedIds = {};
 
   bool _isSelecting = false;
@@ -125,37 +124,6 @@ class _BrochureListBodyState extends State<BrochureListBody> {
 
     return CustomScrollView(
       slivers: [
-        // ------------------------------------------------------------------
-        // Loading branch — copy back when Riverpod returns (with a loading
-        // flag or an AsyncValue). Needs the app_constants.dart import.
-        //
-        // AppSliverGrid.count(
-        //   padding: EdgeInsetsDirectional.only(
-        //     start: AppSize.p20,
-        //     end: AppSize.p20,
-        //     top: AppSize.p12,
-        //   ),
-        //   crossAxisCount: _columns,
-        //   mainAxisSpacing: AppSize.p8,
-        //   crossAxisSpacing: AppSize.p8,
-        //   itemCount: AppConstants.brochureListSkeletonCount,
-        //   itemBuilder: (context, index) =>
-        //       const HomeBrochureEntryRow.loading(),
-        // )
-        //
-        // Error branch — copy back when Riverpod returns
-        // (ref.invalidate(provider) instead of the empty callback).
-        // Needs app_error_view.dart and app_strings.dart imports.
-        //
-        // SliverFillRemaining(
-        //   hasScrollBody: false,
-        //   child: AppErrorView(
-        //     message: AppStrings.errorWidgetTitle,
-        //     onRetry: () {},
-        //   ),
-        // )
-        // ------------------------------------------------------------------
-
         // Loading skeletons (initial load)
         if (widget.isLoading && widget.entries.isEmpty)
           AppSliverGrid.count(
@@ -164,10 +132,10 @@ class _BrochureListBodyState extends State<BrochureListBody> {
               end: AppSize.p20,
               top: AppSize.p12,
             ),
-            crossAxisCount: _columns,
+            crossAxisCount: AppConstants.brochureGridColumns,
             mainAxisSpacing: AppSize.p8,
             crossAxisSpacing: AppSize.p8,
-            itemCount: 4,
+            itemCount: AppConstants.brochureListSkeletonCount,
             itemBuilder: (context, index) =>
                 const HomeBrochureEntryRow.loading(),
           )
@@ -200,7 +168,7 @@ class _BrochureListBodyState extends State<BrochureListBody> {
               end: AppSize.p20,
               top: AppSize.p12,
             ),
-            crossAxisCount: _columns,
+            crossAxisCount: AppConstants.brochureGridColumns,
             mainAxisSpacing: AppSize.p8,
             crossAxisSpacing: AppSize.p8,
             itemCount: visibleEntries.length,
@@ -222,7 +190,7 @@ class _BrochureListBodyState extends State<BrochureListBody> {
               if (isLoading) {
                 return Skeletonizer(
                   effect: const ShimmerEffect(
-                    duration: Duration(milliseconds: 1200),
+                    duration: AppConstants.skeletonShimmer1200ms,
                   ),
                   child: row,
                 );
@@ -273,7 +241,7 @@ class _SelectionBar extends StatelessWidget {
         Expanded(
           child: Text(
             AppStrings.selectedCount(selectedCount),
-            maxLines: 1,
+            maxLines: AppConstants.maxOneLine,
             overflow: TextOverflow.ellipsis,
             style: AppTextStyles.font14W500Primary,
           ),

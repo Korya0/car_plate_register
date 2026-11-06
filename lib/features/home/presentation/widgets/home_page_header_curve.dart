@@ -33,7 +33,6 @@ class HomePageHeaderCurve extends StatelessWidget {
   }
 }
 
-// Draws the header wave, revealing it from the bottom end up to the top tip.
 class HomePageHeaderCurvePainter extends CustomPainter {
   const HomePageHeaderCurvePainter({required this.progress});
 

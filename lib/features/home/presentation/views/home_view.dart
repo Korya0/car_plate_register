@@ -3,7 +3,7 @@ import 'package:car_register/core/di/app_providers.dart';
 import 'package:car_register/core/router/app_routes.dart';
 import 'package:car_register/core/widgets/custom_confirmation_dialog.dart';
 import 'package:car_register/features/home/domain/entities/brochure_entity.dart';
-import 'package:car_register/features/home/presentation/providers/home_view_model.dart';
+import 'package:car_register/features/home/presentation/providers/home_notifier.dart';
 import 'package:car_register/features/home/presentation/widgets/brochure_list_body.dart';
 import 'package:car_register/features/home/presentation/widgets/home/home_header_content.dart';
 import 'package:car_register/features/home/presentation/widgets/home_brochure_empty_state.dart';
@@ -41,10 +41,10 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(homeViewModelProvider, (previous, next) async {
+    ref.listen(homeNotifierProvider, (previous, next) async {
       if (next.error == null || next.error == previous?.error) return;
       await _showErrorDialog(next.error!);
-      ref.read(homeViewModelProvider.notifier).clearError();
+      ref.read(homeNotifierProvider.notifier).clearError();
     });
 
     if (!_initialized) {
@@ -54,12 +54,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
       });
     }
 
-    final state = ref.watch(homeViewModelProvider);
+    final state = ref.watch(homeNotifierProvider);
 
     if (state.accessCodeInvalid && mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        ref.read(accessCodeProvider).value = '';
+        ref.read(accessCodeProvider.notifier).clear();
         context.go(AppRoutes.accessCode);
       });
     }
@@ -75,6 +75,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
               numberController: _numberController,
               numberFocusNode: _numberFocusNode,
               onSave: _saveNumber,
+              registeredCount: state.brochures.length,
               onSearch: () {
                 _dismissKeyboard();
                 context.push(AppRoutes.search);
@@ -101,14 +102,14 @@ class _HomeViewState extends ConsumerState<HomeView> {
   }
 
   void _handleChanged() {
-    ref.read(homeViewModelProvider.notifier).clearError();
+    ref.read(homeNotifierProvider.notifier).clearError();
   }
 
   Future<void> _loadBrochures() async {
-    final accessCode = ref.read(accessCodeProvider).value;
+    final accessCode = ref.read(accessCodeProvider);
     if (accessCode.isEmpty) return;
     await ref
-        .read(homeViewModelProvider.notifier)
+        .read(homeNotifierProvider.notifier)
         .loadBrochures(
           accessCode: accessCode,
         );
@@ -153,21 +154,21 @@ class _HomeViewState extends ConsumerState<HomeView> {
   void _saveNumber() {
     final number = _numberController.text.trim();
     if (number.isEmpty) return;
-    if (ref.read(accessCodeProvider).value.isEmpty) return;
+    if (ref.read(accessCodeProvider).isEmpty) return;
     ref
-        .read(homeViewModelProvider.notifier)
+        .read(homeNotifierProvider.notifier)
         .addBrochure(
-          accessCode: ref.read(accessCodeProvider).value,
+          accessCode: ref.read(accessCodeProvider),
           number: number,
         );
     _numberController.clear();
   }
 
   void _deleteEntry(BrochureEntity entry) {
-    final accessCode = ref.read(accessCodeProvider).value;
+    final accessCode = ref.read(accessCodeProvider);
     if (accessCode.isEmpty) return;
     ref
-        .read(homeViewModelProvider.notifier)
+        .read(homeNotifierProvider.notifier)
         .deleteBrochure(
           accessCode: accessCode,
           id: entry.id,

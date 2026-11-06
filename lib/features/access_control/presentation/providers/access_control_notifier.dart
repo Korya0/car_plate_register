@@ -32,7 +32,7 @@ class AccessCodeState {
   }
 }
 
-class AccessCodeViewModel extends Notifier<AccessCodeState> {
+class AccessCodeNotifier extends Notifier<AccessCodeState> {
   @override
   AccessCodeState build() => const AccessCodeState();
 
@@ -57,7 +57,7 @@ class AccessCodeViewModel extends Notifier<AccessCodeState> {
   }
 }
 
-final accessCodeViewModelProvider =
-    NotifierProvider<AccessCodeViewModel, AccessCodeState>(
-      AccessCodeViewModel.new,
+final accessCodeNotifierProvider =
+    NotifierProvider<AccessCodeNotifier, AccessCodeState>(
+      AccessCodeNotifier.new,
     );

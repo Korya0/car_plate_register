@@ -53,7 +53,7 @@ class HomeState {
   }
 }
 
-class HomeViewModel extends Notifier<HomeState> {
+class HomeNotifier extends Notifier<HomeState> {
   @override
   HomeState build() => const HomeState();
 
@@ -217,6 +217,6 @@ class HomeViewModel extends Notifier<HomeState> {
   }
 }
 
-final homeViewModelProvider = NotifierProvider<HomeViewModel, HomeState>(
-  HomeViewModel.new,
+final homeNotifierProvider = NotifierProvider<HomeNotifier, HomeState>(
+  HomeNotifier.new,
 );

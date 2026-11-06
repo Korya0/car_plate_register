@@ -3,7 +3,7 @@ import 'package:car_register/core/di/app_providers.dart';
 import 'package:car_register/core/router/app_routes.dart';
 import 'package:car_register/core/widgets/custom_confirmation_dialog.dart';
 import 'package:car_register/features/home/domain/entities/brochure_entity.dart';
-import 'package:car_register/features/home/presentation/providers/home_view_model.dart';
+import 'package:car_register/features/home/presentation/providers/home_notifier.dart';
 import 'package:car_register/features/home/presentation/widgets/brochure_list_body.dart';
 import 'package:car_register/features/home/presentation/widgets/home_brochure_empty_state.dart';
 import 'package:car_register/features/home/presentation/widgets/home_page_header.dart';
@@ -37,19 +37,19 @@ class _SearchViewState extends ConsumerState<SearchView> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(homeViewModelProvider, (previous, next) async {
+    ref.listen(homeNotifierProvider, (previous, next) async {
       if (next.error == null || next.error == previous?.error) return;
       await _showErrorDialog(next.error!);
-      ref.read(homeViewModelProvider.notifier).clearError();
+      ref.read(homeNotifierProvider.notifier).clearError();
     });
 
-    final state = ref.watch(homeViewModelProvider);
+    final state = ref.watch(homeNotifierProvider);
     final query = _searchController.text.trim();
 
     if (state.accessCodeInvalid && mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        ref.read(accessCodeProvider).value = '';
+        ref.read(accessCodeProvider.notifier).clear();
         context.go(AppRoutes.accessCode);
       });
     }
@@ -64,7 +64,7 @@ class _SearchViewState extends ConsumerState<SearchView> {
               searchController: _searchController,
               searchFocusNode: _searchFocusNode,
               onSearchChanged: (value) {
-                ref.read(homeViewModelProvider.notifier).setQuery(value);
+                ref.read(homeNotifierProvider.notifier).setQuery(value);
               },
               onSubmit: _dismissKeyboard,
               onBack: _goBack,
@@ -126,10 +126,10 @@ class _SearchViewState extends ConsumerState<SearchView> {
   }
 
   void _deleteEntry(BrochureEntity entry) {
-    final accessCode = ref.read(accessCodeProvider).value;
+    final accessCode = ref.read(accessCodeProvider);
     if (accessCode.isEmpty) return;
     ref
-        .read(homeViewModelProvider.notifier)
+        .read(homeNotifierProvider.notifier)
         .deleteBrochure(
           accessCode: accessCode,
           id: entry.id,

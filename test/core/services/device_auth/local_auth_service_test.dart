@@ -2,8 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'package:car_register/features/local_auth/data/local_auth_service.dart';
-import 'package:car_register/features/local_auth/domain/local_auth_result.dart';
+import 'package:car_register/core/services/device_auth/local_auth_service.dart';
+import 'package:car_register/core/services/device_auth/local_auth_result.dart';
+import 'package:car_register/core/utils/app_logger.dart';
 
 class MockLocalAuthentication extends Mock implements LocalAuthentication {}
 
@@ -13,7 +14,10 @@ void main() {
 
   setUp(() {
     authentication = MockLocalAuthentication();
-    service = DeviceLocalAuthService(authentication: authentication);
+    service = DeviceLocalAuthService(
+      authentication: authentication,
+      logger: const AppLogger(),
+    );
   });
 
   void stubAuthenticate(Future<bool> Function() answer) {

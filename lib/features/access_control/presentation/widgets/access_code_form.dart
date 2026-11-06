@@ -13,7 +13,7 @@ import 'package:car_register/core/utils/app_validators.dart';
 import 'package:car_register/core/widgets/app_gap.dart';
 import 'package:car_register/core/widgets/app_primary_button.dart';
 import 'package:car_register/core/widgets/app_text_field.dart';
-import 'package:car_register/features/access_control/presentation/providers/access_control_view_model.dart';
+import 'package:car_register/features/access_control/presentation/providers/access_control_notifier.dart';
 
 class AccessCodeForm extends ConsumerStatefulWidget {
   const AccessCodeForm({super.key});
@@ -40,27 +40,27 @@ class _AccessCodeFormState extends ConsumerState<AccessCodeForm> {
   }
 
   void _handleChanged() =>
-      ref.read(accessCodeViewModelProvider.notifier).clearError();
+      ref.read(accessCodeNotifierProvider.notifier).clearError();
 
   Future<void> _submit() async {
     if (_controller.text.trim().isEmpty) return;
 
     await ref
-        .read(accessCodeViewModelProvider.notifier)
+        .read(accessCodeNotifierProvider.notifier)
         .validate(_controller.text.trim());
 
     if (!mounted) return;
 
-    final state = ref.read(accessCodeViewModelProvider);
+    final state = ref.read(accessCodeNotifierProvider);
     if (state.accessCode != null) {
-      ref.read(accessCodeProvider).value = _controller.text.trim();
+      ref.read(accessCodeProvider.notifier).save(_controller.text.trim());
       context.go(AppRoutes.home);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(accessCodeViewModelProvider);
+    final state = ref.watch(accessCodeNotifierProvider);
     final canSubmit = _controller.text.trim().isNotEmpty && !state.isLoading;
 
     return Column(

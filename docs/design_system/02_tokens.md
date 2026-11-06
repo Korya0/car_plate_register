@@ -1,4 +1,4 @@
-# Tokens & Constants — AppSize, AppConstants, Validators
+# Tokens & Constants â€” AppSize, AppConstants, Validators
 
 **Single source of truth** for every dimension, threshold, duration, and input validation rule in `lib/core/`.
 
@@ -17,13 +17,13 @@ Colors and text styles are documented in [`01_theme.md`](01_theme.md).
 > **Never write raw literal numbers in a widget. Every pixel dimension must come from `AppSize.*`; every duration, opacity, or line limit must come from `AppConstants.*`.**
 
 ```dart
-// ✅ Correct
+// âœ… Correct
 height: AppSize.h48
 padding: AppSize.shp
 maxLines: AppConstants.maxOneLine
 duration: AppConstants.animationNormal300ms
 
-// ❌ Forbidden
+// âŒ Forbidden
 height: 48
 padding: EdgeInsets.symmetric(horizontal: 16)
 maxLines: 1
@@ -32,11 +32,11 @@ duration: Duration(milliseconds: 300)
 
 ---
 
-## 2. `AppSize` — Scaled Pixel Tokens
+## 2. `AppSize` â€” Scaled Pixel Tokens
 
 ### Principles
 
-- `AppSize` values are **dynamic getters**, scaled based on screen width via `_shortestSide / 375` and clamped between `0.8×` and `1.3×` to ensure balanced rendering on compact devices, phones, and tablets.
+- `AppSize` values are **dynamic getters**, scaled based on screen width via `_shortestSide / 375` and clamped between `0.8Ã—` and `1.3Ã—` to ensure balanced rendering on compact devices, phones, and tablets.
 - `AppSize.init(context)` is invoked once inside `CarRegisterApp`'s `MaterialApp.router` `builder`.
 - Because they are dynamic getters and not compile-time constants, widgets that need them as default values define nullable parameters and resolve with `?? AppSize.*` inside `build()`.
 
@@ -50,19 +50,19 @@ duration: Duration(milliseconds: 300)
 | **Heights** | `h*` | `h12`, `h18`, `h24`, `h40`, `h48`, `h56`, `h64`, `h150` | Heights of buttons, inputs, cards |
 | **Widths** | `w*` | `w4`, `w24`, `w40`, `w48`, `w100`, `w200` | Specific widths, indicators, logos |
 | **Radii** | `r*` | `r4`, `r8`, `r12`, `r16`, `r20`, `r24`, `r40`, `circularRadius` | `BorderRadius.circular(...)` on cards & buttons |
-| **Borders & Dividers** | — | `borderWidth`, `borderWidthThick`, `dividerThickness`, `dividerHeight` | Borders, outlines, and horizontal dividers |
+| **Borders & Dividers** | â€” | `borderWidth`, `borderWidthThick`, `dividerThickness`, `dividerHeight` | Borders, outlines, and horizontal dividers |
 
 ### Composite Layout Insets
 
-- `AppSize.shp`: `EdgeInsets.symmetric(horizontal: p16)` — standard screen horizontal padding.
-- `AppSize.stp`: `p16` — screen top padding.
-- `AppSize.sbp`: `p40` — screen bottom padding (ensures scrollable content clears bottom sheets/bars).
+- `AppSize.shp`: `EdgeInsets.symmetric(horizontal: p16)` â€” standard screen horizontal padding.
+- `AppSize.stp`: `p16` â€” screen top padding.
+- `AppSize.sbp`: `p40` â€” screen bottom padding (ensures scrollable content clears bottom sheets/bars).
 - `AppSize.keyboardHeight(context)`: Resolves active keyboard inset.
-- `AppSize.contentMaxWidth`: `640` — max width for center-constrained tablets/foldables.
+- `AppSize.contentMaxWidth`: `640` â€” max width for center-constrained tablets/foldables.
 
 ---
 
-## 3. `AppConstants` — Non-Pixel Thresholds
+## 3. `AppConstants` â€” Non-Pixel Thresholds
 
 ### Categories
 
@@ -73,7 +73,8 @@ duration: Duration(milliseconds: 300)
 3. **Brochure Numbers:**
    - `brochureNumberMinLength = 1`
    - `brochureNumberMaxLength = 4`
-   - `brochureListSkeletonCount = 3`
+   - `brochureGridColumns = 4`
+   - `brochureListSkeletonCount = 4`
 4. **Touch Target:**
    - `minTapTarget = 48` (unscaled accessibility floor)
 5. **Line Heights:**
@@ -85,6 +86,7 @@ duration: Duration(milliseconds: 300)
    - `accessCodeStagger60ms`, `accessCodeLogoDelay500ms`, `accessCodeLogoSlide700ms`
    - `accessCodeDividerFillDelay500ms`, `accessCodeDividerFill700ms`
    - `homeHeaderCurveDelay300ms`, `homeHeaderCurveDraw900ms`
+    - `dividerFill700ms`, `skeletonShimmer1200ms`
    - `slideOffsetNone = 0`, `slideOffsetSmall = 0.2`
 7. **Opacities:**
    - `opacityPressed = 0.55`, `opacityDisabled = 0.45`
@@ -99,7 +101,7 @@ duration: Duration(milliseconds: 300)
 
 ---
 
-## 4. `AppValidators` — Input Validation Rules
+## 4. `AppValidators` â€” Input Validation Rules
 
 ### Brochure Number Validator (`AppValidators.brochureNumber`)
 
