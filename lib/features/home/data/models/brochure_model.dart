@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:car_register/core/constants/firebase_constants.dart';
 import 'package:car_register/features/home/domain/entities/brochure_entity.dart';
 
 class BrochureModel {
@@ -21,7 +22,7 @@ class BrochureModel {
       throw const FormatException('Brochure snapshot has no data.');
     }
 
-    final createdAtRaw = data['createdAt'];
+    final createdAtRaw = data[FirebaseDocumentFieldKeys.brochureCreatedAt];
     DateTime createdAt;
     if (createdAtRaw is Timestamp) {
       createdAt = createdAtRaw.toDate();
@@ -33,7 +34,9 @@ class BrochureModel {
 
     return BrochureModel(
       id: snapshot.id,
-      number: (data['number'] as String?)?.trim() ?? snapshot.id,
+      number: (data[FirebaseDocumentFieldKeys.brochureNumber] as String?)
+              ?.trim() ??
+          snapshot.id,
       createdAt: createdAt,
     );
   }
@@ -45,8 +48,8 @@ class BrochureModel {
   );
 
   Map<String, dynamic> toMap() => {
-    'number': number,
-    'createdAt': Timestamp.fromDate(createdAt),
+    FirebaseDocumentFieldKeys.brochureNumber: number,
+    FirebaseDocumentFieldKeys.brochureCreatedAt: Timestamp.fromDate(createdAt),
   };
 
   BrochureEntity toEntity() => BrochureEntity(

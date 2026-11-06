@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:car_register/core/constants/app_strings.dart';
+import 'package:car_register/core/constants/firebase_constants.dart';
 import 'package:car_register/core/error/failure.dart';
 import 'package:car_register/core/error/result.dart';
 import 'package:car_register/core/utils/app_logger.dart';
@@ -30,7 +31,8 @@ class BrochureRepositoryImpl implements BrochureRepository {
   // on the access code path means the shared access code changed or was
   // revoked; everything else is treated as a generic network error.
   Failure _mapFirebaseError(FirebaseException e) {
-    if (e.code == 'permission-denied' || e.code == 'not-found') {
+    if (e.code == FirebaseErrorCodes.permissionDenied ||
+        e.code == FirebaseErrorCodes.notFound) {
       return const AccessCodeFailure(
         message: AppStrings.accessCodeChangedMessage,
       );

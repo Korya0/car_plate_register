@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:car_register/core/constants/app_strings.dart';
+import 'package:car_register/core/constants/firebase_constants.dart';
 import 'package:car_register/core/error/failure.dart';
 import 'package:car_register/core/error/result.dart';
 import 'package:car_register/core/utils/app_logger.dart';
@@ -49,7 +50,8 @@ class AccessControlRepositoryImpl implements AccessControlRepository {
       );
       return Result.success(model.toEntity());
     } on FirebaseException catch (e, st) {
-      if (e.code == 'permission-denied' || e.code == 'not-found') {
+      if (e.code == FirebaseErrorCodes.permissionDenied ||
+          e.code == FirebaseErrorCodes.notFound) {
         logger.error(
           'Access code invalid or revoked',
           error: e,

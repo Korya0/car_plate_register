@@ -51,7 +51,7 @@ class BrochureRemoteDataSourceImpl implements BrochureRemoteDataSource {
     required String accessCode,
   }) async {
     final snapshot = await _platesRef(accessCode)
-        .orderBy('createdAt', descending: true)
+        .orderBy(FirebaseDocumentFieldKeys.brochureCreatedAt, descending: true)
         .get()
         .timeout(AppConstants.networkRequestTimeout);
 
