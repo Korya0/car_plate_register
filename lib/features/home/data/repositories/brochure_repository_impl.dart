@@ -174,7 +174,6 @@ class BrochureRepositoryImpl implements BrochureRepository {
       );
 
       _platesByNumber.remove(id);
-      _platesByNumber.removeWhere((_, entity) => entity.id == id);
 
       logger.info('Deleted brochure with id: $id');
       return const Result.success(null);
