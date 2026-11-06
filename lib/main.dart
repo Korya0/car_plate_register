@@ -11,7 +11,6 @@ Future<void> main() async {
   runApp(
     ProviderScope(
       overrides: [
-        appLocalStorageProvider.overrideWithValue(bootstrap.localStorage),
         appSecureStorageProvider.overrideWithValue(bootstrap.secureStorage),
       ],
       observers: const [AppProviderObserver()],
