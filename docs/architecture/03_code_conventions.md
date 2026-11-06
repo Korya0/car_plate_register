@@ -129,7 +129,15 @@ Future<void> loadBrochures() async {}
 - A bug fix adds a test that fails before the fix.
 - `flutter analyze` and `flutter test` must both pass before hand-off.
 
-## 10. Hard stops
+## 10. README
+
+- Any change — by a human or an AI — that is visible to a client, a reader, or a reviewer must be reflected in `README.md` when it deserves it.
+- "Deserves it" means: a new or removed feature, a behavior change users can see, a tech-stack dependency added or removed, or a claim in the README that is no longer true.
+- Wording stays honest: the README describes what is actually implemented (including which package does the work), never aspirational or inflated claims.
+- Internal-only changes (refactors, renames, tests, doc edits, logging) stay out of the README.
+- A README update accompanies the change; it is not deferred to a later pass.
+
+## 11. Hard stops
 
 - No `Page` or `Screen` suffix.
 - No `My*` prefix.

@@ -71,14 +71,25 @@
 </details>
 
 <details>
+<summary><b>☁️ Cloud Data</b></summary>
+<br>
+
+- **Firestore Only**: All data lives in `Cloud Firestore` under `access_codes/{code}/plates`; every read and write needs a connection.
+- **Access Code Check**: The shared access code is validated by reading its `access_codes/{code}` document and its active flag.
+- **Session Cache Only**: Brochures are cached in memory per session — there is no local database or offline sync yet.
+- **Secure Code Storage**: `flutter_secure_storage` keeps the access code on the device; nothing else is stored locally.
+
+</details>
+
+<details>
 <summary><b>🔒 App Lock</b></summary>
 <br>
 
-- **Device-Local PIN**: Lock the app with the device's local PIN/pattern authentication.
-- **Biometrics**: Fingerprint support when available and enabled on the device.
-- **Auth Guard**: Opt-in `runWithLocalAuth` guard wraps sensitive actions behind authentication.
-- **Result Handling**: Covers success, cancelled, unavailable, not enrolled, locked out, busy, and error states.
-- **Availability Check**: Verifies device authentication support before prompting.
+- **Built on `local_auth`**: The app delegates authentication to the package — it does not implement its own PIN or biometric system.
+- **Device Credentials**: Authentication requests use the device's existing screen lock (PIN/pattern) and fingerprint when enrolled, on the device's side.
+- **Auth Guard Wrapper**: An opt-in `runWithLocalAuth` context guard prompts authentication before delete actions only.
+- **Result Mapping**: The package's exception codes are mapped into a `LocalAuthResult` enum (success, cancelled, unavailable, not enrolled, locked out, busy, error).
+- **Availability Check**: `isDeviceSupported()` is verified before prompting.
 
 </details>
 
@@ -91,9 +102,11 @@
 - **Framework**: `Flutter`
 - **Language**: `Dart`
 - **State Management**: `Riverpod`
-- **Cloud Database**: `Firebase Firestore`
+- **Cloud Database**: `Cloud Firestore`
+- **Local Storage**: `flutter_secure_storage` (access code only)
+- **Device Auth**: `local_auth` (delegates to the device's screen lock and biometrics)
 - **Architecture**: `Feature-First Clean Architecture`
-- **Testing**: `Unit, Widget, Integration Tests`
+- **Testing**: `Unit & Widget Tests`
 
 <img src="https://img.shields.io/badge/-%20-C8CBCD?style=flat-square" width="100%" height="2" alt="" />
 
