@@ -1,137 +1,444 @@
-# Car Register — مراحل التنفيذ والتشيك ليست (Progress Checklist)
+# Car Register — مراحل التنفيذ والتشيك ليست (Updated Progress Roadmap)
 
-**المرجع:** `docs/PROJECT_SPECIFICATION.md` (v1.3)
-**تاريخ الفحص:** 2026-11-06
-**نطاق الفحص:** كل ملفات `lib/` (core + 3 features) و`test/` (18 ملف ≈ 87 حالة test) و`android/` و`firestore.rules` و`pubspec.yaml` و`README.md` و`docs/`
+**المرجع:** `docs/PROJECT_SPECIFICATION.md` (v1.3)  
+**تاريخ التحديث:** 2026-11-08  
+**الحالة:** تطوير الخطة الأصلية وإضافة تحديات هندسية وميزات جديدة.
 
-| الرمز | المعنى |
-|---|---|
-| ✅ مكتمل | مطبّق فعليًا في الكود (كود + غالبًا اختبار) |
-| 🟡 جزئي | مطبّق جزئيًا أو فيه فجوة/تناقض ملحوظ |
-| ❌ غير منفّذ | ينعدم من الكود والمواصفة تطلبه |
+## الرموز
+
+- [x] مكتمل — مطبق فعليًا.
+- [ ] غير منفذ — مهمة مستقبلية.
+- [ ] 🆕 إضافة جديدة — Feature أو Engineering Challenge مضافة للخطة.
 
 ---
 
 ## ✅ المرحلة 1 — الإعداد والتأسيس
 
-- [x] إعداد `pubspec.yaml` كامل: Riverpod, go_router, Firebase (core + Firestore), flutter_secure_storage, local_auth, mocktail/flutter_lints — ونطاق SDK صحيح (`sdk: ^3.13.3`)
-- [x] package name مضبوط: `com.korya0.car_register` + versioning صحيح (1.0.0+1)
-- [x] Theme واحد (Light Material3) + خط Cairo في `lib/core/theme/` (`app_theme.dart`, `app_colors.dart`, `app_text_styles.dart`, `app_font.dart`)
-- [x] Assets + fonts + native splash منظّمة في pubspec (`assets/images`, `assets/native`, `assets/fonts/cairo`)
-- [x] قواعد lint مفعّلة: `analysis_options.yaml` + `flutter_lints ^6.0.0`
-- [x] Firebase Android config: `android/app/google-services.json` + `lib/core/services/firebase/firebase_options.dart` (generated)
-- [x] `.firebaserc` موجودة في الجذر
-- [x] ✅ تم حل توحيد هوية مشروع Firebase: `.firebaserc` → `car-register-7e6e6` بينما `google-services.json` → `car-registration-30663` — **mismatch** الملفّين مش شغّالين على مشروع واحد
-- [x] ✅ No CLI scaffolding الملفّين `firebase.json` و`firestore.indexes.json` اتحذفوا — ما فيش deploy عن طريق CLI، القواعد موجودة فعليًا في الـ Firebase Console (المشروع `car-registration-30663`)؛ الريبو محتفظ بـ `.firebaserc` و`firestore.rules` بس
+- [x] إعداد `pubspec.yaml` كامل: Riverpod, go_router, Firebase (core + Firestore), flutter_secure_storage, local_auth, mocktail/flutter_lints.
+- [x] package name: `com.korya0.car_register` + versioning.
+- [x] Theme (Light Material3) + Cairo Font.
+- [x] Assets + fonts + native splash.
+- [x] Lint rules عبر `analysis_options.yaml`.
+- [x] Firebase Android configuration.
+- [x] `.firebaserc`.
+- [x] توحيد Firebase Project بين `.firebaserc` و`google-services.json`.
+- [x] إزالة CLI scaffolding غير المستخدم (`firebase.json`, `firestore.indexes.json`).
 
 ## ✅ المرحلة 2 — البنية الأساسية (Core)
 
-- [x] Feature-First Clean Architecture فعلية: `domain/` + `data/` + `presentation/` لكل feature (`home`, `access_control`, `local_auth`)
-- [x] نظام أخطاء ونتائج واضح: `lib/core/error/result.dart` + `failure.dart` (مغطى باختبار `test/core/error/result_test.dart`)
-- [x] حقن التوابع عبر Riverpod providers: `lib/core/di/app_providers.dart` + `app_initializer.dart`
-- [x] Router موحّد بـ go_router: `/access-code` (initial) → `/home` → `/search` في `lib/core/router/`
-- [x] مكتبة widgets مشتركة flat في `lib/core/widgets/` (17 widget: `app_text_field.dart`, `custom_confirmation_dialog.dart`, `app_error_view.dart`, ...) — مطابقة لقواعد `docs/architecture/03_code_conventions.md`
-- [x] `AppLogger` + `AppProviderObserver` في `lib/core/utils/`
-- [x] Validators مركزية لرقم البروشور + كود الوصول (`lib/core/utils/app_validators.dart`)
-- [x] وثائق دليلية محفوظة: `docs/architecture/`, `docs/design_system/`, `docs/ui/`
+- [x] Feature-First Clean Architecture: `domain/` + `data/` + `presentation/`.
+- [x] Error & Result System: `Result` + `Failure`.
+- [x] Dependency Injection باستخدام Riverpod.
+- [x] Unified Routing باستخدام go_router.
+- [x] Shared Widgets في `core/widgets/`.
+- [x] AppLogger + AppProviderObserver.
+- [x] Centralized Validators.
+- [x] Architecture Documentation.
+- [x] الحفاظ على Riverpod كحل State Management الحالي دون تغييره.
 
-## ✅ المرحلة 3 — أرقام البروشورات (Brochure Numbers)
+## 🟡 المرحلة 3 — أرقام البروشورات (Brochure Numbers)
 
-- [x] إضافة رقم وحفظه في Firestore تحت `access_codes/{code}/plates` (`brochure_remote_data_source.dart`)
-- [x] تحقق 1–4 أرقام فقط (`brochure_number_validator.dart` + `app_validators.dart`)
-- [x] الاحتفاظ بصفر البداية مثل `007` — تخزين `String` + تسوية إلى 4 أرقام في `brochure_repository_impl.dart` (الحفظ في Firestore بنوع string ليس int)
-- [x] عرض الأرقام في قائمة مع وقت الإضافة (`brochure_entity.dart` {id, number, createdAt} + `home_brochure_entry_row.dart`)
-- [x] البحث عن الأرقام — شاشة كاملة `search_view.dart` + `search_brochure_use_case.dart`
-- [x] حذف رقم مع تأكيد الحذف (`custom_confirmation_dialog.dart` قبل التنفيذ)
-- [x] حذف متعدد عبر selection bar (long-press → تحديد الكل → حذف المحدد) في `brochure_list_body.dart`
-- [x] عرض عدد الأرقام المسجّلة كعداد ديناميكي في هيدر Home (سطر `عدد الأرقام المسجلة: N` تحت اسم التطبيق — `HomeHeaderContent` بـ `registeredCount`)
+### الوظائف الأساسية
+
+- [x] إضافة رقم وحفظه في Firestore.
+- [x] Validation: من 1 إلى 4 أرقام.
+- [x] الاحتفاظ بالأصفار البادئة مثل `007`.
+- [x] عرض الأرقام مع وقت الإضافة.
+- [x] البحث عن الأرقام.
+- [x] حذف رقم مع التأكيد.
+- [x] Multi-Selection + Bulk Delete.
+- [x] عرض عدد الأرقام المسجلة.
+
+### A. Advanced Search
+
+- [ ] 🆕 Advanced Search — تطوير البحث ليعتمد على أكثر من معيار.
+- [ ] 🆕 البحث برقم البروشور.
+- [ ] 🆕 البحث بتاريخ الإضافة.
+- [ ] 🆕 البحث باستخدام نطاق زمني (From Date – To Date).
+- [ ] 🆕 الجمع بين أكثر من معيار في عملية بحث واحدة.
+- [ ] 🆕 دعم شروط AND / OR عند الحاجة.
+- [ ] 🆕 تصميم Search Logic قابلة للتوسع دون ربطها بالـ UI.
+
+### B. Search History
+
+- [ ] 🆕 الاحتفاظ بعمليات البحث السابقة.
+- [ ] 🆕 إعادة تنفيذ عملية بحث سابقة.
+- [ ] 🆕 حذف عنصر من سجل البحث.
+- [ ] 🆕 مسح سجل البحث بالكامل.
+- [ ] 🆕 تحديد مكان تخزين سجل البحث محليًا.
+
+### C. Recently Added / Modified
+
+- [ ] 🆕 عرض أحدث السجلات إضافة.
+- [ ] 🆕 عرض أحدث السجلات تعديلًا.
+- [ ] 🆕 إضافة `updatedAt` إلى نموذج السجل.
+- [ ] 🆕 ترتيب السجلات حسب وقت الإضافة أو آخر تعديل.
+
+### D. Recycle Bin
+
+- [ ] 🆕 إنشاء Recycle Bin للاحتفاظ بالسجلات المحذوفة.
+- [ ] 🆕 نقل السجل إلى سلة المحذوفات بدل الحذف النهائي مباشرة.
+- [ ] 🆕 عرض السجلات المحذوفة في شاشة مستقلة.
+- [ ] 🆕 استعادة سجل محذوف (Restore).
+- [ ] 🆕 الحذف النهائي لسجل محدد.
+- [ ] 🆕 حذف جميع السجلات من سلة المحذوفات.
+- [ ] 🆕 الاحتفاظ بتاريخ الحذف `deletedAt`.
+- [ ] 🆕 تحديد سياسة الاحتفاظ بالسجلات المحذوفة.
+- [ ] 🆕 دعم استعادة السجلات مع المزامنة بين الأجهزة.
 
 ## 🟡 المرحلة 4 — مشاركة البيانات (Shared Access PIN)
 
-- [x] شاشة إدخال الكود `access_code_view.dart` + `access_code_form.dart`: validation (حد أقصى 10 أحرف لاتينية/أرقام فقط عبر `app_validators.accessCode`) + التحويل إلى `/home` عند النجاح
-- [x] التحقق من الكود مقابل وثيقة Firestore `access_codes/{code}` + علم `isActive` (`access_control_remote_data_source.dart`) — "التحقق على الخادم" معتمد على Firestore rules وقراءة الـ doc
-- [x] الكود يُدخل مرة واحدة عند ربط الجهاز ولا يُطلب مجددًا في الإضافة/الحذف/العمليات العادية — يعيش أثناء الجلسة في `accessCodeProvider`
-- [x] لا يوجد تسجيل دخول إيميل/باسورد ولا شاشة لإنشاء/عرض Share Code داخل التطبيق (متوافق مع §2.2)
-- [x] انتهاء/إبطال الكود: `accessCodeInvalid` في `home_view_model.dart` يفرَغ الـ provider ويعيد التوجيه تلقائيًا إلى `/access-code`
-- [ ] ❌ منع محاولات التخمين المتكررة للكود (throttling/lockout) — غير موجود نهائيًا (§5)
+### الوظائف الحالية
 
-## ❌ المرحلة 5 — العمل أوفلاين والمزامنة (Offline & Sync) — غير منفّذة
+- [x] شاشة إدخال Access Code.
+- [x] Validation للكود.
+- [x] التحقق من الكود مقابل Firestore.
+- [x] الاعتماد على `isActive`.
+- [x] إدخال الكود عند ربط الجهاز.
+- [x] انتهاء أو إبطال الكود وإعادة التوجيه إلى شاشة إدخال الكود.
+- [x] عدم وجود تسجيل دخول Email/Password أو إدارة الأكواد داخل التطبيق.
 
-- [x] إقرار معلَن: `README.md` §Cloud Data يقول صراحة "Session Cache Only — there is no local database or offline sync yet"
-- [ ] ❌ قاعدة بيانات محلية (SQLite / Drift) — **لا يوجد أي dependency لقاعدة محلية في pubspec** (لا drift ولا sqflite ولا shared_preferences)
-- [ ] ❌ العمل دون إنترنت وعرض البيانات المخزّنة محليًا
-- [ ] ❌ حفظ التغييرات محليًا ومزامنتها عند عودة الإنترنت (لا sync service ولا outbox/queue)
-- [ ] ❌ منع تكرار السجلات بسبب إعادة المحاولة — الاستثناء الوحيد (de-facto) أن doc ID يساوي الرقم المعدّل (padded) بـ `_platesRef.doc(number).set(...)`، وهذه ليست ميكانيزم retry مضمونًا
-- [ ] ❌ منع ظهور السجلات المحذوفة مجددًا بعد المزامنة — لا يوجد soft-delete / `isDeleted` في الكود إطلاقًا
-- [ ] ❌ التعامل مع تعارضات عدة أجهزة — لا سياسة محسومة ولا كود، وهي أيضًا ضمن §8 Pending Decisions
+### A. Shared Access Security
+
+- [ ] 🆕 Rate Limiting — تحديد معدل محاولات إدخال Access Code.
+- [ ] 🆕 Temporary Lockout — إيقاف المحاولات مؤقتًا بعد عدد محدد من المحاولات الفاشلة.
+- [ ] 🆕 Access Code Expiration — تحديد مدة صلاحية الكود.
+- [ ] 🆕 Server-Side Validation — تنفيذ التحقق والعمليات الحساسة من خلال Cloud Functions عند الحاجة.
+- [ ] 🆕 منع تخمين Access Code عن طريق المحاولات المتكررة.
+- [ ] 🆕 التعامل مع انتهاء صلاحية الكود أثناء استخدام التطبيق.
+
+### B. Device Management
+
+- [ ] 🆕 Device Registration — تسجيل الأجهزة المصرح لها باستخدام Access Code.
+- [ ] 🆕 Device Identification — إنشاء هوية موثوقة لكل جهاز مرتبط.
+- [ ] 🆕 Device Revocation — إلغاء صلاحية جهاز محدد.
+- [ ] 🆕 منع الجهاز الملغى من تنفيذ عمليات جديدة.
+- [ ] 🆕 ربط صلاحية الجهاز بحالة Access Code.
+- [ ] 🆕 Device Management Screen — شاشة لإدارة الأجهزة المرتبطة.
+
+### C. Access Audit Log
+
+- [ ] 🆕 تسجيل محاولات إدخال Access Code.
+- [ ] 🆕 تسجيل عمليات ربط الأجهزة.
+- [ ] 🆕 تسجيل عمليات إلغاء صلاحية الأجهزة.
+- [ ] 🆕 تسجيل العمليات الأمنية المهمة.
+- [ ] 🆕 حفظ وقت ونوع العملية والجهاز المرتبط بها.
+- [ ] 🆕 عرض سجل النشاط الأمني عند الحاجة.
+
+## ❌ المرحلة 5 — العمل أوفلاين والمزامنة (Offline-First & Data Synchronization)
+
+### A. Local Database
+
+- [ ] 🆕 إضافة Drift + SQLite.
+- [ ] 🆕 تصميم Local Database Schema.
+- [ ] 🆕 إنشاء Local Data Source.
+- [ ] 🆕 إنشاء Database Migrations.
+- [ ] 🆕 ربط Local Data Source بالـ Repository.
+- [ ] 🆕 تحديد استراتيجية تخزين البيانات محليًا.
+- [ ] 🆕 دعم تخزين السجلات النشطة والمحذوفة محليًا.
+
+### B. Offline-First Architecture
+
+- [ ] 🆕 تطبيق Offline-First Architecture.
+- [ ] 🆕 اعتماد Local Database كمصدر قراءة أساسي (Local Source of Truth).
+- [ ] 🆕 عرض البيانات دون الحاجة لاتصال بالإنترنت.
+- [ ] 🆕 تنفيذ عمليات الإضافة محليًا.
+- [ ] 🆕 تنفيذ عمليات التعديل محليًا.
+- [ ] 🆕 تنفيذ عمليات الحذف محليًا.
+- [ ] 🆕 تحديث الواجهة مباشرة بعد العمليات المحلية.
+- [ ] 🆕 دعم البحث والفلترة أثناء عدم الاتصال.
+
+### C. Synchronization Engine
+
+- [ ] 🆕 إنشاء Sync Service مستقل.
+- [ ] 🆕 إنشاء Pending Operations Queue / Outbox.
+- [ ] 🆕 تسجيل العمليات التي تنتظر المزامنة.
+- [ ] 🆕 مزامنة البيانات عند عودة الاتصال.
+- [ ] 🆕 Background Synchronization.
+- [ ] 🆕 Manual Sync.
+- [ ] 🆕 Pull to Refresh.
+- [ ] 🆕 تحديد ترتيب تنفيذ العمليات المتراكمة.
+- [ ] 🆕 معالجة فشل المزامنة دون فقد البيانات.
+- [ ] 🆕 Sync Status لكل سجل: Synced / Pending / Failed.
+
+### D. Reliability & Retry
+
+- [ ] 🆕 Retry Mechanism.
+- [ ] 🆕 Exponential Backoff.
+- [ ] 🆕 تحديد عدد محاولات إعادة التنفيذ.
+- [ ] 🆕 Idempotent Operations — منع تكرار تأثير العملية عند إعادة إرسالها.
+- [ ] 🆕 ضمان عدم تكرار السجلات نتيجة إعادة المحاولة.
+- [ ] 🆕 التعامل مع العمليات الفاشلة التي تحتاج تدخلًا إضافيًا.
+
+### E. Conflict Resolution
+
+- [ ] 🆕 تصميم Conflict Resolution Strategy.
+- [ ] 🆕 اكتشاف تعارض التعديلات بين الأجهزة.
+- [ ] 🆕 تحديد سياسة التعامل مع تعديل نفس السجل من جهازين.
+- [ ] 🆕 تحديد سياسة التعامل مع حذف سجل أثناء تعديله على جهاز آخر.
+- [ ] 🆕 تحديد أولوية العمليات المتعارضة.
+- [ ] 🆕 ضمان اتساق البيانات بين الأجهزة بعد المزامنة.
+
+### F. Soft Delete & Tombstones
+
+- [ ] 🆕 تطبيق Soft Delete بدل الحذف النهائي المباشر.
+- [ ] 🆕 إضافة `isDeleted` و`deletedAt`.
+- [ ] 🆕 الاحتفاظ بمعلومات الحذف أثناء المزامنة.
+- [ ] 🆕 منع ظهور السجلات المحذوفة مجددًا على الأجهزة الأخرى.
+- [ ] 🆕 دعم Restore من Recycle Bin.
+- [ ] 🆕 تصميم آلية الحذف النهائي بعد انتهاء سياسة الاحتفاظ.
+- [ ] 🆕 التعامل مع Tombstones أثناء المزامنة بين الأجهزة.
 
 ## 🟡 المرحلة 6 — قفل التطبيق (App Lock)
 
-- [x] بنية local_auth صحيحة: `local_auth_service.dart` + ربط exception codes بـ `LocalAuthResult` (success / cancelled / unavailable / notEnrolled / lockedOut / busy / error) مغطية بـ 12 حالة اختبار
-- [x] Guard اختياري `runWithLocalAuth` في `local_auth_guard.dart` + فحص `isDeviceSupported()` قبل الطلب
-- [x] fallback لاعتمادات الجهاز (PIN/pattern/biometric) بمعايير `authenticate(biometricOnly: false)`
+### الوظائف الحالية
 
-## ✅ المرحلة 8 — واجهة الاستخدام (UI/UX)
+- [x] Local Auth Service.
+- [x] Local Auth Result Handling.
+- [x] `runWithLocalAuth` Guard.
+- [x] فحص `isDeviceSupported()`.
+- [x] Fallback لاعتمادات الجهاز PIN / Pattern / Biometrics.
+- [x] Unit Tests للخدمة والـ Guard.
 
-- [x] واجهة عربية بالكامل: strings عربية ثابتة في `app_strings.dart` + `locale: 'ar'` + supportedLocales `['ar']` + global delegates في `app.dart`
-- [x] RTL محكم: `EdgeInsetsDirectional` + اختبار متعمد أن الأرقام تتوزع LTR داخل RTL (`test/core/widgets/app_text_field_test.dart`)
-- [x] Theme واحد فقط في الإصدار الأول (Light Material3، لا dark mode) — متوافق مع §3
-- [x] شاشة إضافة وعرض الأرقام: `HomeView` (input + list + delete)
-- [x] شاشة بحث مفصولة: `SearchView` (رجوع + filter + delete + refresh)
-- [x] تأكيد واضح قبل الحذف (فردي / متعدد) + "كل الأرقام" عبر تحديد الكل (اقترح زرًا واضحاً)
-- [x] حالة skeleton loading (`skeletonizer` + `HomeBrochureEntryRow.loading`)
-- [x] حالة القائمة الفارغة + حالة لا نتائج (`home_brochure_empty_state.dart`)
-- [x] شاشات خطأ: `app_error_view.dart` + error dialog + strings خطأ (404 في router كذلك)
-- [x] منع تغيّر خط النظام (`preventTextScaling`) + edge-to-edge + keyboard dismiss عند اللمس/السحب (`test/widget_test.dart`)
+### A. Sensitive Screen Protection
+
+- [ ] 🆕 Secure Sensitive Screens — حماية الشاشات الحساسة من الظهور بمحتواها في Recent Apps.
+- [ ] 🆕 Screenshot Protection — منع التقاط Screenshots للشاشات الحساسة على Android.
+- [ ] 🆕 تحديد الشاشات التي تحتاج إلى الحماية.
+- [ ] 🆕 تطبيق الحماية عند دخول الشاشة.
+- [ ] 🆕 إزالة الحماية عند مغادرة الشاشة عند الحاجة.
+- [ ] 🆕 التأكد من عدم تسرب البيانات الحساسة في App Switcher.
+
+**ملاحظة:** لا نعيد تنفيذ Automatic App Lock أو Lock Timeout أو Authentication on Resume باعتبارها Features جديدة إذا كانت بالفعل مغطاة بالسلوك الحالي؛ المصادقة نفسها تظل عبر `local_auth`.
+
+## 🟡 المرحلة 8 — واجهة الاستخدام (UI/UX)
+
+### الوظائف الحالية
+
+- [x] واجهة عربية بالكامل.
+- [x] RTL.
+- [x] Light Material3 Theme.
+- [x] Home Screen.
+- [x] Search Screen.
+- [x] Confirmation Dialogs.
+- [x] Skeleton Loading.
+- [x] Empty States.
+- [x] Error Views.
+- [x] Keyboard Handling.
+- [x] Edge-to-Edge.
+
+### تطويرات الواجهة الجديدة
+
+- [ ] 🆕 شاشة Recycle Bin.
+- [ ] 🆕 واجهة Advanced Search.
+- [ ] 🆕 عرض Search History.
+- [ ] 🆕 عرض Recently Added / Modified.
+- [ ] 🆕 عرض حالة الاتصال بالإنترنت.
+- [ ] 🆕 عرض Sync Status.
+- [ ] 🆕 عرض العمليات التي تنتظر المزامنة.
+- [ ] 🆕 واجهة التعامل مع فشل المزامنة.
+- [ ] 🆕 واجهة Device Management.
+- [ ] 🆕 عرض تفاصيل الأجهزة المرتبطة.
+- [ ] 🆕 واجهة Access Audit Log عند الحاجة.
 
 ## 🟡 المرحلة 9 — قاعدة البيانات والأمان (DB & Security)
 
-- [x] نموذج السجل بالحقول المطلوبة: id / brochureNumber (String) / createdAt (`brochure_entity.dart` + `brochure_model.dart` with fromFirestore/toMap)
-- [x] التجميع تحت `access_codes/{code}/plates` (subcollection لكل عميل) — يعكس ربط الجهاز المصرّح بمجموعة بيانات العميل (§5)
-- [x] `firestore.rules`: قراءة `access_codes/{code}` متاحة (للتحقق من الكود) و`list` و`write` على access codes مرفوضة (إدارة الكود من الخارج/الوضع الإداري)
-- [x] كتابة plates مقيدة بوجود الـ parent وأنّه `isActive == true` (helper `isCodeActive()`)
-- [x] الرجوع للشاشة عند access code غير صالح أثناء الأوامر (permission-denied / not-found → redirect)
-- [x] لا توجد مفاتيح إدارة سرية داخل التطبيق (لا admin SDK ولا service account في `lib/`)
-- [ ] ❌ حماية من تخمين الكود: الـ rules تسمح بـ `get: if true` **بدون throttle ولا عدّادات محاولات** (§5 بند "منع محاولات التخمين المتكررة")
+### الوظائف الحالية
+
+- [x] Brochure Entity / Model.
+- [x] تخزين رقم البروشور كـ String.
+- [x] Firestore Collection Structure.
+- [x] Firestore Security Rules.
+- [x] تقييد الكتابة بوجود Access Code فعال.
+- [x] التعامل مع Access Code غير الصالح.
+- [x] عدم تخزين مفاتيح إدارة سرية داخل التطبيق.
+
+### A. Data Integrity
+
+- [ ] 🆕 تحديث Data Model لدعم `updatedAt`.
+- [ ] 🆕 تحديث Data Model لدعم `deletedAt` و`isDeleted`.
+- [ ] 🆕 إضافة Metadata اللازمة للمزامنة.
+- [ ] 🆕 تحديد معرفات ثابتة للسجلات بين Local DB وFirestore.
+- [ ] 🆕 تحديد Version أو Revision للبيانات عند الحاجة.
+- [ ] 🆕 ضمان اتساق نموذج البيانات المحلي والسحابي.
+- [ ] 🆕 Database Migration Strategy.
+- [ ] 🆕 مراجعة Integrity بعد عمليات المزامنة.
+
+### B. Firestore Security
+
+- [ ] 🆕 مراجعة وتطوير Firestore Security Rules مع الميزات الجديدة.
+- [ ] 🆕 حماية عمليات Recycle Bin والاستعادة والحذف النهائي.
+- [ ] 🆕 حماية بيانات الأجهزة المرتبطة.
+- [ ] 🆕 حماية Access Audit Logs.
+- [ ] 🆕 التأكد من عدم قدرة الأجهزة الملغاة على تنفيذ عمليات.
+- [ ] 🆕 تطبيق Server-Side Validation للعمليات التي لا يمكن تأمينها بقواعد Firestore وحدها.
+- [ ] 🆕 مراجعة صلاحيات القراءة والكتابة لكل عملية.
 
 ## 🟡 المرحلة 10 — الاختبارات (Testing)
 
-**المغطّى (18 ملف ≈ 87 حالة):**
-- [x] validators الأرقام — الأصفار البادئة + رفض >4 أرقام / فارغ / غير رقمي / `0000` (`brochure_number_validator_test.dart`)
-- [x] repository: padded ops + duplicate rejection بدون backend + delete purge + بحث داخلي + ربط الـ use cases بـ mocks (`brochure_repository_impl_test.dart`)
-- [x] شاشة Home كاملة: add/delete + empty + keyboard dismiss + selection mode (long-press/select-all/multi-delete/clear) + عدم وجود أيقونة حذف per-card + لوحة أرقام رقمية (`home_view_test.dart` — 12 حالة)
-- [x] شاشة البحث: navigation + filtering + حذف وrefresh بعد الحذف + حالة نتائج فارغة (`search_view_test.dart` — 8 حالات)
-- [x] شاشة كود الوصول: animations + validation + رسالة الكود غير الصحيح + افتتاح الكود التجريبي `KORYA` (`access_code_view_test.dart` — 8 حالات)
-- [x] `ValidateAccessCodeUseCase` (`validate_access_code_use_case_test.dart`)
-- [x] local_auth: الخدمة (12 حالة) + الـ Guard (skip عند disabled، تشغيل بعد success، block عند cancel/unavailable)
-- [x] widgets أساسية: `app_text_field_test.dart` (LTR digits داخل RTL + backspace من النهاية) + `app_theme_test.dart` (Cairo هو الخط الوحيد)
-- [x] `Result` semantics (`test/core/error/result_test.dart`)
-- [x] مستويات app-level: focus borders، keyboard dismiss بالسحب، edge-to-edge/transparent bars (`test/widget_test.dart`)
-- [x] اختبار helpers: `fake_local_auth_service.dart`, `home_test_helpers.dart` + use of `mocktail`
+### الاختبارات الحالية
+
+- [x] Validators Tests.
+- [x] Repository Tests.
+- [x] Home View Tests.
+- [x] Search View Tests.
+- [x] Access Code Tests.
+- [x] Validate Access Code Use Case Tests.
+- [x] Local Auth Service Tests.
+- [x] Local Auth Guard Tests.
+- [x] Widget Tests.
+- [x] Result Semantics Tests.
+- [x] App-level UI Tests.
+- [x] Test Helpers + Mocktail.
+
+**التغطية الحالية:** 18 ملف اختبار تقريبًا و87 حالة اختبار وفق الفحص السابق.
+
+### A. Offline & Sync Testing
+
+- [ ] 🆕 Local Database Tests.
+- [ ] 🆕 Database Migration Tests.
+- [ ] 🆕 Offline Read Tests.
+- [ ] 🆕 Offline Write Tests.
+- [ ] 🆕 Sync Engine Tests.
+- [ ] 🆕 Pending Operations Queue Tests.
+- [ ] 🆕 Retry Mechanism Tests.
+- [ ] 🆕 Exponential Backoff Tests.
+- [ ] 🆕 Idempotency Tests.
+- [ ] 🆕 Conflict Resolution Tests.
+- [ ] 🆕 Multi-Device Synchronization Tests.
+- [ ] 🆕 Soft Delete & Restore Tests.
+- [ ] 🆕 Tombstone Synchronization Tests.
+
+### B. Search & Recycle Bin Testing
+
+- [ ] 🆕 Advanced Search Tests.
+- [ ] 🆕 Combined Search Criteria Tests.
+- [ ] 🆕 AND / OR Logic Tests.
+- [ ] 🆕 Search History Tests.
+- [ ] 🆕 Recently Added / Modified Tests.
+- [ ] 🆕 Recycle Bin Tests.
+- [ ] 🆕 Restore Deleted Records Tests.
+- [ ] 🆕 Permanent Delete Tests.
+
+### C. Security Testing
+
+- [ ] 🆕 Rate Limiting Tests.
+- [ ] 🆕 Temporary Lockout Tests.
+- [ ] 🆕 Access Code Expiration Tests.
+- [ ] 🆕 Device Registration Tests.
+- [ ] 🆕 Device Revocation Tests.
+- [ ] 🆕 Unauthorized Device Access Tests.
+- [ ] 🆕 Access Audit Log Tests.
+- [ ] 🆕 Firestore Security Rules Tests.
+- [ ] 🆕 Sensitive Screen Protection Tests.
+- [ ] 🆕 Screenshot Protection Tests.
+
+### D. Integration & End-to-End Testing
+
+- [ ] 🆕 Integration Testing لتدفقات العمليات بين الطبقات.
+- [ ] 🆕 Firebase Emulator Suite.
+- [ ] 🆕 اختبار Firestore Security Rules باستخدام Emulator.
+- [ ] 🆕 End-to-End Tests للسيناريوهات الأساسية.
+- [ ] 🆕 اختبار فقدان الإنترنت أثناء عملية كتابة.
+- [ ] 🆕 اختبار عودة الإنترنت وتنفيذ العمليات المعلقة.
+- [ ] 🆕 اختبار تعارض التعديلات بين جهازين.
+- [ ] 🆕 اختبار Recycle Bin مع المزامنة.
 
 ## ❌ المرحلة 11 — التسليم المباشر (Google Drive → APK)
 
-**الهدف:** بناء APK موقّع وإرساله للعميل عبر Google Drive — بدون متجر وبدون pipeline.
+### المهام الأصلية
 
-- [ ] ❌ إعداد توقيع الـ release: إنشاء/استخدام keystore + `key.properties` خارج git + `signingConfig` release في `android/app/build.gradle.kts`
-- [ ] ❌ `flutter build apk --release` ينجح و الـ APK بيثبت ويفتح على أجهزة العميل (SHA-256 + versionCode محدّث)
-- [ ] ❌ رفع الـ APK على Google Drive ومشاركة اللينك (view-only) مع العميل
-- [ ] 🟡 app icon + native splash assets جاهزة (`flutter_launcher_icons`, `flutter_native_splash`) — مطلوب التأكد من سلامتها في بناء release
-- [ ] 🟡 توثيق تسليم قصير: مكان حفظ الـ keystore + الأوامر + البصمة + طريقة استلام الـ APK من الـ Drive
+- [ ] إعداد Release Signing: Keystore + `key.properties` خارج Git.
+- [ ] إعداد `signingConfig` في `android/app/build.gradle.kts`.
+- [ ] نجاح `flutter build apk --release`.
+- [ ] التأكد من تثبيت وتشغيل APK على أجهزة العميل.
+- [ ] التحقق من SHA-256 وVersion Code.
+- [ ] رفع APK على Google Drive.
+- [ ] مشاركة رابط View-only.
+- [ ] مراجعة App Icon وNative Splash في Release Build.
+- [ ] توثيق Keystore ومكان حفظه وأوامر البناء والبصمة وطريقة التسليم.
+- [ ] إزالة الكود التجريبي `KORYA` قبل التسليم.
 
-ملاحظة: عناصر GitHub Actions والـ CI أُسقطت من الخطة — التسليم يدوي عبر Drive فقط، ولا pipeline مطلوب هنا. ولو اتقرر إضافة CI مستقبلًا يترجع كمرحلة جديدة بإرادتك.
+### شروط التسليم
+
+- [ ] التأكد من عدم وجود إعدادات أو بيانات تجريبية.
+- [ ] التأكد من أن النسخة النهائية متصلة بمشروع Firebase الصحيح.
+- [ ] التأكد من صلاحية Firestore Rules.
+- [ ] اختبار التطبيق بعد تثبيته من APK وليس من بيئة التطوير فقط.
+- [ ] التأكد من حفظ Keystore بطريقة آمنة.
+
+**ملاحظة:** لا GitHub Actions ولا CI/CD ضمن نطاق هذه المرحلة؛ التسليم يظل يدويًا عبر Google Drive كما في الخطة الأصلية.
 
 ---
 
-## 📊 الخلاصة — الفجوات الحرجة (مرتبة حسب الأهمية)
+## 📊 ملخص التطويرات الجديدة
 
-1. **لا قاعدة بيانات محلية ولا أوفلاين ولا مزامنة** — المرحلة 5 كاملة غير منفّذة (§2.3)، وهي جوهر "مشاركة البيانات بين أجهزة" في نظرة عامة للمشروع §1
-2. **لا توقيع release ولا APK موقّع ولا تسليم على Drive** — المرحلة 11
-3. **حماية من تخمين الكود** — rules تسمح بـ `get: if true` بدون throttling (§5)
-4. **Firebase project mismatch**: ✅ تم حلها — `.firebaserc` يعمل الآن على `car-registration-30663` مثل `google-services.json` ✔
-5. **كود تجريبي `KORYA` في `app_constants.dart`** مع تعليق "Temporary until the access API is wired" — لازم يُرفع قبل التسليم
+### الميزات والتحديات المضافة
 
-## ⚡ مكاسب سريعة مقترحة
+1. Advanced Search.
+2. Search History.
+3. Recently Added / Modified.
+4. Recycle Bin.
+5. Local Database باستخدام Drift.
+6. Offline-First Architecture.
+7. Synchronization Engine.
+8. Pending Operations Queue.
+9. Retry + Exponential Backoff.
+10. Idempotent Operations.
+11. Conflict Resolution.
+12. Soft Delete + Tombstones.
+13. Device Registration.
+14. Device Revocation.
+15. Rate Limiting.
+16. Temporary Lockout.
+17. Access Code Expiration.
+18. Access Audit Log.
+19. Server-Side Validation.
+20. Secure Sensitive Screens.
+21. Screenshot Protection.
+22. Integration Testing.
+23. Firebase Emulator Testing.
+24. Multi-Device Synchronization Testing.
+25. Security Rules Testing.
 
-- إعداد توقيع الـ release + رفع الـ APK على Google Drive — أقرب طريق لتسليم العميل
-- إزالة `KORYA` demo قبل التسليم
+### أهم الفجوات التي سنعمل على حلها
+
+- لا توجد قاعدة بيانات محلية أو Offline Support.
+- لا يوجد Synchronization Engine.
+- لا توجد سياسة Conflict Resolution.
+- لا يوجد Recycle Bin أو Soft Delete.
+- لا توجد إدارة للأجهزة المرتبطة.
+- لا توجد حماية من تخمين Access Code.
+- لا يوجد Access Audit Log.
+- لا توجد حماية للشاشات الحساسة من Recent Apps وScreenshots.
+- لا توجد اختبارات تكاملية كافية للسيناريوهات الجديدة.
+- لا يزال Release Signing والتسليم النهائي غير مكتملين.
+
+## 📌 قرارات معمارية ثابتة
+
+- Riverpod يظل State Management المستخدم في المشروع.
+- الحفاظ على Feature-First Clean Architecture.
+- الحفاظ على Domain / Data / Presentation Separation.
+- عدم وضع Business Logic داخل UI.
+- عدم تغيير التقنيات الحالية دون سبب معماري واضح.
+- كل Feature جديدة يجب أن تكون لها اختبارات مناسبة.
+- كل عملية Offline يجب أن يكون لها سلوك واضح عند المزامنة.
+- الأمان الحقيقي للعمليات الحساسة يجب ألا يعتمد على Flutter Client وحده.
+- لا تتم إضافة أي تعقيدات لا تحقق قيمة فعلية للمشروع.
+
+---
+
+## 🎯 الهدف النهائي
+
+تحويل Car Register من تطبيق بسيط لإدارة أرقام البروشورات ومشاركتها إلى تطبيق يدعم:
+
+- Offline-First Data Management.
+- Reliable Multi-Device Synchronization.
+- Secure Shared Access.
+- Device Management.
+- Advanced Data Search.
+- Data Recovery.
+- Local & Remote Data Consistency.
+- Automated Testing للسيناريوهات المعقدة.
+
+مع الحفاظ على البنية الحالية والتقنيات المختارة، وتطبيق كل تطوير كحل لمشكلة حقيقية يمكن شرحه ومناقشته في Technical Interview.
